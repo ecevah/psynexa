@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "496261291244",
+    "project_id": "psynexa-60ed8",
+    "storage_bucket": "psynexa-60ed8.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:496261291244:android:d84a8af18c62e9e4f919c9",
+        "android_client_info": {
+          "package_name": "com.example.psynexa"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "496261291244-nm901vu6b17fh74vf9keh6qoaks64180.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAY2iPViCS80-s_ebMvN8Mr8HGw0VllFL4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "496261291244-j5skhn6hamlk4sm7p8q52jsic22bl80r.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "496261291244-rr4i4m5e22bo3r3ph4mi8ve13tvn3r0a.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.psynexa"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
