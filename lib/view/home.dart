@@ -1,3 +1,4 @@
+import 'package:Psynexa/view/deneme.dart';
 import 'package:flutter/material.dart';
 import 'package:Psynexa/assets.dart';
 import 'package:Psynexa/components/image_button.dart';
@@ -79,7 +80,20 @@ class _HomeState extends ConsumerState<Home> {
         body: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            _homeCardRandevuAl(),
+            Padding(
+              padding: const EdgeInsets.only(bottom: 20.0),
+              child: _homeCardRandevuAl(),
+            ),
+            Expanded(
+                flex: 2,
+                child: Container(
+                  color: Constant.blue,
+                )),
+            Expanded(
+                flex: 3,
+                child: Container(
+                  color: Constant.purple,
+                )),
           ],
         ));
   }
@@ -161,7 +175,7 @@ class _appBarHome extends StatelessWidget {
               ),
               if (notification != 0)
                 Padding(
-                  padding: const EdgeInsets.only(bottom: 12.0, left: 5),
+                  padding: const EdgeInsets.only(bottom: 12, left: 5),
                   child: Container(
                     width: 13,
                     height: 13,

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:Psynexa/model/home_model.dart';
+import 'package:Psynexa/models/home_model.dart';
 
 class HomePageRiverpod extends ChangeNotifier {
   bool isSelect = true;

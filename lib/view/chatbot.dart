@@ -1,11 +1,15 @@
+import 'package:Psynexa/models/firebase_model.dart';
+import 'package:Psynexa/services/firebase_service.dart';
 import 'package:flutter/material.dart';
 import 'package:Psynexa/assets.dart';
 import 'package:Psynexa/constant/constant.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:grock/grock.dart';
+import 'package:intl/intl.dart';
 
 class ChatBot extends StatefulWidget {
-  const ChatBot({super.key});
+  String chatid;
+  ChatBot({super.key, required this.chatid});
 
   @override
   State<ChatBot> createState() => _ChatBotState();
@@ -15,24 +19,16 @@ class _ChatBotState extends State<ChatBot> {
   TextEditingController text = TextEditingController();
   FocusNode _textFocusNode = FocusNode();
 
-  List<_chatBotModel> _chatModel = [
-    _chatBotModel(
-        message: "Merhaba, ben Nexa. Size nasıl yardımcı olabilirim?",
-        hour: "3:14",
-        rol: 'bot'),
-    _chatBotModel(message: "Merhaba Nexa", hour: "3:13", rol: 'user'),
-    _chatBotModel(
-        message: "Merhaba, ben Nexa. Size nasıl yardımcı olabilirim?",
-        hour: "3:12",
-        rol: 'bot'),
-    _chatBotModel(message: "Merhaba Nexa", hour: "3:10", rol: 'user'),
-  ];
-
   @override
   Widget build(BuildContext context) {
+    @override
+    void initState() {
+      super.initState();
+    }
+
     return Scaffold(
       appBar: AppBar(
-        toolbarHeight: 64,
+        toolbarHeight: 70,
         elevation: 0,
         centerTitle: true,
         title: Padding(
@@ -72,63 +68,37 @@ class _ChatBotState extends State<ChatBot> {
         child: Column(
           children: [
             Expanded(
-              child: ListView.builder(
-                reverse: true,
-                padding: EdgeInsets.only(bottom: 20),
-                itemCount: _chatModel.length,
-                itemBuilder: (BuildContext context, int index) {
-                  return ListTile(
-                    title: Align(
-                      alignment: _chatModel[index].rol == 'bot'
-                          ? Alignment.centerLeft
-                          : Alignment.centerRight,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        mainAxisSize: MainAxisSize.min,
-                        crossAxisAlignment: _chatModel[index].rol == 'bot'
-                            ? CrossAxisAlignment.start
-                            : CrossAxisAlignment.end,
-                        children: [
-                          Container(
-                            padding: EdgeInsets.symmetric(
-                                horizontal: 20, vertical: 14),
-                            decoration: BoxDecoration(
-                              color: _chatModel[index].rol == 'bot'
-                                  ? Constant.darkwhite
-                                  : Color.fromARGB(73, 103, 71, 199),
-                              borderRadius: _chatModel[index].rol == 'bot'
-                                  ? BorderRadius.only(
-                                      bottomRight: Radius.circular(15),
-                                      topLeft: Radius.circular(15),
-                                      topRight: Radius.circular(15))
-                                  : BorderRadius.only(
-                                      bottomLeft: Radius.circular(15),
-                                      topLeft: Radius.circular(15),
-                                      topRight: Radius.circular(15)),
-                            ),
-                            child: Text(
-                              _chatModel[index].message,
-                              style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 13.5,
-                                  fontWeight: FontWeight.w400,
-                                  fontFamily: 'Proxima Nova',
-                                  letterSpacing: -0.4),
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(top: 6.0),
-                            child: Text(
-                              _chatModel[index].hour,
-                              style: TextStyle(
-                                  fontSize: 11,
-                                  fontWeight: FontWeight.w400,
-                                  color: Color.fromARGB(133, 51, 51, 51)),
-                            ),
-                          )
-                        ],
+              child: StreamBuilder<Chats>(
+                stream: FirebaseService().getUserPostsAsStream(widget.chatid),
+                builder: (context, snapshot) {
+                  final Chats? chats = snapshot.data;
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return Center(child: CircularProgressIndicator());
+                  }
+                  return Column(
+                    children: [
+                      Expanded(
+                        child: ListView.builder(
+                          reverse: true,
+                          padding: EdgeInsets.only(bottom: 20),
+                          itemCount: chats!.chats.length,
+                          itemBuilder: (BuildContext context, int index) {
+                            return _messageWidget(
+                              role: chats
+                                  .chats[(chats.chats.length - 1) - index].role,
+                              date: DateFormat('HH:mm')
+                                  .format(chats
+                                      .chats[(chats.chats.length - 1) - index]
+                                      .date)
+                                  .toString(),
+                              message: chats
+                                  .chats[(chats.chats.length - 1) - index]
+                                  .message,
+                            );
+                          },
+                        ),
                       ),
-                    ),
+                    ],
                   );
                 },
               ),
@@ -181,7 +151,7 @@ class _ChatBotState extends State<ChatBot> {
                         GrockContainer(
                           onTap: () {
                             setState(() {
-                              DateTime now = DateTime.now();
+                              /*DateTime now = DateTime.now();
                               _chatModel.insert(
                                 0,
                                 _chatBotModel(
@@ -191,7 +161,7 @@ class _ChatBotState extends State<ChatBot> {
                               );
                               text.text = '';
                               FocusScope.of(context)
-                                  .requestFocus(_textFocusNode);
+                                  .requestFocus(_textFocusNode);*/
                             });
                           },
                           height: 44,
@@ -220,9 +190,62 @@ class _ChatBotState extends State<ChatBot> {
   }
 }
 
-class _chatBotModel {
-  String message;
-  String rol;
-  String hour;
-  _chatBotModel({required this.message, required this.hour, required this.rol});
+class _messageWidget extends StatelessWidget {
+  String role, message;
+  String date;
+  _messageWidget(
+      {required this.role, required this.date, required this.message});
+
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      title: Align(
+        alignment: role == 'bot' ? Alignment.centerLeft : Alignment.centerRight,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment:
+              role == 'bot' ? CrossAxisAlignment.start : CrossAxisAlignment.end,
+          children: [
+            Container(
+              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 14),
+              decoration: BoxDecoration(
+                color: role == 'bot'
+                    ? Constant.darkwhite
+                    : Color.fromARGB(73, 103, 71, 199),
+                borderRadius: role == 'bot'
+                    ? BorderRadius.only(
+                        bottomRight: Radius.circular(15),
+                        topLeft: Radius.circular(15),
+                        topRight: Radius.circular(15))
+                    : BorderRadius.only(
+                        bottomLeft: Radius.circular(15),
+                        topLeft: Radius.circular(15),
+                        topRight: Radius.circular(15)),
+              ),
+              child: Text(
+                message,
+                style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 13.5,
+                    fontWeight: FontWeight.w400,
+                    fontFamily: 'Proxima Nova',
+                    letterSpacing: -0.4),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(top: 6.0),
+              child: Text(
+                date,
+                style: TextStyle(
+                    fontSize: 11,
+                    fontWeight: FontWeight.w400,
+                    color: Color.fromARGB(133, 51, 51, 51)),
+              ),
+            )
+          ],
+        ),
+      ),
+    );
+  }
 }

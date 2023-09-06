@@ -2,9 +2,25 @@
 class Assets {
   Assets._();
 
+  static final checkout = _AssetsCheckout._();
   static final icons = _AssetsIcons._();
   static final images = _AssetsImages._();
+  static final snackbar = _AssetsSnackbar._();
 
+}
+
+class _AssetsCheckout {
+  _AssetsCheckout._();
+
+
+  final maestroSVG = 'assets/checkout/Maestro.svg';
+  final mastercardSVG = 'assets/checkout/Mastercard.svg';
+  final unionSVG = 'assets/checkout/Union.svg';
+  final unionalertSVG = 'assets/checkout/Unionalert.svg';
+  final visaSVG = 'assets/checkout/Visa.svg';
+  final deleteResSVG = 'assets/checkout/deleteRes.svg';
+  final detailsSVG = 'assets/checkout/details.svg';
+  final doneSVG = 'assets/checkout/done.svg';
 }
 
 class _AssetsIcons {
@@ -56,4 +72,23 @@ class _AssetsImages {
   final imOnBoardSVG = 'assets/images/im_onBoard.svg';
   final imXLogoSvgSVG = 'assets/images/im_xLogoSvg.svg';
   final nexaGIF = 'assets/images/nexa.gif';
+}
+
+class _AssetsSnackbar {
+  _AssetsSnackbar._();
+
+
+  final ellipse763PNG = 'assets/snackbar/Ellipse 763.png';
+  final unionPNG = 'assets/snackbar/Union.png';
+  final unionSVG = 'assets/snackbar/Union.svg';
+  final alertPNG = 'assets/snackbar/alert.png';
+  final asPNG = 'assets/snackbar/as.png';
+  final bigelipsePNG = 'assets/snackbar/bigelipse.png';
+  final ePNG = 'assets/snackbar/e.png';
+  final errorPNG = 'assets/snackbar/error.png';
+  final greyPNG = 'assets/snackbar/grey.png';
+  final peoplePNG = 'assets/snackbar/people.png';
+  final questionPNG = 'assets/snackbar/question.png';
+  final succesPNG = 'assets/snackbar/succes.png';
+  final svgSVG = 'assets/snackbar/svg.svg';
 }

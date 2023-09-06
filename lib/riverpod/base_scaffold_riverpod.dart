@@ -1,5 +1,5 @@
 import 'package:Psynexa/assets.dart';
-import 'package:Psynexa/model/bottom_nav_bar_model.dart';
+import 'package:Psynexa/models/bottom_nav_bar_model.dart';
 import 'package:Psynexa/view/account.dart';
 import 'package:Psynexa/view/favorites.dart';
 import 'package:Psynexa/view/home.dart';

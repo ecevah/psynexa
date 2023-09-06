@@ -23,7 +23,7 @@ class _BaseScaffoldState extends ConsumerState<BaseScaffold> {
     return WillPopScope(
       onWillPop: _onWillPop,
       child: Scaffold(
-        bottomNavigationBar: const CustomBottomNavBar(),
+        bottomNavigationBar: CustomBottomNavBar(),
         body: ref.watch(baseScaffoldRiverpod).body(),
       ),
     );

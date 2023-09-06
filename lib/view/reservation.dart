@@ -15,13 +15,13 @@ class Reservation extends StatelessWidget {
     List<_resListModel> iptalList = [
       _resListModel(
         title: "Prof. Dr. Ahmet Ecevit",
-        date: DateTime(2023, 8, 30, 22, 22, 56, 486, 933),
+        date: DateTime(2023, 10, 30, 22, 22, 56, 486, 933),
         rol: 'Travma Sonrası Stres Bozukluğu',
         image: Assets.images.imKariPNG,
       ),
       _resListModel(
         title: "Prof. Dr. Ahmet Ecevit",
-        date: DateTime(2023, 8, 23, 22, 22, 56, 486, 933),
+        date: DateTime(2023, 10, 23, 22, 22, 56, 486, 933),
         rol: 'Travma Sonrası Stres Bozukluğu',
         image: Assets.images.imKariPNG,
       ),

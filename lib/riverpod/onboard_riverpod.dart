@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:Psynexa/model/onboard_model.dart';
+import 'package:Psynexa/models/onboard_model.dart';
 
 class FirstPageRivepod extends ChangeNotifier {
   FirstPageModel firstPage = FirstPageModel(

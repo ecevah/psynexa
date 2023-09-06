@@ -6,7 +6,7 @@ import 'package:Psynexa/components/randevu_detay.dart';
 import 'package:Psynexa/components/randevu_detay_card.dart';
 import 'package:Psynexa/components/randevu_number_card.dart';
 import 'package:Psynexa/constant/constant.dart';
-import 'package:Psynexa/model/reservation_model.dart';
+import 'package:Psynexa/models/reservation_model.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:grock/grock.dart';
 

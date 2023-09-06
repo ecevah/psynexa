@@ -10,7 +10,8 @@ import 'package:Psynexa/view/chatbot.dart';
 import 'image_button.dart';
 
 class CustomBottomNavBar extends ConsumerWidget {
-  const CustomBottomNavBar({super.key});
+  CustomBottomNavBar({super.key});
+  String uid = "d3nQ9koukoiHfQ4dunj1";
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     var watch = ref.watch(baseScaffoldRiverpod);
@@ -38,7 +39,7 @@ class CustomBottomNavBar extends ConsumerWidget {
               tag: 'chatgifhero',
               child: ImageButton(
                 onPressed: () {
-                  Grock.to(ChatBot());
+                  Grock.to(ChatBot(chatid: uid));
                 },
                 imagePath: Assets.images.nexaGIF,
                 width: 60,

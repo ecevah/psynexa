@@ -6,7 +6,7 @@ import 'package:Psynexa/components/randevu_detay.dart';
 import 'package:Psynexa/components/randevu_detay_card.dart';
 import 'package:Psynexa/components/randevu_number_card.dart';
 import 'package:Psynexa/constant/constant.dart';
-import 'package:Psynexa/model/reservation_model.dart';
+import 'package:Psynexa/models/reservation_model.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:grock/grock.dart';
 import 'package:Psynexa/view/calendar.dart';
@@ -118,11 +118,13 @@ class DetayPsikiyatri extends StatelessWidget {
                               Text(
                                 'Uyum bozuklukları uzmanı, psikolojik danışmanlık ve terapi hizmetleri sunan bir sağlık profesyonelidir. Uyum bozuklukları, bireylerin hayatlarında önemli bir stres kaynağı olabilir ve iş, okul ve sosyal ilişkiler gibi yaşamın birçok alanını etkileyebilir. Bu nedenle, uyum bozuklukları uzmanları, hastalarının günlük yaşamlarında karşılaştıkları zorluklara yardımcı olmak için özel olarak eğitilirler.Uyum bozuklukları uzmanları, çeşitli terapi teknikleri kullanarak hastalarının uyum sorunlarını ele alır. Bunlar arasında bilişsel davranışçı terapi, kişilerarası terapi, aile terapisi ve psikodinamik terapi gibi terapiler yer alır. Uzmanlar, hastalarının yaşadıkları sorunları ve hissettikleri duyguları anlamak için bireysel danışmanlık, grup terapisi veya aile terapisi gibi farklı terapi yöntemleri kullanabilirler.',
                                 style: TextStyle(
-                                    fontSize: 13,
-                                    fontFamily: 'Proxima Nova',
-                                    fontWeight: FontWeight.w400,
-                                    letterSpacing: -0.2,
-                                    color: Color.fromARGB(140, 0, 0, 0)),
+                                  fontSize: 13,
+                                  fontFamily: 'Proxima Nova',
+                                  fontWeight: FontWeight.w400,
+                                  letterSpacing: -0.2,
+                                  color: Color.fromARGB(140, 0, 0, 0),
+                                  height: 1.5,
+                                ),
                               )
                             ],
                           ),
@@ -148,7 +150,8 @@ class DetayPsikiyatri extends StatelessWidget {
                                     fontFamily: 'Proxima Nova',
                                     fontWeight: FontWeight.w400,
                                     letterSpacing: -0.2,
-                                    color: const Color.fromARGB(140, 0, 0, 0)),
+                                    color: const Color.fromARGB(140, 0, 0, 0),
+                                    height: 1.5),
                               ),
                             ),
                           ],
@@ -194,7 +197,7 @@ class DetayPsikiyatri extends StatelessWidget {
                               borderRadius: BorderRadius.circular(12)),
                         ),
                         child: SvgPicture.asset(
-                          Assets.icons.icUnionSVG,
+                          Assets.icons.icHeartGraySVG,
                           color: Constant.purple,
                         ),
                       ),

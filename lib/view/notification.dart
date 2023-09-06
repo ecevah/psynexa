@@ -20,11 +20,11 @@ class _NotificationPageState extends State<NotificationPage> {
   List<_notifiListModel> notiList = [
     _notifiListModel(
       title: "Prof. Dr. Ahmet Ecevit",
-      date: DateTime(2023, 8, 30, 22, 22, 56, 486, 933),
+      date: DateTime(2023, 8, 20, 22, 22, 56, 486, 933),
     ),
     _notifiListModel(
       title: "Prof. Dr. Ahmet Ecevit",
-      date: DateTime(2023, 8, 30, 22, 22, 56, 486, 933),
+      date: DateTime(2023, 8, 20, 22, 22, 56, 486, 933),
     ),
     _notifiListModel(
       title: "Prof. Dr. Ahmet Ecevit",
