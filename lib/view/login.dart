@@ -1,5 +1,7 @@
 import 'package:Psynexa/components/exit_alert.dart';
 import 'package:Psynexa/components/snackbar.dart';
+import 'package:Psynexa/models/login/login_request.dart';
+import 'package:Psynexa/services/login_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
@@ -12,24 +14,36 @@ import 'package:Psynexa/view/meet.dart';
 import 'package:Psynexa/view/register.dart';
 import '../assets.dart';
 import '../components/custom_pass_input.dart';
+import 'package:dio/dio.dart';
 
 class Login extends ConsumerStatefulWidget {
-  const Login({super.key});
+  bool onBoard;
+  Login({super.key, bool? onBoard}) : onBoard = onBoard ?? true;
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => _LoginState();
 }
 
 class _LoginState extends ConsumerState<Login> {
-  final conferanceId = TextEditingController();
+  late final LoginService loginService;
+  final username = TextEditingController();
+  final password = TextEditingController();
+  final GlobalKey<FormState> formKey = GlobalKey();
+
+  @override
+  void initState() {
+    super.initState();
+    loginService = LoginService(Dio(BaseOptions(baseUrl: Constant.domain)));
+  }
 
   @override
   void dispose() {
     super.dispose();
-    conferanceId.dispose();
+    username.dispose();
+    password.dispose();
   }
 
   Future<bool> _onWillPop() async {
-    return await onWillPop(context);
+    return widget.onBoard == true ? await onWillPop(context) : true;
   }
 
   @override
@@ -37,198 +51,74 @@ class _LoginState extends ConsumerState<Login> {
     return WillPopScope(
       onWillPop: _onWillPop,
       child: Scaffold(
-          body: Center(
-        child: Column(
+        body: Column(
           children: [
-            const Expanded(flex: 2, child: SizedBox()),
+            const Expanded(flex: 4, child: SizedBox()),
             Expanded(
               flex: 14,
-              child: Center(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 60.0),
-                      child: SvgPicture.asset(
-                        Assets.images.imXLogoSvgSVG,
-                        height: 40,
-                        width: 220,
-                      ),
-                    ),
-                    CustomText(
-                      text: 'Mail Adresi',
-                      controller: conferanceId,
-                    ),
-                    const CustomPassword(),
-                    Row(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Form(
+                    key: formKey,
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
+                    child: Wrap(
+                      alignment: WrapAlignment.center,
                       children: [
-                        const Spacer(),
                         Padding(
-                          padding: const EdgeInsets.only(right: 15.0),
-                          child: TextButton(
-                            onPressed: () {
-                              // ScaffoldMessenger.of(context).showSnackBar(
-                              //   SnackBar(
-                              //     behavior: SnackBarBehavior.floating,
-                              //     backgroundColor: Colors.transparent,
-                              //     elevation: 0,
-                              //     content: ErrorSnackbar(context),
-                              //   ),
-                              // );
-
-                              showDialog(
-                                context: context,
-                                builder: (BuildContext context) {
-                                  return Align(
-                                    alignment: Alignment.bottomCenter,
-                                    child: IntrinsicHeight(
-                                      child: Padding(
-                                        padding:
-                                            const EdgeInsets.only(bottom: 30.0),
-                                        child: Container(
-                                          padding: EdgeInsets.symmetric(
-                                              horizontal: 32, vertical: 36),
-                                          width:
-                                              MediaQuery.sizeOf(context).width -
-                                                  48,
-                                          height: 260,
-                                          decoration: BoxDecoration(
-                                              color: Colors.white,
-                                              borderRadius:
-                                                  BorderRadius.circular(10)),
-                                          child: Column(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              SvgPicture.asset(
-                                                "assets/checkout/Unionalert.svg",
-                                                height: 70,
-                                                color: Constant.purple,
-                                              ),
-                                              Text(
-                                                "Hesaptan çıkış yapmak\n istediğinize emin misiniz?",
-                                                style: TextStyle(
-                                                  color: Colors.black
-                                                      .withOpacity(0.65),
-                                                  fontSize: 15,
-                                                  decoration:
-                                                      TextDecoration.none,
-                                                  fontWeight: FontWeight.w400,
-                                                  fontFamily: 'Proxima Nova',
-                                                ),
-                                                textAlign: TextAlign.center,
-                                              ),
-                                              Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment
-                                                        .spaceBetween,
-                                                children: [
-                                                  GestureDetector(
-                                                    onTap: () {
-                                                      Grock.toRemove(Login());
-                                                    },
-                                                    child: Container(
-                                                      height: 45,
-                                                      width: (MediaQuery.sizeOf(
-                                                                      context)
-                                                                  .width -
-                                                              126) /
-                                                          2,
-                                                      decoration: BoxDecoration(
-                                                        color: Constant.purple
-                                                            .withOpacity(0.10),
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(10),
-                                                      ),
-                                                      child: Center(
-                                                        child: Text(
-                                                          "Çıkış Yap",
-                                                          style: TextStyle(
-                                                            decoration:
-                                                                TextDecoration
-                                                                    .none,
-                                                            color:
-                                                                Constant.purple,
-                                                            fontSize: 15,
-                                                            fontWeight:
-                                                                FontWeight.w500,
-                                                            fontFamily:
-                                                                'Proxima Nova',
-                                                            letterSpacing: -0.1,
-                                                          ),
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  ),
-                                                  GestureDetector(
-                                                    onTap: () {
-                                                      Navigator.of(context)
-                                                          .pop();
-                                                    },
-                                                    child: Container(
-                                                      height: 45,
-                                                      width: (MediaQuery.sizeOf(
-                                                                      context)
-                                                                  .width -
-                                                              126) /
-                                                          2,
-                                                      decoration: BoxDecoration(
-                                                        color: Constant.purple,
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(10),
-                                                      ),
-                                                      child: Center(
-                                                        child: Text(
-                                                          "İptal Et",
-                                                          style: TextStyle(
-                                                            decoration:
-                                                                TextDecoration
-                                                                    .none,
-                                                            color: Colors.white,
-                                                            fontSize: 15,
-                                                            fontWeight:
-                                                                FontWeight.w500,
-                                                            fontFamily:
-                                                                'Proxima Nova',
-                                                            letterSpacing: -0.1,
-                                                          ),
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  );
-                                },
-                              );
-                            },
-                            child: const Text(
-                              'Şifremi Unuttum',
-                              style: TextStyle(
-                                color: Constant.inputText,
-                              ),
-                            ),
+                          padding: const EdgeInsets.only(bottom: 60.0),
+                          child: SvgPicture.asset(
+                            Assets.images.imXLogoSvgSVG,
+                            height: 24,
+                            width: 130,
                           ),
                         ),
+                        CustomText(
+                          text: 'Mail Adresi',
+                          controller: username,
+                        ),
+                        CustomPassword(
+                          controller: password,
+                        ),
+                        Row(
+                          children: [
+                            const Spacer(),
+                            Padding(
+                              padding: const EdgeInsets.only(right: 15.0),
+                              child: TextButton(
+                                onPressed: () {},
+                                child: const Text(
+                                  'Şifremi Unuttum',
+                                  style: TextStyle(
+                                    color: Constant.inputText,
+                                    fontFamily: 'Proxima Nova',
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: 13,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(top: 40.0),
+                          child: FirstBtn(
+                              onTap: () async {
+                                print([username.text, password.text]);
+
+                                if (formKey.currentState?.validate() ?? false) {
+                                  final res = await loginService.fetchLogin(
+                                      UserRequestModel(
+                                          username: username.text,
+                                          password: password.text));
+                                }
+                              },
+                              text: 'Giriş Yap'),
+                        )
                       ],
                     ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 40.0),
-                      child: FirstBtn(
-                          onTap: () {
-                            Grock.toRemove(BaseScaffold());
-                          },
-                          text: 'Giriş Yap'),
-                    )
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
             Expanded(
@@ -240,9 +130,11 @@ class _LoginState extends ConsumerState<Login> {
                   const Text(
                     'Hesabınız yok mu?',
                     style: TextStyle(
-                        color: Constant.inputText,
-                        fontSize: 13,
-                        fontWeight: FontWeight.w400),
+                      color: Constant.inputText,
+                      fontSize: 13,
+                      fontWeight: FontWeight.w400,
+                      fontFamily: 'Proxima Nova',
+                    ),
                   ),
                   TextButton(
                     onPressed: () {
@@ -257,9 +149,11 @@ class _LoginState extends ConsumerState<Login> {
                     child: const Text(
                       'Üye ol',
                       style: TextStyle(
-                          color: Constant.inputText,
-                          fontSize: 13,
-                          fontWeight: FontWeight.w700),
+                        color: Constant.inputText,
+                        fontSize: 13,
+                        fontWeight: FontWeight.w700,
+                        fontFamily: 'Proxima Nova',
+                      ),
                     ),
                   )
                 ],
@@ -267,7 +161,7 @@ class _LoginState extends ConsumerState<Login> {
             ),
           ],
         ),
-      )),
+      ),
     );
   }
 }

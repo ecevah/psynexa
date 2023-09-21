@@ -1,3 +1,5 @@
+import 'package:Psynexa/components/reservation_active.dart';
+import 'package:Psynexa/components/reservation_detay.dart';
 import 'package:flutter/material.dart';
 import 'package:Psynexa/assets.dart';
 import 'package:Psynexa/components/custom_reservation_detaylistTile.dart';
@@ -14,13 +16,13 @@ class Reservation extends StatelessWidget {
   Widget build(BuildContext context) {
     List<_resListModel> iptalList = [
       _resListModel(
-        title: "Prof. Dr. Ahmet Ecevit",
-        date: DateTime(2023, 10, 30, 22, 22, 56, 486, 933),
+        title: "Ahmet Ecevit",
+        date: DateTime(2023, 9, 6, 20, 16, 56, 486, 933),
         rol: 'Travma Sonrası Stres Bozukluğu',
         image: Assets.images.imKariPNG,
       ),
       _resListModel(
-        title: "Prof. Dr. Ahmet Ecevit",
+        title: "Ahmet Ecevit",
         date: DateTime(2023, 10, 23, 22, 22, 56, 486, 933),
         rol: 'Travma Sonrası Stres Bozukluğu',
         image: Assets.images.imKariPNG,
@@ -42,10 +44,10 @@ class Reservation extends StatelessWidget {
     DateTime now = DateTime.now();
 
     List<_resListModel> aktifList = iptalList
-        .where((item) => item.date.isAfter(now.add(Duration(minutes: 15))))
+        .where((item) => item.date.isAfter(now.subtract(Duration(minutes: 5))))
         .toList();
     List<_resListModel> gecmisList = iptalList
-        .where((item) => item.date.isBefore(now.add(Duration(minutes: 15))))
+        .where((item) => item.date.isBefore(now.subtract(Duration(minutes: 5))))
         .toList();
 
     return DefaultTabController(
@@ -105,13 +107,16 @@ class Reservation extends StatelessWidget {
                       ),
                       Expanded(
                         child: ListView.builder(
+                          physics: BouncingScrollPhysics(),
+                          padding: EdgeInsets.symmetric(horizontal: 19),
                           itemCount: aktifList.length,
                           itemBuilder: (BuildContext context, int index) {
-                            return CustomReservationIptalListTile(
+                            return reservationActiveCard(
                               title: aktifList[index].title,
                               image: aktifList[index].image,
                               rol: aktifList[index].rol,
                               date: aktifList[index].date,
+                              padding: 10,
                             );
                           },
                         ),
@@ -125,9 +130,11 @@ class Reservation extends StatelessWidget {
                       ),
                       Expanded(
                         child: ListView.builder(
+                          physics: BouncingScrollPhysics(),
+                          padding: EdgeInsets.symmetric(horizontal: 19),
                           itemCount: gecmisList.length,
                           itemBuilder: (BuildContext context, int index) {
-                            return CustomReservationDetayListTile(
+                            return reservationDetayCard(
                               title: gecmisList[index].title,
                               image: gecmisList[index].image,
                               rol: gecmisList[index].rol,

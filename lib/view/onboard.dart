@@ -8,6 +8,7 @@ import 'package:Psynexa/riverpod/onboard_riverpod.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:grock/grock.dart';
 import 'package:Psynexa/view/login.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 final firstPageRiverpod = ChangeNotifierProvider((ref) => FirstPageRivepod());
 
@@ -48,7 +49,7 @@ class _FirstPageState extends ConsumerState<FirstPage> {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.only(top: 20.0, bottom: 40.0),
+                padding: const EdgeInsets.only(top: 30.0, bottom: 30.0),
                 child: _firstCardCarousel(read: read, watch: watch),
               ),
               SvgPicture.asset(
@@ -58,11 +59,18 @@ class _FirstPageState extends ConsumerState<FirstPage> {
               ),
               Padding(
                 padding: const EdgeInsets.only(top: 80.0),
-                child: FirstBtn(
-                  onTap: () {
-                    Grock.to(const Login());
-                  },
-                  text: 'DEVAM ET',
+                child: SizedBox(
+                  width: 320,
+                  child: FirstBtn(
+                    onTap: () async {
+                      final prefs = await SharedPreferences.getInstance();
+                      await prefs.setBool('isNew', true);
+                      Grock.toRemove(Login(
+                        onBoard: false,
+                      ));
+                    },
+                    text: 'DEVAM ET',
+                  ),
                 ),
               )
             ],

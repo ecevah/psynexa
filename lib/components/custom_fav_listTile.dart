@@ -1,3 +1,4 @@
+import 'package:Psynexa/components/fav_alert.dart';
 import 'package:flutter/material.dart';
 import 'package:Psynexa/assets.dart';
 import 'package:Psynexa/constant/constant.dart';
@@ -11,7 +12,7 @@ class listOge extends StatelessWidget {
   int number;
   String imagePath;
   double float;
-  Function onTap;
+  String onTap;
   listOge(
       {super.key,
       required this.title,
@@ -23,75 +24,97 @@ class listOge extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.symmetric(vertical: 18),
-      decoration: BoxDecoration(
-        border: Border(
-          bottom: BorderSide(color: Constant.gray, width: 0.7),
+    Future<bool> onWillPop(String id) async {
+      return await onFavPop(context, id);
+    }
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 5.0, horizontal: 19),
+      child: Container(
+        padding: EdgeInsets.symmetric(
+          vertical: 15,
         ),
-        color: Constant.white,
-      ),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.all(Radius.circular(10)),
+          border: Border.all(
+              style: BorderStyle.solid, width: 1, color: Color(0xFFEAEAEF)),
+          color: Constant.white,
+        ),
         child: ListTile(
           title: Text(
             title,
             style: TextStyle(
-              fontSize: 13.5,
+              fontSize: 15,
               fontWeight: FontWeight.w500,
-              color: Constant.black,
+              color: Constant.black75,
               fontFamily: 'Proxima Nova',
+              letterSpacing: -0.2,
             ),
           ),
           subtitle: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              SizedBox(
+                height: 3,
+              ),
               Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.only(top: 2),
-                    child: RatingStars(
-                      valueLabelVisibility: false,
-                      value: 3.6,
-                      starBuilder: (index, color) => Icon(
-                        Icons.star,
-                        color: color,
-                        size: 11,
-                      ),
-                      starCount: 5,
-                      starSize: 15,
-                      maxValue: 5,
-                      starSpacing: 0,
-                      maxValueVisibility: true,
-                      starOffColor: Color.fromARGB(50, 255, 235, 59),
-                      starColor: Colors.yellow,
+                  RatingStars(
+                    valueLabelVisibility: false,
+                    value: float,
+                    starBuilder: (index, color) => Icon(
+                      Icons.star,
+                      color: color,
+                      size: 9,
                     ),
+                    starCount: 5,
+                    starSize: 12,
+                    maxValue: 5,
+                    starSpacing: 0,
+                    maxValueVisibility: true,
+                    starOffColor: Color.fromARGB(70, 255, 235, 59),
+                    starColor: Colors.yellow,
                   ),
                   Padding(
-                    padding: const EdgeInsets.only(top: 4, left: 1, bottom: 2),
+                    padding: const EdgeInsets.only(left: 3, bottom: 1),
                     child: Text(
                       '$float ($number Oylama)',
                       style: TextStyle(
-                        fontSize: 8,
+                        fontSize: 11,
                         fontWeight: FontWeight.w400,
-                        color: const Color.fromARGB(145, 51, 51, 51),
+                        color: Colors.black.withOpacity(0.5),
                         fontFamily: 'Proxima Nova',
                       ),
                     ),
                   )
                 ],
               ),
+              SizedBox(
+                height: 3,
+              ),
               Text(
                 rol,
                 style: TextStyle(
-                  fontSize: 10,
+                  fontSize: 12,
                   fontWeight: FontWeight.w400,
-                  color: Color.fromARGB(103, 51, 51, 51),
+                  color: Colors.black.withOpacity(0.35),
                   fontFamily: 'Proxima Nova',
                 ),
-              )
+              ),
             ],
+          ),
+          trailing: GrockContainer(
+            onTap: () {
+              onWillPop(onTap);
+            },
+            child: SvgPicture.asset(
+              Assets.icons.icHeartSVG,
+              width: 16,
+              height: 15,
+              color: Color(0xFFD63928),
+            ),
           ),
           leading: Container(
             width: 70,
@@ -102,41 +125,6 @@ class listOge extends StatelessWidget {
                 image: AssetImage(imagePath),
                 fit: BoxFit.contain,
               ),
-            ),
-          ),
-          trailing: GrockContainer(
-            padding: EdgeInsets.only(top: 1),
-            onTap: onTap(),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Container(
-                  width: 35,
-                  height: 35,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: Color.fromARGB(39, 240, 115, 90),
-                  ),
-                  child: Center(
-                    child: Padding(
-                      padding: const EdgeInsets.only(left: 2.0),
-                      child: SvgPicture.asset(Assets.icons.icHeartSVG,
-                          width: 11, height: 11, color: Constant.red),
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  height: 1,
-                ),
-                Text(
-                  'Kaldır',
-                  style: TextStyle(
-                    fontSize: 8,
-                    fontWeight: FontWeight.w500,
-                    color: Constant.red,
-                  ),
-                )
-              ],
             ),
           ),
         ),

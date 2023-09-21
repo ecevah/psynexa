@@ -33,14 +33,17 @@ class _AssetsIcons {
   final icAccRandevularSVG = 'assets/icons/ic_acc_randevular.svg';
   final icBuyReservationSVG = 'assets/icons/ic_buyReservation.svg';
   final icCalendarSVG = 'assets/icons/ic_calendar.svg';
+  final icCameraSVG = 'assets/icons/ic_camera.svg';
   final icCinsiyetSVG = 'assets/icons/ic_cinsiyet.svg';
   final icCircle1SVG = 'assets/icons/ic_circle1.svg';
   final icCircle2SVG = 'assets/icons/ic_circle2.svg';
   final icCircle3SVG = 'assets/icons/ic_circle3.svg';
   final icClockGraySVG = 'assets/icons/ic_clockGray.svg';
   final icClockPurpleSVG = 'assets/icons/ic_clockPurple.svg';
+  final icDefterSVG = 'assets/icons/ic_defter.svg';
   final icDetaySVG = 'assets/icons/ic_detay.svg';
   final icDoubleCalendarSVG = 'assets/icons/ic_doubleCalendar.svg';
+  final icErrorSVG = 'assets/icons/ic_error.svg';
   final icGecmisSVG = 'assets/icons/ic_gecmis.svg';
   final icHeartSVG = 'assets/icons/ic_heart.svg';
   final icHeartGraySVG = 'assets/icons/ic_heartGray.svg';
@@ -54,10 +57,12 @@ class _AssetsIcons {
   final icSaatSVG = 'assets/icons/ic_saat.svg';
   final icSendArrowSVG = 'assets/icons/ic_sendArrow.svg';
   final icStarSVG = 'assets/icons/ic_star.svg';
+  final icTickSVG = 'assets/icons/ic_tick.svg';
   final icUnionSVG = 'assets/icons/ic_union.svg';
   final icUserCaroSVG = 'assets/icons/ic_userCaro.svg';
   final icUserGraySVG = 'assets/icons/ic_userGray.svg';
   final icUserPurpleSVG = 'assets/icons/ic_userPurple.svg';
+  final icVerifyTickSVG = 'assets/icons/ic_verify_tick.svg';
   final icZamanSVG = 'assets/icons/ic_zaman.svg';
 }
 
@@ -66,10 +71,12 @@ class _AssetsImages {
 
 
   final imChatbotPNG = 'assets/images/im_chatbot.png';
+  final imDepresyonSVG = 'assets/images/im_depresyon.svg';
   final imHomeKariPNG = 'assets/images/im_homeKari.png';
   final imKariPNG = 'assets/images/im_kari.png';
   final imLogoSvgSVG = 'assets/images/im_logoSVG.svg';
   final imOnBoardSVG = 'assets/images/im_onBoard.svg';
+  final imStresSVG = 'assets/images/im_stres.svg';
   final imXLogoSvgSVG = 'assets/images/im_xLogoSvg.svg';
   final nexaGIF = 'assets/images/nexa.gif';
 }

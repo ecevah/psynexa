@@ -1,6 +1,7 @@
 import 'package:Psynexa/assets.dart';
 import 'package:Psynexa/components/custom_back_appbar.dart';
 import 'package:Psynexa/components/custom_first_btn.dart';
+import 'package:Psynexa/components/pay_alert.dart';
 import 'package:Psynexa/constant/constant.dart';
 import 'package:Psynexa/view/base_scaffold.dart';
 import 'package:flutter/material.dart';
@@ -10,8 +11,13 @@ import 'package:grock/grock.dart';
 class PayPage extends StatelessWidget {
   PayPage({super.key});
   double price = 500.00;
+
   @override
   Widget build(BuildContext context) {
+    Future<bool> _onWillPop() async {
+      return await onPayPop(context);
+    }
+
     return Scaffold(
       appBar: CustomAccAppBar(appbarTitle: 'Ödeme Detayları'),
       body: Padding(
@@ -207,7 +213,8 @@ class PayPage extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.only(bottom: 34.0),
               child: FirstBtn(
-                onTap: () {
+                onTap: () async {
+                  await _onWillPop();
                   Grock.toRemove(BaseScaffold());
                 },
                 text: 'Ödeme Yap',

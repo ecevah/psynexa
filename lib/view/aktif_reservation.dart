@@ -19,7 +19,7 @@ class AktifReservation extends StatefulWidget {
 class _AktifReservationState extends State<AktifReservation> {
   String name = 'Ahmet Ecevit';
   String phone = '0555 555 55 55';
-  String conferenceID = 'sdasd';
+  String conferenceID = '2EwSO9l6';
   double price = 500.00;
   int age = 23;
   DateTime date = DateTime(2023, 8, 26, 22, 22, 56, 486, 933);
@@ -63,6 +63,7 @@ class _AktifReservationState extends State<AktifReservation> {
             ),
             Expanded(
               child: ListView(
+                physics: BouncingScrollPhysics(),
                 children: [
                   Column(
                     children: [

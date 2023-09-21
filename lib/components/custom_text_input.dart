@@ -13,6 +13,7 @@ class CustomText extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizedBox(
       width: 340,
+      height: 64,
       child: Padding(
         padding: const EdgeInsets.only(top: 7.0, bottom: 7.0),
         child: TextField(
@@ -21,17 +22,23 @@ class CustomText extends StatelessWidget {
           decoration: InputDecoration(
             focusedBorder: OutlineInputBorder(
               borderSide: const BorderSide(color: Constant.gray, width: 1),
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: BorderRadius.circular(10),
             ),
             enabledBorder: OutlineInputBorder(
               borderSide: const BorderSide(color: Constant.gray, width: 1),
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: BorderRadius.circular(10),
             ),
-            labelStyle: const TextStyle(color: Constant.inputText),
+            labelStyle: const TextStyle(
+              color: Constant.inputText,
+              fontSize: 13,
+              fontWeight: FontWeight.w400,
+              fontFamily: 'Proxima Nova',
+            ),
+            labelText: text,
             focusColor: Constant.inputText,
             filled: true,
             fillColor: Constant.darkwhite,
-            labelText: text,
+            contentPadding: EdgeInsets.symmetric(horizontal: 20),
           ),
         ),
       ),

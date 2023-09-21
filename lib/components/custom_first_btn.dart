@@ -19,12 +19,15 @@ class FirstBtn extends StatelessWidget {
       child: ElevatedButton(
         onPressed: () => onTap(),
         style: ElevatedButton.styleFrom(
-            backgroundColor: Constant.purple,
+            backgroundColor: Constant.purple.withOpacity(0.17),
+            elevation: 0,
             shape: RoundedRectangleBorder(borderRadius: 12.allBR)),
         child: Text(
           text,
           style: const TextStyle(
-              color: Constant.white, fontWeight: FontWeight.w700, fontSize: 13),
+              color: Constant.purple,
+              fontWeight: FontWeight.w700,
+              fontSize: 13),
         ),
       ),
     );

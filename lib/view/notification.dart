@@ -19,72 +19,18 @@ class NotificationPage extends StatefulWidget {
 class _NotificationPageState extends State<NotificationPage> {
   List<_notifiListModel> notiList = [
     _notifiListModel(
-      title: "Prof. Dr. Ahmet Ecevit",
-      date: DateTime(2023, 8, 20, 22, 22, 56, 486, 933),
-    ),
+        title: "Prof. Dr. Ahmet Ecevit",
+        date: DateTime(2023, 8, 20, 22, 22, 56, 486, 933),
+        tur: true),
     _notifiListModel(
-      title: "Prof. Dr. Ahmet Ecevit",
-      date: DateTime(2023, 8, 20, 22, 22, 56, 486, 933),
-    ),
+        title: "Prof. Dr. Ahmet Ecevit",
+        date: DateTime(2023, 8, 20, 22, 22, 56, 486, 933),
+        tur: false),
     _notifiListModel(
-      title: "Prof. Dr. Ahmet Ecevit",
-      date: DateTime(2023, 8, 24, 22, 22, 56, 486, 933),
-    ),
-    _notifiListModel(
-      title: "Prof. Dr. Ahmet Ecevit",
-      date: DateTime(2023, 8, 24, 22, 22, 56, 486, 933),
-    ),
-    _notifiListModel(
-      title: "Prof. Dr. Ahmet Ecevit",
-      date: DateTime(2023, 8, 24, 22, 22, 56, 486, 933),
-    ),
-    _notifiListModel(
-      title: "Prof. Dr. Ahmet Ecevit",
-      date: DateTime(2023, 8, 23, 22, 22, 56, 486, 933),
-    ),
-    _notifiListModel(
-      title: "Prof. Dr. Ahmet Ecevit",
-      date: DateTime(2023, 8, 23, 22, 22, 56, 486, 933),
-    ),
-    _notifiListModel(
-      title: "Prof. Dr. Ahmet Ecevit",
-      date: DateTime(2023, 8, 23, 22, 22, 56, 486, 933),
-    ),
-    _notifiListModel(
-      title: "Prof. Dr. Ahmet Ecevit",
-      date: DateTime(2023, 8, 23, 22, 22, 56, 486, 933),
-    ),
-    _notifiListModel(
-      title: "Prof. Dr. Ahmet Ecevit",
-      date: DateTime(2023, 8, 23, 22, 22, 56, 486, 933),
-    ),
-    _notifiListModel(
-      title: "Prof. Dr. Ahmet Ecevit",
-      date: DateTime(2023, 8, 23, 22, 22, 56, 486, 933),
-    ),
+        title: "Prof. Dr. Ahmet Ecevit",
+        date: DateTime(2023, 8, 24, 22, 22, 56, 486, 933),
+        tur: true)
   ];
-
-  List<_notifiListModel> todayNotiList = [];
-  List<_notifiListModel> beforeTodayNotiList = [];
-
-  @override
-  void initState() {
-    super.initState();
-    for (int i = 0; i < notiList.length; i++) {
-      if (isToday(notiList[i].date)) {
-        todayNotiList.add(notiList[i]);
-      } else {
-        beforeTodayNotiList.add(notiList[i]);
-      }
-    }
-  }
-
-  bool isToday(DateTime dateTime) {
-    final now = DateTime.now();
-    return dateTime.year == now.year &&
-        dateTime.month == now.month &&
-        dateTime.day == now.day;
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -94,71 +40,19 @@ class _NotificationPageState extends State<NotificationPage> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Expanded(
-            child: ListView(
-              children: [
-                if (todayNotiList.isNotEmpty)
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(
-                            left: 30, top: 16, bottom: 16),
-                        child: Row(
-                          children: [
-                            Text(
-                              'Bugün  ',
-                              style: TextStyle(
-                                fontSize: 15,
-                                fontWeight: FontWeight.w500,
-                                color: Constant.black,
-                              ),
-                            ),
-                            Container(
-                              width: 1,
-                              height: 16,
-                              color: Constant.black,
-                            ),
-                            Text(
-                              '  ${DateFormat('dd MMMM yyyy').format(DateTime.now())}',
-                              style: TextStyle(
-                                fontSize: 15,
-                                fontWeight: FontWeight.w500,
-                                color: Constant.black,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      for (int i = 0; i < todayNotiList.length; i++)
-                        CustomNatiListTile(
-                            date: todayNotiList[i].date,
-                            title: todayNotiList[i].title,
-                            onTab: true),
-                    ],
-                  ),
-                if (beforeTodayNotiList.isNotEmpty)
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(
-                            left: 30, top: 16, bottom: 16),
-                        child: Text(
-                          'Daha Önce',
-                          style: TextStyle(
-                              fontSize: 15,
-                              fontWeight: FontWeight.w500,
-                              color: Constant.black),
-                        ),
-                      ),
-                      for (int i = 0; i < beforeTodayNotiList.length; i++)
-                        CustomNatiListTile(
-                            date: beforeTodayNotiList[i].date,
-                            title: beforeTodayNotiList[i].title,
-                            onTab: false),
-                    ],
-                  ),
-              ],
+            child: Padding(
+              padding: EdgeInsets.symmetric(vertical: 20),
+              child: ListView.builder(
+                physics: BouncingScrollPhysics(),
+                itemCount: notiList.length,
+                itemBuilder: (BuildContext context, int index) {
+                  return CustomNatiListTile(
+                    date: notiList[index].date,
+                    title: notiList[index].title,
+                    tur: notiList[index].tur,
+                  );
+                },
+              ),
             ),
           ),
         ],
@@ -170,8 +64,7 @@ class _NotificationPageState extends State<NotificationPage> {
 class _notifiListModel {
   String title;
   DateTime date;
-  _notifiListModel({
-    required this.title,
-    required this.date,
-  });
+  bool tur;
+  _notifiListModel(
+      {required this.title, required this.date, required this.tur});
 }

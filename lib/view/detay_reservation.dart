@@ -57,6 +57,7 @@ class DetayReservation extends StatelessWidget {
                   ],
                 ),
                 child: ListView(
+                  physics: BouncingScrollPhysics(),
                   children: [
                     Text(
                       'Psikiyatrist Yorumu',

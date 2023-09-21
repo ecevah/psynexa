@@ -46,6 +46,7 @@ class LastReservation extends StatelessWidget {
           ),
           Expanded(
             child: ListView.builder(
+              physics: BouncingScrollPhysics(),
               itemCount: gecmisList.length,
               itemBuilder: (BuildContext context, int index) {
                 return CustomReservationDetayListTile(

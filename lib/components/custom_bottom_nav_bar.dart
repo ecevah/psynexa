@@ -18,7 +18,7 @@ class CustomBottomNavBar extends ConsumerWidget {
     var read = ref.read(baseScaffoldRiverpod);
     return Container(
       width: Grock.width,
-      height: 100,
+      height: 90,
       padding: const EdgeInsets.only(bottom: 17, top: 10),
       decoration: const BoxDecoration(
         color: Constant.white,
@@ -39,7 +39,7 @@ class CustomBottomNavBar extends ConsumerWidget {
               tag: 'chatgifhero',
               child: ImageButton(
                 onPressed: () {
-                  Grock.to(ChatBot(chatid: uid));
+                  Grock.to(ChatBot());
                 },
                 imagePath: Assets.images.nexaGIF,
                 width: 60,

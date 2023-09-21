@@ -38,7 +38,7 @@ class BaseScaffoldRiverpod extends ChangeNotifier {
       case 2:
         return Reservation();
       case 3:
-        return const Account();
+        return Account();
       default:
         return const Home();
     }

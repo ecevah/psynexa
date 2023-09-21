@@ -1,3 +1,5 @@
+import 'package:Psynexa/view/base_scaffold.dart';
+import 'package:Psynexa/view/login.dart';
 import 'package:flutter/material.dart';
 // ignore: depend_on_referenced_packages
 import 'package:flutter_svg/svg.dart';
@@ -5,6 +7,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:grock/grock.dart';
 import 'package:Psynexa/view/onboard.dart';
 import '../assets.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Splash extends StatefulWidget {
   const Splash({super.key});
@@ -18,14 +21,17 @@ class _SplashState extends State<Splash> with TickerProviderStateMixin {
 
   @override
   void initState() {
-    Future.delayed(const Duration(seconds: 2), () {
-      Grock.toRemove(const FirstPage());
-    });
     super.initState();
     _controller = AnimationController(
       duration: const Duration(seconds: 1),
       vsync: this,
     )..repeat();
+    _loadPrefsAndNavigate();
+  }
+
+  void _loadPrefsAndNavigate() async {
+    await Future.delayed(Duration(seconds: 2));
+    Grock.toRemove(FirstPage());
   }
 
   @override
@@ -42,23 +48,24 @@ class _SplashState extends State<Splash> with TickerProviderStateMixin {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Padding(
-                padding: 12.allP,
-                child: SvgPicture.asset(
-                  Assets.images.imLogoSvgSVG,
-                ),
+              SvgPicture.asset(
+                Assets.images.imLogoSvgSVG,
+                height: 28.54,
+                width: 150,
+              ),
+              SizedBox(
+                height: 14,
               ),
               Stack(
                 alignment: Alignment.center,
                 children: [
                   RotationTransition(
                     turns: Tween(begin: 0.0, end: 1.0).animate(_controller),
-                    child: SizedBox(
-                      height: 43.2,
-                      width: 43.2,
-                      child: Padding(
-                        padding: const EdgeInsets.only(
-                            top: 16.0, bottom: 12.0, left: 14, right: 14),
+                    child: Padding(
+                      padding: const EdgeInsets.only(top: 2.0),
+                      child: SizedBox(
+                        height: 7.56,
+                        width: 7.56,
                         child: SvgPicture.asset(
                           Assets.icons.icCircle1SVG,
                         ),
@@ -68,12 +75,14 @@ class _SplashState extends State<Splash> with TickerProviderStateMixin {
                   RotationTransition(
                     turns: Tween(begin: 1.0, end: 0.0).animate(_controller),
                     child: SizedBox(
-                      height: 30,
-                      width: 30,
                       child: Padding(
-                        padding: const EdgeInsets.only(bottom: 12.0),
-                        child: SvgPicture.asset(
-                          Assets.icons.icCircle2SVG,
+                        padding: const EdgeInsets.only(bottom: 7, top: 1),
+                        child: SizedBox(
+                          height: 9,
+                          width: 17.64,
+                          child: SvgPicture.asset(
+                            Assets.icons.icCircle2SVG,
+                          ),
                         ),
                       ),
                     ),
@@ -82,11 +91,10 @@ class _SplashState extends State<Splash> with TickerProviderStateMixin {
                     turns: Tween(begin: 0.0, end: 1.0).animate(_controller),
                     child: SizedBox(
                       child: Padding(
-                        padding:
-                            const EdgeInsets.only(top: 19.0, left: 2, right: 1),
+                        padding: const EdgeInsets.only(top: 10),
                         child: SizedBox(
-                          height: 43.2,
-                          width: 43.2,
+                          height: 15,
+                          width: 25,
                           child: SvgPicture.asset(
                             Assets.icons.icCircle3SVG,
                           ),

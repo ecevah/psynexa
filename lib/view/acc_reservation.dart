@@ -1,3 +1,5 @@
+import 'package:Psynexa/components/reservation_active.dart';
+import 'package:Psynexa/components/reservation_detay.dart';
 import 'package:flutter/material.dart';
 import 'package:Psynexa/assets.dart';
 import 'package:Psynexa/components/custom_back_appbar.dart';
@@ -101,13 +103,16 @@ class AccReservation extends StatelessWidget {
                       ),
                       Expanded(
                         child: ListView.builder(
+                          physics: BouncingScrollPhysics(),
+                          padding: EdgeInsets.symmetric(horizontal: 19),
                           itemCount: aktifList.length,
                           itemBuilder: (BuildContext context, int index) {
-                            return CustomReservationIptalListTile(
+                            return reservationActiveCard(
                               title: aktifList[index].title,
                               image: aktifList[index].image,
                               rol: aktifList[index].rol,
                               date: aktifList[index].date,
+                              padding: 10,
                             );
                           },
                         ),
@@ -121,9 +126,11 @@ class AccReservation extends StatelessWidget {
                       ),
                       Expanded(
                         child: ListView.builder(
+                          physics: BouncingScrollPhysics(),
+                          padding: EdgeInsets.symmetric(horizontal: 19),
                           itemCount: gecmisList.length,
                           itemBuilder: (BuildContext context, int index) {
-                            return CustomReservationDetayListTile(
+                            return reservationDetayCard(
                               title: gecmisList[index].title,
                               image: gecmisList[index].image,
                               rol: gecmisList[index].rol,

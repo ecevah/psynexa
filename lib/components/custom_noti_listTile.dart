@@ -1,21 +1,20 @@
+import 'package:Psynexa/view/test.dart';
 import 'package:flutter/material.dart';
 import 'package:Psynexa/assets.dart';
 import 'package:Psynexa/constant/constant.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:grock/grock.dart';
+import 'package:intl/intl.dart';
 import 'package:Psynexa/view/aktif_reservation.dart';
 import 'package:Psynexa/view/detay_reservation.dart';
 
 class CustomNatiListTile extends StatefulWidget {
   DateTime date;
   String title;
-  bool onTab;
+  bool tur;
 
   CustomNatiListTile(
-      {super.key,
-      required this.date,
-      required this.title,
-      required this.onTab});
+      {super.key, required this.date, required this.title, required this.tur});
 
   @override
   State<CustomNatiListTile> createState() => _CustomNatiListTileState();
@@ -24,61 +23,169 @@ class CustomNatiListTile extends StatefulWidget {
 class _CustomNatiListTileState extends State<CustomNatiListTile> {
   @override
   Widget build(BuildContext context) {
-    return GrockContainer(
-      onTap: () {
-        widget.onTab
-            ? Grock.to(AktifReservation())
-            : Grock.to(DetayReservation());
-      },
-      padding: EdgeInsets.symmetric(vertical: 6),
-      decoration: BoxDecoration(
-        border: Border(
-          bottom: BorderSide(color: Constant.gray, width: 1),
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 19.0, vertical: 5),
+      child: GrockContainer(
+        padding: EdgeInsets.symmetric(
+          vertical: 15,
+          horizontal: 32,
         ),
-        color: Constant.white,
-      ),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 9.0, vertical: 6),
-        child: ListTile(
-          title: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                "Bugün saat ${widget.date.hour.toString().padLeft(2, '0')}:${widget.date.minute.toString().padLeft(2, '0')}'da ${widget.title} ile randevun var.",
-                style: TextStyle(
-                  fontSize: 12,
-                  fontWeight: FontWeight.w300,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.all(Radius.circular(10)),
+          border: Border.all(
+              style: BorderStyle.solid, width: 1, color: Color(0xFFEAEAEF)),
+          color: Constant.white,
+        ),
+        child: Row(
+          children: [
+            Container(
+              width: 50,
+              height: 50,
+              decoration: BoxDecoration(
+                color: widget.tur
+                    ? Constant.error.withOpacity(0.1)
+                    : Constant.purple.withOpacity(0.1),
+                borderRadius: BorderRadius.all(Radius.circular(25)),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.only(
+                    top: 12.0, bottom: 15, left: 12, right: 12),
+                child: SvgPicture.asset(
+                  widget.tur
+                      ? Assets.icons.icErrorSVG
+                      : Assets.icons.icDefterSVG,
+                  color: widget.tur ? Constant.error : Constant.purple,
                 ),
               ),
-              SizedBox(
-                height: 12,
-              ),
-              Container(
-                child: Text(
-                  "Şimdi Katıl",
-                  style: TextStyle(
-                      color: Constant.purple,
-                      fontSize: 11,
-                      fontWeight: FontWeight.w300),
-                ),
-              )
-            ],
-          ),
-          leading: Container(
-            width: 60,
-            height: 67,
-            decoration: BoxDecoration(
-              color: Color.fromARGB(76, 103, 71, 199),
-              shape: BoxShape.circle,
             ),
-            child: Center(
-              child: SvgPicture.asset(
-                Assets.icons.icCalendarSVG,
-                color: Constant.purple,
-              ),
+            SizedBox(
+              width: 15,
             ),
-          ),
+            Expanded(
+              child: widget.tur
+                  ? RichText(
+                      text: TextSpan(
+                        text: 'Bugün saat ',
+                        style: TextStyle(
+                          fontFamily: 'Proxima Nova',
+                          fontWeight: FontWeight.w400,
+                          fontSize: 13,
+                          height: 1.2,
+                          color: Constant.black,
+                        ),
+                        children: <TextSpan>[
+                          TextSpan(
+                            text: '${DateFormat('HH:mm').format(widget.date)}',
+                            style: TextStyle(
+                              fontFamily: 'Proxima Nova',
+                              fontWeight: FontWeight.w600,
+                              fontSize: 13,
+                              height: 1.2,
+                              color: Constant.black,
+                            ),
+                          ),
+                          TextSpan(
+                            text: "'te ",
+                            style: TextStyle(
+                              fontFamily: 'Proxima Nova',
+                              fontWeight: FontWeight.w400,
+                              fontSize: 13,
+                              height: 1.2,
+                              color: Constant.black,
+                            ),
+                          ),
+                          TextSpan(
+                            text: '${widget.title}',
+                            style: TextStyle(
+                              fontFamily: 'Proxima Nova',
+                              fontWeight: FontWeight.w600,
+                              fontSize: 13,
+                              height: 1.2,
+                              color: Constant.black,
+                            ),
+                          ),
+                          TextSpan(
+                            text: " ile randevunuz bulunmakta.",
+                            style: TextStyle(
+                              fontFamily: 'Proxima Nova',
+                              fontWeight: FontWeight.w400,
+                              fontSize: 13,
+                              height: 1.2,
+                              color: Constant.black,
+                            ),
+                          ),
+                        ],
+                      ),
+                    )
+                  : Column(
+                      children: [
+                        RichText(
+                          text: TextSpan(
+                            text: '${widget.title},',
+                            style: TextStyle(
+                              fontFamily: 'Proxima Nova',
+                              fontWeight: FontWeight.w600,
+                              fontSize: 13,
+                              height: 1.2,
+                              color: Constant.black,
+                            ),
+                            children: <TextSpan>[
+                              TextSpan(
+                                text:
+                                    ' sizin için bir psikolojik test gönderdi.',
+                                style: TextStyle(
+                                  fontFamily: 'Proxima Nova',
+                                  fontWeight: FontWeight.w400,
+                                  fontSize: 13,
+                                  height: 1.2,
+                                  color: Constant.black,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        SizedBox(
+                          height: 4,
+                        ),
+                        Row(
+                          children: [
+                            Spacer(),
+                            SizedBox(
+                              width: 99,
+                              height: 26,
+                              child: ElevatedButton(
+                                onPressed: () {
+                                  Grock.to(
+                                    TestView(
+                                      title: 'Depresyon',
+                                      image: Assets.images.imDepresyonSVG,
+                                    ),
+                                  );
+                                },
+                                child: Text(
+                                  'Şimdi Çöz',
+                                  style: TextStyle(
+                                    fontFamily: 'Proxima Nova',
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 13,
+                                    height: 1.2,
+                                    color: Constant.black,
+                                  ),
+                                ),
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: Color(0xFFF5F5F5),
+                                  elevation: 0,
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(5)),
+                                ),
+                              ),
+                            ),
+                          ],
+                        )
+                      ],
+                    ),
+            )
+          ],
         ),
       ),
     );
