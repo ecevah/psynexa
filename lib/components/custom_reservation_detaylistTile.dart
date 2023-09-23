@@ -109,7 +109,9 @@ class _CustomReservationDetayListTileState
           trailing: GrockContainer(
             padding: EdgeInsets.only(top: 1),
             onTap: () {
-              Grock.to(DetayReservation());
+              Grock.to(DetayReservation(
+                id: "1",
+              ));
             },
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,

@@ -11,12 +11,14 @@ class reservationDetayCard extends StatefulWidget {
   DateTime date;
   String rol;
   String image;
+  String id;
   reservationDetayCard(
       {super.key,
       required this.title,
       required this.date,
       required this.rol,
-      required this.image});
+      required this.image,
+      required this.id});
 
   @override
   State<reservationDetayCard> createState() => _reservationDetayCardState();
@@ -29,7 +31,7 @@ class _reservationDetayCardState extends State<reservationDetayCard> {
       padding: const EdgeInsets.only(bottom: 10.0),
       child: GrockContainer(
         onTap: () {
-          Grock.to(DetayReservation());
+          Grock.to(DetayReservation(id: widget.id));
         },
         padding: EdgeInsets.symmetric(
           vertical: 15,

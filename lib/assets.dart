@@ -79,6 +79,10 @@ class _AssetsImages {
   final imStresSVG = 'assets/images/im_stres.svg';
   final imXLogoSvgSVG = 'assets/images/im_xLogoSvg.svg';
   final nexaGIF = 'assets/images/nexa.gif';
+  final pp1PNG = 'assets/images/pp1.png';
+  final pp2PNG = 'assets/images/pp2.png';
+  final pp3PNG = 'assets/images/pp3.png';
+  final pp4PNG = 'assets/images/pp4.png';
 }
 
 class _AssetsSnackbar {

@@ -1,4 +1,5 @@
 import 'package:Psynexa/components/reservation_active.dart';
+import 'package:Psynexa/models/reservation/reservation_list.dart';
 import 'package:Psynexa/models/reservation/reservation_response.dart';
 import 'package:Psynexa/view/acc_reservation.dart';
 import 'package:Psynexa/view/deneme.dart';
@@ -34,9 +35,14 @@ class Home extends ConsumerStatefulWidget {
 }
 
 class _HomeState extends ConsumerState<Home> {
-  int notification = 3;
-  late List<_resListModel> list;
-  late List<_resListModel> aktiflist = [];
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    fetchData();
+  }
+
+  List<ResListModel> aktiflist = [];
   final headers = {
     'Content-Type': 'application/json',
     'Authorization':
@@ -48,31 +54,25 @@ class _HomeState extends ConsumerState<Home> {
         Uri.parse(
             '${Constant.domain}/api/meetings?sort[0]=meetingDate:desc&populate=*'),
         headers: headers);
+
+    print(response);
     if (response.statusCode == 200) {
       final data = json.decode(response.body);
 
       final userResponse = ReservationResponse.fromJson(data);
-      for (int i = 0; i < userResponse.data.length; i++)
-        list.add(_resListModel(
-            title: userResponse.data[i].psychologist!.fullName,
-            date: userResponse.data[i].meetingDate.toDate,
-            rol: userResponse.data[i].psychologist!.profession,
-            image: Assets.images.imHomeKariPNG));
-      aktiflist = list
-          .where((item) =>
-              item.date.isAfter(DateTime.now().subtract(Duration(minutes: 5))))
-          .toList();
+      for (int i = 0; i < userResponse.data!.length; i++)
+        ref.read(homePageRiverpod).setList(
+            ResListModel(
+                title: userResponse.data![i].psychologist!.fullName!,
+                date: userResponse.data![i].meetingDate!.toDate,
+                rol: userResponse.data![i].psychologist!.profession!,
+                image: Assets.images.imHomeKariPNG,
+                conferanceId: userResponse.data![i].meetingId!),
+            1);
     } else {
       // Hata durumunda işlem yapabilirsiniz
       throw Exception('API isteği başarısız oldu ${jsonDecode(response.body)}');
     }
-  }
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    fetchData();
   }
 
   @override
@@ -106,6 +106,7 @@ class _HomeState extends ConsumerState<Home> {
 
     var watch = ref.watch(homePageRiverpod);
     var read = ref.read(homePageRiverpod);
+
     return Scaffold(
       appBar: AppBar(
         toolbarHeight: 105,
@@ -119,7 +120,99 @@ class _HomeState extends ConsumerState<Home> {
                 Padding(
                   padding: const EdgeInsets.only(
                       left: 18, right: 18, bottom: 15, top: 10),
-                  child: _appBarHome(notification: notification),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      Expanded(
+                        flex: 26,
+                        child: SizedBox(
+                          height: 37,
+                          child: TextField(
+                            textAlignVertical: TextAlignVertical.bottom,
+                            decoration: InputDecoration(
+                              focusedBorder: OutlineInputBorder(
+                                borderSide: const BorderSide(
+                                    color: Colors.transparent, width: 0),
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              enabledBorder: OutlineInputBorder(
+                                borderSide: const BorderSide(
+                                    color: Colors.transparent, width: 0),
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              labelStyle:
+                                  const TextStyle(color: Constant.inputText),
+                              focusColor: Constant.inputText,
+                              filled: true,
+                              fillColor: Color(0xFFF5F5F5),
+                              hintText: 'Psikolog veya alan ara',
+                              hintStyle: const TextStyle(
+                                fontSize: 14,
+                                color: Constant.inputText,
+                                letterSpacing: 0,
+                                fontFamily: 'Proxima Nova',
+                              ),
+                              prefixIcon: const Icon(
+                                Icons.search,
+                                color: Constant.purple,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      Spacer(),
+                      Expanded(
+                        flex: 3,
+                        child: Stack(
+                          alignment: AlignmentDirectional.topEnd,
+                          children: [
+                            GrockContainer(
+                              onTap: () {
+                                read.setNoti();
+                                Grock.to(NotificationPage());
+                              },
+                              width: 35,
+                              height: 35,
+                              decoration: const BoxDecoration(
+                                  color: Color(0xFFF5F5F5),
+                                  shape: BoxShape.circle),
+                              child: Padding(
+                                padding: const EdgeInsets.only(
+                                    top: 6.5, bottom: 6, left: 8, right: 8),
+                                child: SvgPicture.asset(
+                                  Assets.icons.icNotificationSVG,
+                                  width: 15,
+                                  height: 17,
+                                  color: Color(0xFF333333),
+                                ),
+                              ),
+                            ),
+                            if (watch.notification != 0)
+                              Padding(
+                                padding:
+                                    const EdgeInsets.only(bottom: 12, left: 5),
+                                child: Container(
+                                  width: 13,
+                                  height: 13,
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    color: Constant.purple,
+                                  ),
+                                  child: Center(
+                                      child: Text(
+                                    watch.notification.toString(),
+                                    style: TextStyle(
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.w400,
+                                        color: Constant.white),
+                                  )),
+                                ),
+                              ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
                 SizedBox(
                   height: 31,
@@ -200,7 +293,7 @@ class _HomeState extends ConsumerState<Home> {
                     ],
                   ),
                 ),
-                aktiflist.length == 0
+                watch.resList.length == 0
                     ? Padding(
                         padding:
                             EdgeInsets.only(left: 19.0, right: 19, bottom: 25),
@@ -231,33 +324,23 @@ class _HomeState extends ConsumerState<Home> {
                       )
                     : SizedBox(
                         height: 175,
-                        child: FutureBuilder(
-                          future: fetchData(),
-                          builder: (context, snapshot) {
-                            if (snapshot.connectionState ==
-                                ConnectionState.waiting) {
-                              return Center(child: CircularProgressIndicator());
-                            } else {
-                              // Veriler geldiğinde ekranda gösterme işlemlerini yapın
-                              return ListView.builder(
-                                physics: NeverScrollableScrollPhysics(),
-                                padding: EdgeInsets.symmetric(horizontal: 19),
-                                itemCount:
-                                    aktiflist.length > 2 ? 2 : aktiflist.length,
-                                itemBuilder: (BuildContext context, int index) {
-                                  return reservationActiveCard(
-                                    title: aktiflist[index].title,
-                                    image: aktiflist[index].image,
-                                    rol: aktiflist[index].rol,
-                                    date: aktiflist[index].date,
-                                    padding: 5,
-                                  );
-                                },
-                              );
-                            }
+                        child: ListView.builder(
+                          physics: NeverScrollableScrollPhysics(),
+                          padding: EdgeInsets.symmetric(horizontal: 19),
+                          itemCount: watch.resList.length > 2
+                              ? 2
+                              : watch.resList.length,
+                          itemBuilder: (BuildContext context, int index) {
+                            return reservationActiveCard(
+                              title: watch.resList[index].title,
+                              image: watch.resList[index].image,
+                              rol: watch.resList[index].rol,
+                              date: watch.resList[index].date,
+                              conferenceID: watch.resList[index].conferanceId,
+                              padding: 5,
+                            );
                           },
-                        ),
-                      ),
+                        )),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -402,108 +485,6 @@ class _TestBoxCard extends StatelessWidget {
           ],
         ),
       ),
-    );
-  }
-}
-
-class _appBarHome extends StatelessWidget {
-  const _appBarHome({
-    super.key,
-    required this.notification,
-  });
-
-  final int notification;
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceAround,
-      children: [
-        Expanded(
-          flex: 26,
-          child: SizedBox(
-            height: 37,
-            child: TextField(
-              textAlignVertical: TextAlignVertical.bottom,
-              decoration: InputDecoration(
-                focusedBorder: OutlineInputBorder(
-                  borderSide:
-                      const BorderSide(color: Colors.transparent, width: 0),
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                enabledBorder: OutlineInputBorder(
-                  borderSide:
-                      const BorderSide(color: Colors.transparent, width: 0),
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                labelStyle: const TextStyle(color: Constant.inputText),
-                focusColor: Constant.inputText,
-                filled: true,
-                fillColor: Color(0xFFF5F5F5),
-                hintText: 'Psikolog veya alan ara',
-                hintStyle: const TextStyle(
-                  fontSize: 14,
-                  color: Constant.inputText,
-                  letterSpacing: 0,
-                  fontFamily: 'Proxima Nova',
-                ),
-                prefixIcon: const Icon(
-                  Icons.search,
-                  color: Constant.purple,
-                ),
-              ),
-            ),
-          ),
-        ),
-        const Spacer(),
-        Expanded(
-          flex: 3,
-          child: Stack(
-            alignment: AlignmentDirectional.topEnd,
-            children: [
-              GrockContainer(
-                onTap: () {
-                  Grock.to(NotificationPage());
-                },
-                width: 35,
-                height: 35,
-                decoration: const BoxDecoration(
-                    color: Color(0xFFF5F5F5), shape: BoxShape.circle),
-                child: Padding(
-                  padding: const EdgeInsets.only(
-                      top: 6.5, bottom: 6, left: 8, right: 8),
-                  child: SvgPicture.asset(
-                    Assets.icons.icNotificationSVG,
-                    width: 15,
-                    height: 17,
-                    color: Color(0xFF333333),
-                  ),
-                ),
-              ),
-              if (notification != 0)
-                Padding(
-                  padding: const EdgeInsets.only(bottom: 12, left: 5),
-                  child: Container(
-                    width: 13,
-                    height: 13,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: Constant.purple,
-                    ),
-                    child: Center(
-                        child: Text(
-                      notification.toString(),
-                      style: TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.w400,
-                          color: Constant.white),
-                    )),
-                  ),
-                ),
-            ],
-          ),
-        ),
-      ],
     );
   }
 }

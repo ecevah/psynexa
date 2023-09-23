@@ -9,86 +9,145 @@ import 'package:Psynexa/constant/constant.dart';
 import 'package:Psynexa/models/reservation_model.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:grock/grock.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+import 'package:Psynexa/models/psyc/psyc_response.dart';
+import 'dart:math';
 
-class DetayReservation extends StatelessWidget {
-  DateTime time = DateTime(2023, 8, 24, 22, 22, 56, 486, 933);
-  String name = 'Prof. Dr. Ali Durmaz';
-  String rol = 'Travma Sonrası Stres Bozukluğu Uzmanı';
-  String image = Assets.images.imKariPNG;
+class DetayReservation extends StatefulWidget {
+  String id;
+
+  DetayReservation({super.key, required this.id});
+
+  @override
+  State<DetayReservation> createState() => _DetayReservationState();
+}
+
+class _DetayReservationState extends State<DetayReservation> {
+  late DateTime time = DateTime(2023, 9, 21, 22, 12, 0, 0);
+  late String name;
+  late String rol;
+  late String image;
+  bool show = true;
+
+  int count = 0 + random.nextInt(3 - 0 + 1);
   int sure = 50;
+  final headers = {
+    'Content-Type': 'application/x-www-form-urlencoded',
+    'Authorization':
+        'Bearer 0b6c05e02ee081f0f9d3d733e6dadefcc7d3e5bb2c10f3195927e2794002eefdf5f6f2774afeba9188a133385082a36818baca38f93bf05be5a9c68672a84f3efde436ce64afeedf5e3d79f36980e9e8cd9ed4f41939dd2a666f386118604991d5ada44ca4ca9c02881e1692e8cd5ad4f6016cea4390fb0931ae7c3ae9ad573e'
+  };
+  Future fetchData() async {
+    final response = await http.get(
+        Uri.parse('${Constant.domain}/api/psychologists/1?populate=*'),
+        headers: headers);
 
-  DetayReservation({super.key});
+    if (response.statusCode == 200) {
+      // API'den gelen veriyi JSON formatından dönüştürün
+      final data = json.decode(response.body);
+      final userResponse = psyc_id.fromJson(data);
+      name = '${userResponse.data!.title} ${userResponse.data!.fullName}';
+      rol = '${userResponse.data!.profession}';
+      image = '${Constant.domain}${userResponse.data!.avatar!.url}';
+      show = false;
+      setState(() {});
+      // Veriyi kullanmak için burada işlemler yapabilirsiniz
+    } else {
+      // Hata durumunda işlem yapabilirsiniz
+      throw Exception('API isteği başarısız oldu');
+    }
+  }
+
+  List<String> comment = [
+    'Hastamın TSSB semptomlarındaki ilerleme son derece olumlu oldu. İlk değerlendirme sırasında yaşadığı yoğun korku, panik ataklar ve uykusuzluk gibi semptomlarının birçoğu azaldı veya tamamen ortadan kalktı. Terapi sırasında, hastam duygu düzenleme becerileri konusunda önemli bir ilerleme kaydetti ve bu beceriler, günlük hayatında da uygulayabileceği bir şekilde öğretildi. Tedavi sürecinde, hastamın kendine güveni de arttı ve daha önce yapamadığı birçok şeyi yapmak için cesaret kazandı. Hastamın hayat kalitesi ve işlevselliği önemli ölçüde arttı. Kendisiyle yaptığımız son görüşmede, artık TSSB semptomlarının daha az şiddetli ve daha az sıklıkla ortaya çıktığını bildirdi ve yaşam kalitesinin önemli ölçüde arttığını belirtti. Bu sonuçlar beni son derece mutlu ediyor ve hastamın tedavi sürecindeki başarısı için gurur duyuyorum.',
+    "Hastanın majör depresyon tedavisi boyunca gösterdiği ilerleme etkileyiciydi. İlk başta ağır bir depresyon yaşadığından, günlük aktiviteleri bile zorlanıyordu. Ancak tedavi sürecinde, antidepresan ilaçların ve terapinin kombinasyonuyla ruh hali önemli ölçüde iyileşti. İleriye dönük olarak, hastanın depresyon semptomlarının azalması ve hayat kalitesinin artması için umutluyuz.",
+    "Hastanın şizofreni tedavisi oldukça karmaşıktı, ancak önemli bir ilerleme kaydetti. İlaçlarla desteklenen psikoterapi ve destek programları, hastanın psikotik semptomlarını kontrol etmesine yardımcı oldu. İlerleme, sosyal izolasyonun azaltılması ve yaşam becerilerinin geliştirilmesi yoluyla daha da arttı. Tedaviye devam ederken hastanın daha da iyileşeceğine inanıyoruz.",
+    "Hastanın OKB semptomlarının yönetimi için verilen tedavi olumlu sonuçlar gösterdi. Obsesyonlar ve kompulsiyonlar üzerinde çalışmak için bilişsel davranışçı terapi kullanıldı ve hastanın semptomları azaldı. Terapinin bir parçası olarak öğrenilen beceriler, günlük yaşamda OKB semptomlarını daha iyi kontrol etmesine yardımcı oldu.",
+    "Hastanın bipolar bozukluk tedavisi, manik ve depresif dönemlerin daha iyi yönetilmesi için önemli bir ilerleme kaydetti. Duygusal dengeyi sağlamak için uygun ilaç kombinasyonları belirlendi ve hastanın dengesiz ruh hali üzerindeki kontrolü arttı. Tedavi süreci boyunca, hastanın duygu düzenleme becerileri de gelişti.",
+    "Hastanın anksiyete bozukluğu tedavisinde önemli bir iyileşme gözlemlendi. İlaçlar ve bilişsel davranışçı terapi, hastanın anksiyete semptomlarını yönetmesine yardımcı oldu. Özellikle, hastanın endişe seviyeleri azaldı ve günlük yaşam aktivitelerine daha rahat bir şekilde katılabildi. Tedavi sürecinin devam etmesiyle daha da fazla ilerleme bekliyoruz."
+  ];
+  @override
+  void initState() {
+    super.initState();
+    fetchData();
+    Random random = Random();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAccAppBar(appbarTitle: 'Randevu Detayları'),
-      body: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.only(top: 5.0, bottom: 30),
-            child: RandevuImageCard(
-                iconText1: '${time.day}.${time.month}.${time.year}',
-                iconText2: '${time.hour}:${time.minute}',
-                iconText3: '${sure.toString()} dk',
-                iconTitle1: 'Tarih',
-                iconTitle2: 'Saat',
-                iconTitle3: 'Süre',
-                icon1: Assets.icons.icDoubleCalendarSVG,
-                icon2: Assets.icons.icSaatSVG,
-                icon3: Assets.icons.icZamanSVG,
-                title: name,
-                rol: rol,
-                image: image),
-          ),
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.only(left: 30.0, right: 30, top: 7),
-              child: Container(
-                padding: EdgeInsets.all(25),
-                decoration: BoxDecoration(
-                  color: Constant.white,
-                  borderRadius: BorderRadius.circular(10),
-                  boxShadow: [
-                    BoxShadow(
-                        color: Color.fromARGB(81, 217, 217, 217),
-                        spreadRadius: 2,
-                        blurRadius: 4),
-                  ],
+      body: show
+          ? Center(
+              child: CircularProgressIndicator(),
+            )
+          : Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(top: 5.0, bottom: 30),
+                  child: RandevuImageCard(
+                      iconText1: '${time.day}.${time.month}.${time.year}',
+                      iconText2: '${time.hour}:${time.minute}',
+                      iconText3: '${sure.toString()} dk',
+                      iconTitle1: 'Tarih',
+                      iconTitle2: 'Saat',
+                      iconTitle3: 'Süre',
+                      icon1: Assets.icons.icDoubleCalendarSVG,
+                      icon2: Assets.icons.icSaatSVG,
+                      icon3: Assets.icons.icZamanSVG,
+                      title: name,
+                      rol: rol,
+                      image: image),
                 ),
-                child: ListView(
-                  physics: BouncingScrollPhysics(),
-                  children: [
-                    Text(
-                      'Psikiyatrist Yorumu',
-                      style: TextStyle(
-                          fontSize: 13,
-                          fontWeight: FontWeight.w500,
-                          color: const Color.fromARGB(214, 0, 0, 0),
-                          fontFamily: 'Proxima Nova',
-                          letterSpacing: -0.1),
+                Expanded(
+                  child: Padding(
+                    padding:
+                        const EdgeInsets.only(left: 30.0, right: 30, top: 7),
+                    child: Container(
+                      padding: EdgeInsets.all(25),
+                      decoration: BoxDecoration(
+                        color: Constant.white,
+                        borderRadius: BorderRadius.circular(10),
+                        boxShadow: [
+                          BoxShadow(
+                              color: Color.fromARGB(81, 217, 217, 217),
+                              spreadRadius: 2,
+                              blurRadius: 4),
+                        ],
+                      ),
+                      child: ListView(
+                        physics: BouncingScrollPhysics(),
+                        children: [
+                          Text(
+                            'Psikiyatrist Yorumu',
+                            style: TextStyle(
+                                fontSize: 13,
+                                fontWeight: FontWeight.w500,
+                                color: const Color.fromARGB(214, 0, 0, 0),
+                                fontFamily: 'Proxima Nova',
+                                letterSpacing: -0.1),
+                          ),
+                          SizedBox(
+                            height: 12,
+                          ),
+                          Text(
+                            'Hastamın TSSB semptomlarındaki ilerleme son derece olumlu oldu. İlk değerlendirme sırasında yaşadığı yoğun korku, panik ataklar ve uykusuzluk gibi semptomlarının birçoğu azaldı veya tamamen ortadan kalktı. Terapi sırasında, hastam duygu düzenleme becerileri konusunda önemli bir ilerleme kaydetti ve bu beceriler, günlük hayatında da uygulayabileceği bir şekilde öğretildi. Tedavi sürecinde, hastamın kendine güveni de arttı ve daha önce yapamadığı birçok şeyi yapmak için cesaret kazandı. Hastamın hayat kalitesi ve işlevselliği önemli ölçüde arttı. Kendisiyle yaptığımız son görüşmede, artık TSSB semptomlarının daha az şiddetli ve daha az sıklıkla ortaya çıktığını bildirdi ve yaşam kalitesinin önemli ölçüde arttığını belirtti. Bu sonuçlar beni son derece mutlu ediyor ve hastamın tedavi sürecindeki başarısı için gurur duyuyorum.',
+                            style: TextStyle(
+                                fontSize: 13,
+                                fontWeight: FontWeight.w400,
+                                color: Color.fromARGB(90, 0, 0, 0),
+                                height: 1.35),
+                          )
+                        ],
+                      ),
                     ),
-                    SizedBox(
-                      height: 12,
-                    ),
-                    Text(
-                      'Hastamın TSSB semptomlarındaki ilerleme son derece olumlu oldu. İlk değerlendirme sırasında yaşadığı yoğun korku, panik ataklar ve uykusuzluk gibi semptomlarının birçoğu azaldı veya tamamen ortadan kalktı. Terapi sırasında, hastam duygu düzenleme becerileri konusunda önemli bir ilerleme kaydetti ve bu beceriler, günlük hayatında da uygulayabileceği bir şekilde öğretildi. Tedavi sürecinde, hastamın kendine güveni de arttı ve daha önce yapamadığı birçok şeyi yapmak için cesaret kazandı. Hastamın hayat kalitesi ve işlevselliği önemli ölçüde arttı. Kendisiyle yaptığımız son görüşmede, artık TSSB semptomlarının daha az şiddetli ve daha az sıklıkla ortaya çıktığını bildirdi ve yaşam kalitesinin önemli ölçüde arttığını belirtti. Bu sonuçlar beni son derece mutlu ediyor ve hastamın tedavi sürecindeki başarısı için gurur duyuyorum.',
-                      style: TextStyle(
-                          fontSize: 13,
-                          fontWeight: FontWeight.w400,
-                          color: Color.fromARGB(90, 0, 0, 0),
-                          height: 1.35),
-                    )
-                  ],
+                  ),
                 ),
-              ),
+                SizedBox(
+                  height: 70,
+                )
+              ],
             ),
-          ),
-          SizedBox(
-            height: 70,
-          )
-        ],
-      ),
     );
   }
 }

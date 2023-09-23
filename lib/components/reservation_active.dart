@@ -6,6 +6,7 @@ import 'package:Psynexa/constant/constant.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:grock/grock.dart';
 import 'package:intl/intl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class reservationActiveCard extends StatefulWidget {
   String title;
@@ -13,13 +14,16 @@ class reservationActiveCard extends StatefulWidget {
   String rol;
   String image;
   double padding;
+  String conferenceID;
   reservationActiveCard(
       {super.key,
       required this.title,
       required this.date,
       required this.rol,
-      required this.image,
-      required this.padding});
+      this.image =
+          "https://plus.unsplash.com/premium_photo-1664391847942-f9c4562ad692?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1966&q=80",
+      required this.padding,
+      required this.conferenceID});
 
   @override
   State<reservationActiveCard> createState() => _reservationActiveCardState();
@@ -31,11 +35,19 @@ class _reservationActiveCardState extends State<reservationActiveCard> {
     return Padding(
       padding: EdgeInsets.only(bottom: widget.padding),
       child: GrockContainer(
-        onTap: () {
+        onTap: () async {
+          final SharedPreferences prefs = await SharedPreferences.getInstance();
           widget.date.isBefore(DateTime.now().add(Duration(minutes: 15)))
               ? Grock.to(VideoConferencePage(
-                  conferenceID: 'conferenceID', name: 'name', id: 'id'))
-              : Grock.to(AktifReservation());
+                  conferenceID: widget.conferenceID,
+                  name: prefs.getString('name') ?? 'Ahmet',
+                  id: prefs.getString('id') ?? '1'))
+              : Grock.to(AktifReservation(
+                  title: widget.title,
+                  rol: widget.rol,
+                  date: widget.date,
+                  conferenceID: widget.conferenceID,
+                ));
         },
         padding: EdgeInsets.symmetric(
           vertical: 15,

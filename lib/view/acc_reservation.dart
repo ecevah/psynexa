@@ -1,5 +1,6 @@
 import 'package:Psynexa/components/reservation_active.dart';
 import 'package:Psynexa/components/reservation_detay.dart';
+import 'package:Psynexa/models/reservation/reservation_list.dart';
 import 'package:flutter/material.dart';
 import 'package:Psynexa/assets.dart';
 import 'package:Psynexa/components/custom_back_appbar.dart';
@@ -15,33 +16,21 @@ class AccReservation extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    List<_resListModel> iptalList = [
-      _resListModel(
-        title: "Prof. Dr. Ahmet Ecevit",
-        date: DateTime(2023, 8, 26, 22, 22, 56, 486, 933),
-        rol: 'Travma Sonrası Stres Bozukluğu',
-        image: Assets.images.imKariPNG,
-      ),
-      _resListModel(
-        title: "Prof. Dr. Ahmet Ecevit",
-        date: DateTime(2023, 8, 24, 22, 22, 56, 486, 933),
-        rol: 'Travma Sonrası Stres Bozukluğu',
-        image: Assets.images.imKariPNG,
-      ),
-      _resListModel(
-        title: "Prof. Dr. Ahmet Ecevit",
-        date: DateTime(2023, 8, 24, 22, 22, 56, 486, 933),
-        rol: 'Travma Sonrası Stres Bozukluğu',
-        image: Assets.images.imKariPNG,
-      ),
+    List<ResListModel> iptalList = [
+      ResListModel(
+          title: "Prof. Dr. Ahmet Ecevit",
+          date: DateTime(2023, 8, 26, 22, 22, 56, 486, 933),
+          rol: 'Travma Sonrası Stres Bozukluğu',
+          image: Assets.images.imKariPNG,
+          conferanceId: 'ConferenceID')
     ];
 
     DateTime now = DateTime.now();
 
-    List<_resListModel> aktifList = iptalList
+    List<ResListModel> aktifList = iptalList
         .where((item) => item.date.isAfter(now.add(Duration(minutes: 15))))
         .toList();
-    List<_resListModel> gecmisList = iptalList
+    List<ResListModel> gecmisList = iptalList
         .where((item) => item.date.isBefore(now.add(Duration(minutes: 15))))
         .toList();
 
@@ -113,6 +102,7 @@ class AccReservation extends StatelessWidget {
                               rol: aktifList[index].rol,
                               date: aktifList[index].date,
                               padding: 10,
+                              conferenceID: aktifList[index].conferanceId,
                             );
                           },
                         ),
@@ -135,6 +125,7 @@ class AccReservation extends StatelessWidget {
                               image: gecmisList[index].image,
                               rol: gecmisList[index].rol,
                               date: gecmisList[index].date,
+                              id: "1",
                             );
                           },
                         ),

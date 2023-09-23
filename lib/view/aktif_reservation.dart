@@ -10,7 +10,19 @@ import 'package:Psynexa/constant/constant.dart';
 import 'package:Psynexa/view/meet.dart';
 
 class AktifReservation extends StatefulWidget {
-  const AktifReservation({super.key});
+  String title;
+  DateTime date;
+  String rol;
+  String image;
+  String conferenceID;
+  AktifReservation(
+      {super.key,
+      required this.title,
+      required this.date,
+      required this.rol,
+      this.image =
+          "https://plus.unsplash.com/premium_photo-1664391847942-f9c4562ad692?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1966&q=80",
+      required this.conferenceID});
 
   @override
   State<AktifReservation> createState() => _AktifReservationState();
@@ -56,9 +68,9 @@ class _AktifReservationState extends State<AktifReservation> {
         child: Column(
           children: [
             RandevuDetayCard(
-              title: 'Dr. Fatma Durak',
-              rol: 'Travma Sonrası Stres Bozukluğu',
-              time: DateTime.now(),
+              title: widget.title,
+              rol: widget.rol,
+              time: widget.date,
               imagePath: Assets.images.imKariPNG,
             ),
             Expanded(
@@ -100,7 +112,7 @@ class _AktifReservationState extends State<AktifReservation> {
                                 height: 10,
                               ),
                               Text(
-                                'Tarih: ${getFormattedDate(date)}',
+                                'Tarih: ${getFormattedDate(widget.date)}',
                                 style: TextStyle(
                                     fontSize: 11,
                                     fontWeight: FontWeight.w400,
@@ -111,7 +123,7 @@ class _AktifReservationState extends State<AktifReservation> {
                                 height: 7,
                               ),
                               Text(
-                                'Saat: ${getFormattedTimeRange(date, date.add(Duration(minutes: 50)))}',
+                                'Saat: ${getFormattedTimeRange(widget.date, widget.date.add(Duration(minutes: 50)))}',
                                 style: TextStyle(
                                     fontSize: 11,
                                     fontWeight: FontWeight.w400,
@@ -312,7 +324,7 @@ class _AktifReservationState extends State<AktifReservation> {
             Padding(
               padding: const EdgeInsets.only(bottom: 10.0),
               child: StreamBuilder<String>(
-                stream: getRemainingTimeStream(date),
+                stream: getRemainingTimeStream(widget.date),
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
                     return FirstBtn(

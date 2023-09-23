@@ -43,6 +43,7 @@ class LoginService extends ILoginService {
         final userResponse = UserResponseModel.fromJson(jsonResponse);
         await prefs.setInt('id', userResponse.user?.id ?? 0);
         await prefs.setString('token', 'var');
+        await prefs.setString('name', userResponse.user?.username ?? 'Ahmet');
         print(userResponse.user?.id);
         await Grock.toRemove(BaseScaffold());
       } else {

@@ -41,7 +41,7 @@ class RandevuImageCard extends StatelessWidget {
             Column(
               children: [
                 ClipOval(
-                  child: Image.asset(
+                  child: Image.network(
                     image,
                     width: 120,
                     height: 120,

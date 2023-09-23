@@ -39,7 +39,12 @@ class _CustomReservationIptalListTileState
         child: ListTile(
           title: GrockContainer(
             onTap: () {
-              Grock.to(AktifReservation());
+              Grock.to(AktifReservation(
+                title: widget.title,
+                rol: widget.rol,
+                date: widget.date,
+                conferenceID: 'asdasd',
+              ));
             },
             child: Text(
               widget.title,
@@ -54,7 +59,12 @@ class _CustomReservationIptalListTileState
           ),
           subtitle: GrockContainer(
             onTap: () {
-              Grock.to(AktifReservation());
+              Grock.to(AktifReservation(
+                title: widget.title,
+                rol: widget.rol,
+                date: widget.date,
+                conferenceID: 'asdasd',
+              ));
             },
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -108,7 +118,12 @@ class _CustomReservationIptalListTileState
           ),
           leading: GrockContainer(
             onTap: () {
-              Grock.to(AktifReservation());
+              Grock.to(AktifReservation(
+                title: widget.title,
+                rol: widget.rol,
+                date: widget.date,
+                conferenceID: 'asdasd',
+              ));
             },
             width: 70,
             height: 70,
