@@ -1,65 +1,81 @@
 class UserResponseModel {
-  String? jwt;
-  User? user;
+  bool? status;
+  String? message;
+  String? token;
+  Client? client;
 
-  UserResponseModel({this.jwt, this.user});
+  UserResponseModel({this.status, this.message, this.token, this.client});
 
   UserResponseModel.fromJson(Map<String, dynamic> json) {
-    jwt = json['jwt'];
-    user = json['user'] != null ? new User.fromJson(json['user']) : null;
+    status = json['status'];
+    message = json['message'];
+    token = json['token'];
+    client = json['client'] != null ? Client.fromJson(json['client']) : null;
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['jwt'] = this.jwt;
-    if (this.user != null) {
-      data['user'] = this.user!.toJson();
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['status'] = status;
+    data['message'] = message;
+    data['token'] = token;
+    if (client != null) {
+      data['client'] = client!.toJson();
     }
     return data;
   }
 }
 
-class User {
-  int? id;
-  String? username;
-  String? email;
-  String? provider;
-  bool? confirmed;
-  bool? blocked;
-  String? createdAt;
-  String? updatedAt;
+class Client {
+  String? sId;
+  String? name;
+  String? surName;
+  String? pass;
+  String? eMail;
+  String? sex;
+  List<Null>? favorites;
+  int? number;
+  String? dateOfBirth;
+  String? createAt;
+  int? iV;
 
-  User(
-      {this.id,
-      this.username,
-      this.email,
-      this.provider,
-      this.confirmed,
-      this.blocked,
-      this.createdAt,
-      this.updatedAt});
+  Client(
+      {this.sId,
+      this.name,
+      this.surName,
+      this.pass,
+      this.eMail,
+      this.sex,
+      this.favorites,
+      this.number,
+      this.dateOfBirth,
+      this.createAt,
+      this.iV});
 
-  User.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
-    username = json['username'];
-    email = json['email'];
-    provider = json['provider'];
-    confirmed = json['confirmed'];
-    blocked = json['blocked'];
-    createdAt = json['createdAt'];
-    updatedAt = json['updatedAt'];
+  Client.fromJson(Map<String, dynamic> json) {
+    sId = json['_id'];
+    name = json['name'];
+    surName = json['surName'];
+    pass = json['pass'];
+    eMail = json['eMail'];
+    sex = json['sex'];
+    number = json['number'];
+    dateOfBirth = json['dateOfBirth'];
+    createAt = json['createAt'];
+    iV = json['__v'];
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['username'] = this.username;
-    data['email'] = this.email;
-    data['provider'] = this.provider;
-    data['confirmed'] = this.confirmed;
-    data['blocked'] = this.blocked;
-    data['createdAt'] = this.createdAt;
-    data['updatedAt'] = this.updatedAt;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['_id'] = sId;
+    data['name'] = name;
+    data['surName'] = surName;
+    data['pass'] = pass;
+    data['eMail'] = eMail;
+    data['sex'] = sex;
+    data['number'] = number;
+    data['dateOfBirth'] = dateOfBirth;
+    data['createAt'] = createAt;
+    data['__v'] = iV;
     return data;
   }
 }

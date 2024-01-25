@@ -16,7 +16,7 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  runApp(ProviderScope(
+  runApp(const ProviderScope(
     child: MyApp(),
   ));
 }
@@ -31,12 +31,12 @@ class MyApp extends StatelessWidget {
       DeviceOrientation.portraitDown,
     ]);
     return MaterialApp(
-      title: 'Psynexa',
+      title: "Psynexa",
       debugShowCheckedModeBanner: false,
       navigatorKey: Grock.navigationKey,
       scaffoldMessengerKey: Grock.scaffoldMessengerKey,
       localizationsDelegates: GlobalMaterialLocalizations.delegates,
-      supportedLocales: [const Locale('tr', 'TR')],
+      supportedLocales: const [Locale('tr', 'TR')],
       theme: ThemeData(
         scaffoldBackgroundColor: Constant.white,
       ),

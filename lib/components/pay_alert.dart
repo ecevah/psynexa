@@ -12,7 +12,8 @@ Future<bool> onPayPop(BuildContext context) async {
               child: Padding(
                 padding: const EdgeInsets.only(bottom: 25.0),
                 child: Container(
-                  padding: EdgeInsets.symmetric(horizontal: 32, vertical: 36),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 32, vertical: 36),
                   width: MediaQuery.sizeOf(context).width - 48,
                   height: 260,
                   decoration: BoxDecoration(
@@ -51,7 +52,7 @@ Future<bool> onPayPop(BuildContext context) async {
                                 color: Constant.purple.withOpacity(0.17),
                                 borderRadius: BorderRadius.circular(10),
                               ),
-                              child: Center(
+                              child: const Center(
                                 child: Text(
                                   "Ana Sayfaya Git",
                                   style: TextStyle(

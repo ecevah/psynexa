@@ -10,9 +10,9 @@ class UserRequestModel {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['identifier'] = this.username;
-    data['password'] = this.password;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['identifier'] = username;
+    data['password'] = password;
     return data;
   }
 }

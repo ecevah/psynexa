@@ -23,26 +23,26 @@ class TestSon extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               SvgPicture.asset(
-                Assets.images.imDepresyonSVG,
+                image,
                 width: 200,
                 height: 200,
               ),
-              SizedBox(
+              const SizedBox(
                 height: 25,
               ),
               RichText(
                 textAlign: TextAlign.center,
                 text: TextSpan(
                   text:
-                      'Test sonuçlarınıza göre depresyon belirtileri görünmekte,\n',
-                  style: TextStyle(
+                      'Test sonuçlarınıza göre ${title == 'Stres Yönetimi' ? 'stres' : title.toLowerCase()} belirtileri görünmekte,\n',
+                  style: const TextStyle(
                       fontFamily: 'Proxima Nova',
                       fontWeight: FontWeight.w400,
                       fontSize: 14,
                       height: 1.4,
                       color: Constant.black,
                       letterSpacing: -0.35),
-                  children: <TextSpan>[
+                  children: const <TextSpan>[
                     TextSpan(
                       text:
                           'ancak kesin bir teşhis için bir sağlık profesyoneli ile iletişime geçmelisiniz.',
@@ -57,7 +57,7 @@ class TestSon extends StatelessWidget {
                   ],
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 40,
               ),
               SizedBox(
@@ -70,9 +70,9 @@ class TestSon extends StatelessWidget {
                       elevation: 0,
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(8))),
-                  child: Text(
+                  child: const Text(
                     'Ana Sayfa',
-                    style: const TextStyle(
+                    style: TextStyle(
                       color: Constant.purple,
                       fontWeight: FontWeight.w600,
                       fontSize: 14.6,

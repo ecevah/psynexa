@@ -33,14 +33,16 @@ class _reservationDetayCardState extends State<reservationDetayCard> {
         onTap: () {
           Grock.to(DetayReservation(id: widget.id));
         },
-        padding: EdgeInsets.symmetric(
+        padding: const EdgeInsets.symmetric(
           vertical: 15,
           horizontal: 16,
         ),
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.all(Radius.circular(10)),
+          borderRadius: const BorderRadius.all(Radius.circular(10)),
           border: Border.all(
-              style: BorderStyle.solid, width: 1, color: Color(0xFFEAEAEF)),
+              style: BorderStyle.solid,
+              width: 1,
+              color: const Color(0xFFEAEAEF)),
           color: Constant.white,
         ),
         child: Row(
@@ -54,12 +56,12 @@ class _reservationDetayCardState extends State<reservationDetayCard> {
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
                     image: DecorationImage(
-                      image: AssetImage(widget.image),
+                      image: NetworkImage(widget.image),
                       fit: BoxFit.contain,
                     ),
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   width: 12,
                 ),
                 Column(
@@ -67,7 +69,7 @@ class _reservationDetayCardState extends State<reservationDetayCard> {
                   children: [
                     Text(
                       widget.title,
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontFamily: 'Proxima Nova',
                         fontSize: 14,
                         fontWeight: FontWeight.w600,
@@ -75,12 +77,12 @@ class _reservationDetayCardState extends State<reservationDetayCard> {
                         color: Constant.black,
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 4,
                     ),
                     Text(
                       widget.rol,
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontFamily: 'Proxima Nova',
                         fontSize: 11,
                         fontWeight: FontWeight.w400,
@@ -95,14 +97,14 @@ class _reservationDetayCardState extends State<reservationDetayCard> {
             Container(
               height: 15,
               width: 1,
-              color: Color(0xFFEAEAEF),
+              color: const Color(0xFFEAEAEF),
             ),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  '${DateFormat('HH:mm').format(widget.date)} - ${DateFormat('HH:mm').format(widget.date.add(Duration(minutes: 45)))}',
-                  style: TextStyle(
+                  '${DateFormat('HH:mm').format(widget.date)} - ${DateFormat('HH:mm').format(widget.date.add(const Duration(minutes: 45)))}',
+                  style: const TextStyle(
                     fontFamily: 'Proxima Nova',
                     fontSize: 12,
                     fontWeight: FontWeight.w600,
@@ -110,11 +112,11 @@ class _reservationDetayCardState extends State<reservationDetayCard> {
                     color: Constant.black,
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 3,
                 ),
                 Text(
-                  '${DateFormat('dd MMMM, EE', 'tr_TR').format(widget.date)}',
+                  DateFormat('dd MMMM, EE', 'tr_TR').format(widget.date),
                   style: TextStyle(
                     fontFamily: 'Proxima Nova',
                     fontSize: 11,

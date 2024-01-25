@@ -1,13 +1,10 @@
 import 'dart:convert';
-import 'package:Psynexa/models/reservation/reservation_request.dart';
 import 'package:Psynexa/view/pay.dart';
 import 'package:flutter/material.dart';
 import 'package:Psynexa/components/custom_back_appbar.dart';
 import 'package:Psynexa/constant/constant.dart';
-import 'package:Psynexa/view/base_scaffold.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:intl/intl.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:grock/grock.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
@@ -48,44 +45,33 @@ class _CalendarPageState extends State<CalendarPage> {
       final SharedPreferences prefs = await SharedPreferences.getInstance();
 
       DateTime parsedDate = DateTime.parse(_selectedDay.toString());
-      print(widget.id);
-      final headers = {
-        'Content-Type': 'application/json',
-        'Authorization':
-            'Bearer 0b6c05e02ee081f0f9d3d733e6dadefcc7d3e5bb2c10f3195927e2794002eefdf5f6f2774afeba9188a133385082a36818baca38f93bf05be5a9c68672a84f3efde436ce64afeedf5e3d79f36980e9e8cd9ed4f41939dd2a666f386118604991d5ada44ca4ca9c02881e1692e8cd5ad4f6016cea4390fb0931ae7c3ae9ad573e'
-      };
-      print(prefs.getInt('id'));
+
       Map<String, dynamic> body = {
-        'data': {
-          'meetingDate':
-              '${DateFormat('yyyy-MM-dd').format(parsedDate)}T${selectedTimeSlot}:00.000Z',
-          'isActive': true,
-          'client': prefs.getInt('id').toString(),
-          'psychologist': widget.id.toString(),
-          'meetingId': generateRandomString(10).toString()
-        }
+        'client': prefs.getString('id'),
+        'psyc': widget.id.toString(),
+        'day': DateFormat('yyyy-MM-dd').format(parsedDate),
+        'time': selectedTimeSlot
       };
       String jsonData = json.encode(body);
       try {
-        final response = await http.post(
-            Uri.parse('${Constant.domain}/api/meetings'),
-            headers: headers,
-            body: jsonData);
-        print(jsonData);
+        final response =
+            await http.post(Uri.parse('${Constant.domain}/api/reservation/add'),
+                headers: {
+                  'Content-Type': 'application/json',
+                  'x-access-token': prefs.getString("token") ??
+                      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwc3ljaG9sb2dpc3QiOnsiX2lkIjoiNjVhODI2NGUyMTY0ODg0ZWYyZjc1M2E5IiwibmFtZSI6IlBzeWMgQWhtZXQiLCJzdXJOYW1lIjoiRWNldml0IiwicGFzcyI6IiQyYSQwOCR1bVpYeTU3VXFudnVmdEZ4emZCNW8uSVN1QUFzNHk5b1BBYU1uR1YwWFRzVGdwakRjZVNMUyIsImVNYWlsIjoiZWVjZXZhaEBnbWFpbC5jb20iLCJ0YWciOlsidXptYW4iXSwiaW1hZ2UiOiJpbWFnZS0xNzA1NTE4NjcwODUwLmpwZWciLCJ1bnZhbiI6ImtsaW5payBwc2lrb2xvaCIsInN0YXIiOltdLCJzdGFyQXZnIjpbXSwiYWN0aXZlIjpmYWxzZSwiYWNjQWN0aXZlIjp0cnVlLCJjcmVhdGVBdCI6IjIwMjQtMDEtMTdUMTk6MTE6MTAuODcyWiIsInVwZGF0ZUF0IjoiMjAyNC0wMS0xN1QxOToxMToxMC44NzJaIiwiX192IjowfSwiaWF0IjoxNzA1NTIwMTM1fQ.ad3WLnfmxtpnob3kSqVRZHtUZuOv8nX-CMkQHHdRth4"
+                },
+                body: jsonData);
+
         if (response.statusCode == 200) {
           final jsonResponse = json.decode(response.body);
           await Grock.to(PayPage());
-        } else {
-          print('Hata kodu: ${response.statusCode}');
-          print('Hata mesajı: ${response.body}');
-        }
-      } catch (e) {
-        print('Hata Oluştu: $e');
-      }
+        } else {}
+      } catch (e) {}
     }
 
     return Scaffold(
-      appBar: CustomAccAppBar(
+      appBar: const CustomAccAppBar(
         appbarTitle: 'Randevu Detayları',
       ),
       body: Padding(
@@ -98,15 +84,15 @@ class _CalendarPageState extends State<CalendarPage> {
               children: [
                 TableCalendar(
                   rowHeight: 40,
-                  daysOfWeekStyle: DaysOfWeekStyle(
+                  daysOfWeekStyle: const DaysOfWeekStyle(
                     weekdayStyle: TextStyle(
                       fontSize: 13,
-                      color: const Color.fromARGB(146, 51, 51, 51),
+                      color: Color.fromARGB(146, 51, 51, 51),
                       fontWeight: FontWeight.w400,
                     ),
                     weekendStyle: TextStyle(
                       fontSize: 13,
-                      color: const Color.fromARGB(146, 51, 51, 51),
+                      color: Color.fromARGB(146, 51, 51, 51),
                       fontWeight: FontWeight.w400,
                     ),
                   ),
@@ -138,22 +124,22 @@ class _CalendarPageState extends State<CalendarPage> {
                     CalendarFormat.week: 'Haftalık',
                   },
                   calendarStyle: CalendarStyle(
-                    defaultTextStyle: TextStyle(
+                    defaultTextStyle: const TextStyle(
                       color: Constant.black,
                       fontSize: 14,
                       fontWeight: FontWeight.w500,
                     ),
-                    holidayTextStyle: TextStyle(
+                    holidayTextStyle: const TextStyle(
                       color: Constant.black,
                       fontSize: 14,
                       fontWeight: FontWeight.w500,
                     ),
-                    weekendTextStyle: TextStyle(
+                    weekendTextStyle: const TextStyle(
                       color: Constant.black,
                       fontSize: 14,
                       fontWeight: FontWeight.w500,
                     ),
-                    todayTextStyle: TextStyle(
+                    todayTextStyle: const TextStyle(
                       color: Constant.black,
                       fontSize: 14,
                       fontWeight: FontWeight.w500,
@@ -236,7 +222,7 @@ class _CalendarPageState extends State<CalendarPage> {
                     titleCentered: true,
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 10,
                 ),
                 Center(
@@ -254,7 +240,7 @@ class _CalendarPageState extends State<CalendarPage> {
             Expanded(
               child: Padding(
                 padding: const EdgeInsets.symmetric(vertical: 50.0),
-                child: Container(
+                child: SizedBox(
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
@@ -268,23 +254,23 @@ class _CalendarPageState extends State<CalendarPage> {
                                   : isVisible == true
                                       ? null
                                       : setState(() {
-                                          selectedTimeSlot = '09:00';
+                                          selectedTimeSlot = '09.00';
                                           isKey = true;
                                         });
                             },
-                            padding: EdgeInsets.symmetric(
+                            padding: const EdgeInsets.symmetric(
                                 vertical: 12, horizontal: 20),
                             decoration: BoxDecoration(
                               color: isVisible == true
-                                  ? Color(0xFFEAEAEF)
-                                  : (selectedTimeSlot == '09:00'
+                                  ? const Color(0xFFEAEAEF)
+                                  : (selectedTimeSlot == '09.00'
                                       ? Constant.purple
                                       : Constant.white),
                               border: Border.all(
-                                color: Color(0xFFEAEAEF),
+                                color: const Color(0xFFEAEAEF),
                                 width: 1,
                               ),
-                              borderRadius: BorderRadius.all(
+                              borderRadius: const BorderRadius.all(
                                 Radius.circular(5),
                               ),
                             ),
@@ -295,7 +281,7 @@ class _CalendarPageState extends State<CalendarPage> {
                                 fontWeight: FontWeight.w500,
                                 color: isVisible == true
                                     ? Colors.black.withOpacity(0.35)
-                                    : selectedTimeSlot == '09:00'
+                                    : selectedTimeSlot == '09.00'
                                         ? Constant.white
                                         : Constant.black,
                               ),
@@ -308,23 +294,23 @@ class _CalendarPageState extends State<CalendarPage> {
                                   : isVisible == true
                                       ? null
                                       : setState(() {
-                                          selectedTimeSlot = '11:00';
+                                          selectedTimeSlot = '11.00';
                                           isKey = true;
                                         });
                             },
-                            padding: EdgeInsets.symmetric(
+                            padding: const EdgeInsets.symmetric(
                                 vertical: 12, horizontal: 20),
                             decoration: BoxDecoration(
                               color: isVisible == true
-                                  ? Color(0xFFEAEAEF)
-                                  : (selectedTimeSlot == '11:00'
+                                  ? const Color(0xFFEAEAEF)
+                                  : (selectedTimeSlot == '11.00'
                                       ? Constant.purple
                                       : Constant.white),
                               border: Border.all(
-                                color: Color(0xFFEAEAEF),
+                                color: const Color(0xFFEAEAEF),
                                 width: 1,
                               ),
-                              borderRadius: BorderRadius.all(
+                              borderRadius: const BorderRadius.all(
                                 Radius.circular(5),
                               ),
                             ),
@@ -335,7 +321,7 @@ class _CalendarPageState extends State<CalendarPage> {
                                 fontWeight: FontWeight.w500,
                                 color: isVisible == true
                                     ? Colors.black.withOpacity(0.35)
-                                    : selectedTimeSlot == '11:00'
+                                    : selectedTimeSlot == '11.00'
                                         ? Constant.white
                                         : Constant.black,
                               ),
@@ -348,23 +334,23 @@ class _CalendarPageState extends State<CalendarPage> {
                                   : isVisible == true
                                       ? null
                                       : setState(() {
-                                          selectedTimeSlot = '13:00';
+                                          selectedTimeSlot = '13.00';
                                           isKey = true;
                                         });
                             },
-                            padding: EdgeInsets.symmetric(
+                            padding: const EdgeInsets.symmetric(
                                 vertical: 12, horizontal: 20),
                             decoration: BoxDecoration(
                               color: isVisible == true
-                                  ? Color(0xFFEAEAEF)
-                                  : (selectedTimeSlot == '13:00'
+                                  ? const Color(0xFFEAEAEF)
+                                  : (selectedTimeSlot == '13.00'
                                       ? Constant.purple
                                       : Constant.white),
                               border: Border.all(
-                                color: Color(0xFFEAEAEF),
+                                color: const Color(0xFFEAEAEF),
                                 width: 1,
                               ),
-                              borderRadius: BorderRadius.all(
+                              borderRadius: const BorderRadius.all(
                                 Radius.circular(5),
                               ),
                             ),
@@ -375,7 +361,7 @@ class _CalendarPageState extends State<CalendarPage> {
                                 fontWeight: FontWeight.w500,
                                 color: isVisible == true
                                     ? Colors.black.withOpacity(0.35)
-                                    : selectedTimeSlot == '13:00'
+                                    : selectedTimeSlot == '13.00'
                                         ? Constant.white
                                         : Constant.black,
                               ),
@@ -388,23 +374,23 @@ class _CalendarPageState extends State<CalendarPage> {
                                   : isVisible == true
                                       ? null
                                       : setState(() {
-                                          selectedTimeSlot = '15:00';
+                                          selectedTimeSlot = '15.00';
                                           isKey = true;
                                         });
                             },
-                            padding: EdgeInsets.symmetric(
+                            padding: const EdgeInsets.symmetric(
                                 vertical: 12, horizontal: 20),
                             decoration: BoxDecoration(
                               color: isVisible == true
-                                  ? Color(0xFFEAEAEF)
-                                  : (selectedTimeSlot == '15:00'
+                                  ? const Color(0xFFEAEAEF)
+                                  : (selectedTimeSlot == '15.00'
                                       ? Constant.purple
                                       : Constant.white),
                               border: Border.all(
-                                color: Color(0xFFEAEAEF),
+                                color: const Color(0xFFEAEAEF),
                                 width: 1,
                               ),
-                              borderRadius: BorderRadius.all(
+                              borderRadius: const BorderRadius.all(
                                 Radius.circular(5),
                               ),
                             ),
@@ -415,7 +401,7 @@ class _CalendarPageState extends State<CalendarPage> {
                                 fontWeight: FontWeight.w500,
                                 color: isVisible == true
                                     ? Colors.black.withOpacity(0.35)
-                                    : selectedTimeSlot == '15:00'
+                                    : selectedTimeSlot == '15.00'
                                         ? Constant.white
                                         : Constant.black,
                               ),
@@ -433,23 +419,23 @@ class _CalendarPageState extends State<CalendarPage> {
                                   : isVisible == true
                                       ? null
                                       : setState(() {
-                                          selectedTimeSlot = '09:30';
+                                          selectedTimeSlot = '09.30';
                                           isKey = true;
                                         });
                             },
-                            padding: EdgeInsets.symmetric(
+                            padding: const EdgeInsets.symmetric(
                                 vertical: 12, horizontal: 20),
                             decoration: BoxDecoration(
                               color: isVisible == true
-                                  ? Color(0xFFEAEAEF)
-                                  : (selectedTimeSlot == '09:30'
+                                  ? const Color(0xFFEAEAEF)
+                                  : (selectedTimeSlot == '09.30'
                                       ? Constant.purple
                                       : Constant.white),
                               border: Border.all(
-                                color: Color(0xFFEAEAEF),
+                                color: const Color(0xFFEAEAEF),
                                 width: 1,
                               ),
-                              borderRadius: BorderRadius.all(
+                              borderRadius: const BorderRadius.all(
                                 Radius.circular(5),
                               ),
                             ),
@@ -460,7 +446,7 @@ class _CalendarPageState extends State<CalendarPage> {
                                 fontWeight: FontWeight.w500,
                                 color: isVisible == true
                                     ? Colors.black.withOpacity(0.35)
-                                    : selectedTimeSlot == '09:30'
+                                    : selectedTimeSlot == '09.30'
                                         ? Constant.white
                                         : Constant.black,
                               ),
@@ -473,23 +459,23 @@ class _CalendarPageState extends State<CalendarPage> {
                                   : isVisible == true
                                       ? null
                                       : setState(() {
-                                          selectedTimeSlot = '11:30';
+                                          selectedTimeSlot = '11.30';
                                           isKey = true;
                                         });
                             },
-                            padding: EdgeInsets.symmetric(
+                            padding: const EdgeInsets.symmetric(
                                 vertical: 12, horizontal: 20),
                             decoration: BoxDecoration(
                               color: isVisible == true
-                                  ? Color(0xFFEAEAEF)
-                                  : (selectedTimeSlot == '11:30'
+                                  ? const Color(0xFFEAEAEF)
+                                  : (selectedTimeSlot == '11.30'
                                       ? Constant.purple
                                       : Constant.white),
                               border: Border.all(
-                                color: Color(0xFFEAEAEF),
+                                color: const Color(0xFFEAEAEF),
                                 width: 1,
                               ),
-                              borderRadius: BorderRadius.all(
+                              borderRadius: const BorderRadius.all(
                                 Radius.circular(5),
                               ),
                             ),
@@ -500,7 +486,7 @@ class _CalendarPageState extends State<CalendarPage> {
                                 fontWeight: FontWeight.w500,
                                 color: isVisible == true
                                     ? Colors.black.withOpacity(0.35)
-                                    : selectedTimeSlot == '11:30'
+                                    : selectedTimeSlot == '11.30'
                                         ? Constant.white
                                         : Constant.black,
                               ),
@@ -513,23 +499,23 @@ class _CalendarPageState extends State<CalendarPage> {
                                   : isVisible == true
                                       ? null
                                       : setState(() {
-                                          selectedTimeSlot = '13:30';
+                                          selectedTimeSlot = '13.30';
                                           isKey = true;
                                         });
                             },
-                            padding: EdgeInsets.symmetric(
+                            padding: const EdgeInsets.symmetric(
                                 vertical: 12, horizontal: 20),
                             decoration: BoxDecoration(
                               color: isVisible == true
-                                  ? Color(0xFFEAEAEF)
-                                  : (selectedTimeSlot == '13:30'
+                                  ? const Color(0xFFEAEAEF)
+                                  : (selectedTimeSlot == '13.30'
                                       ? Constant.purple
                                       : Constant.white),
                               border: Border.all(
-                                color: Color(0xFFEAEAEF),
+                                color: const Color(0xFFEAEAEF),
                                 width: 1,
                               ),
-                              borderRadius: BorderRadius.all(
+                              borderRadius: const BorderRadius.all(
                                 Radius.circular(5),
                               ),
                             ),
@@ -540,7 +526,7 @@ class _CalendarPageState extends State<CalendarPage> {
                                 fontWeight: FontWeight.w500,
                                 color: isVisible == true
                                     ? Colors.black.withOpacity(0.35)
-                                    : selectedTimeSlot == '13:30'
+                                    : selectedTimeSlot == '13.30'
                                         ? Constant.white
                                         : Constant.black,
                               ),
@@ -553,23 +539,23 @@ class _CalendarPageState extends State<CalendarPage> {
                                   : isVisible == true
                                       ? null
                                       : setState(() {
-                                          selectedTimeSlot = '15:30';
+                                          selectedTimeSlot = '15.30';
                                           isKey = true;
                                         });
                             },
-                            padding: EdgeInsets.symmetric(
+                            padding: const EdgeInsets.symmetric(
                                 vertical: 12, horizontal: 20),
                             decoration: BoxDecoration(
                               color: isVisible == true
-                                  ? Color(0xFFEAEAEF)
-                                  : (selectedTimeSlot == '15:30'
+                                  ? const Color(0xFFEAEAEF)
+                                  : (selectedTimeSlot == '15.30'
                                       ? Constant.purple
                                       : Constant.white),
                               border: Border.all(
-                                color: Color(0xFFEAEAEF),
+                                color: const Color(0xFFEAEAEF),
                                 width: 1,
                               ),
-                              borderRadius: BorderRadius.all(
+                              borderRadius: const BorderRadius.all(
                                 Radius.circular(5),
                               ),
                             ),
@@ -580,7 +566,7 @@ class _CalendarPageState extends State<CalendarPage> {
                                 fontWeight: FontWeight.w500,
                                 color: isVisible == true
                                     ? Colors.black.withOpacity(0.35)
-                                    : selectedTimeSlot == '15:30'
+                                    : selectedTimeSlot == '15.30'
                                         ? Constant.white
                                         : Constant.black,
                               ),
@@ -598,23 +584,23 @@ class _CalendarPageState extends State<CalendarPage> {
                                   : isVisible == true
                                       ? null
                                       : setState(() {
-                                          selectedTimeSlot = '10:00';
+                                          selectedTimeSlot = '10.00';
                                           isKey = true;
                                         });
                             },
-                            padding: EdgeInsets.symmetric(
+                            padding: const EdgeInsets.symmetric(
                                 vertical: 12, horizontal: 20),
                             decoration: BoxDecoration(
                               color: isVisible == true
-                                  ? Color(0xFFEAEAEF)
-                                  : (selectedTimeSlot == '10:00'
+                                  ? const Color(0xFFEAEAEF)
+                                  : (selectedTimeSlot == '10.00'
                                       ? Constant.purple
                                       : Constant.white),
                               border: Border.all(
-                                color: Color(0xFFEAEAEF),
+                                color: const Color(0xFFEAEAEF),
                                 width: 1,
                               ),
-                              borderRadius: BorderRadius.all(
+                              borderRadius: const BorderRadius.all(
                                 Radius.circular(5),
                               ),
                             ),
@@ -625,7 +611,7 @@ class _CalendarPageState extends State<CalendarPage> {
                                 fontWeight: FontWeight.w500,
                                 color: isVisible == true
                                     ? Colors.black.withOpacity(0.35)
-                                    : selectedTimeSlot == '10:00'
+                                    : selectedTimeSlot == '10.00'
                                         ? Constant.white
                                         : Constant.black,
                               ),
@@ -638,23 +624,23 @@ class _CalendarPageState extends State<CalendarPage> {
                                   : isVisible == true
                                       ? null
                                       : setState(() {
-                                          selectedTimeSlot = '12:00';
+                                          selectedTimeSlot = '12.00';
                                           isKey = true;
                                         });
                             },
-                            padding: EdgeInsets.symmetric(
+                            padding: const EdgeInsets.symmetric(
                                 vertical: 12, horizontal: 20),
                             decoration: BoxDecoration(
                               color: isVisible == true
-                                  ? Color(0xFFEAEAEF)
-                                  : (selectedTimeSlot == '12:00'
+                                  ? const Color(0xFFEAEAEF)
+                                  : (selectedTimeSlot == '12.00'
                                       ? Constant.purple
                                       : Constant.white),
                               border: Border.all(
-                                color: Color(0xFFEAEAEF),
+                                color: const Color(0xFFEAEAEF),
                                 width: 1,
                               ),
-                              borderRadius: BorderRadius.all(
+                              borderRadius: const BorderRadius.all(
                                 Radius.circular(5),
                               ),
                             ),
@@ -665,7 +651,7 @@ class _CalendarPageState extends State<CalendarPage> {
                                 fontWeight: FontWeight.w500,
                                 color: isVisible == true
                                     ? Colors.black.withOpacity(0.35)
-                                    : selectedTimeSlot == '12:00'
+                                    : selectedTimeSlot == '12.00'
                                         ? Constant.white
                                         : Constant.black,
                               ),
@@ -678,23 +664,23 @@ class _CalendarPageState extends State<CalendarPage> {
                                   : isVisible == true
                                       ? null
                                       : setState(() {
-                                          selectedTimeSlot = '14:00';
+                                          selectedTimeSlot = '14.00';
                                           isKey = true;
                                         });
                             },
-                            padding: EdgeInsets.symmetric(
+                            padding: const EdgeInsets.symmetric(
                                 vertical: 12, horizontal: 20),
                             decoration: BoxDecoration(
                               color: isVisible == true
-                                  ? Color(0xFFEAEAEF)
-                                  : (selectedTimeSlot == '14:00'
+                                  ? const Color(0xFFEAEAEF)
+                                  : (selectedTimeSlot == '14.00'
                                       ? Constant.purple
                                       : Constant.white),
                               border: Border.all(
-                                color: Color(0xFFEAEAEF),
+                                color: const Color(0xFFEAEAEF),
                                 width: 1,
                               ),
-                              borderRadius: BorderRadius.all(
+                              borderRadius: const BorderRadius.all(
                                 Radius.circular(5),
                               ),
                             ),
@@ -705,7 +691,7 @@ class _CalendarPageState extends State<CalendarPage> {
                                 fontWeight: FontWeight.w500,
                                 color: isVisible == true
                                     ? Colors.black.withOpacity(0.35)
-                                    : selectedTimeSlot == '14:00'
+                                    : selectedTimeSlot == '14.00'
                                         ? Constant.white
                                         : Constant.black,
                               ),
@@ -718,23 +704,23 @@ class _CalendarPageState extends State<CalendarPage> {
                                   : isVisible == true
                                       ? null
                                       : setState(() {
-                                          selectedTimeSlot = '16:00';
+                                          selectedTimeSlot = '16.00';
                                           isKey = true;
                                         });
                             },
-                            padding: EdgeInsets.symmetric(
+                            padding: const EdgeInsets.symmetric(
                                 vertical: 12, horizontal: 20),
                             decoration: BoxDecoration(
                               color: isVisible == true
-                                  ? Color(0xFFEAEAEF)
-                                  : (selectedTimeSlot == '16:00'
+                                  ? const Color(0xFFEAEAEF)
+                                  : (selectedTimeSlot == '16.00'
                                       ? Constant.purple
                                       : Constant.white),
                               border: Border.all(
-                                color: Color(0xFFEAEAEF),
+                                color: const Color(0xFFEAEAEF),
                                 width: 1,
                               ),
-                              borderRadius: BorderRadius.all(
+                              borderRadius: const BorderRadius.all(
                                 Radius.circular(5),
                               ),
                             ),
@@ -745,7 +731,7 @@ class _CalendarPageState extends State<CalendarPage> {
                                 fontWeight: FontWeight.w500,
                                 color: isVisible == true
                                     ? Colors.black.withOpacity(0.35)
-                                    : selectedTimeSlot == '16:00'
+                                    : selectedTimeSlot == '16.00'
                                         ? Constant.white
                                         : Constant.black,
                               ),
@@ -763,23 +749,23 @@ class _CalendarPageState extends State<CalendarPage> {
                                   : isVisible == true
                                       ? null
                                       : setState(() {
-                                          selectedTimeSlot = '10:30';
+                                          selectedTimeSlot = '10.30';
                                           isKey = true;
                                         });
                             },
-                            padding: EdgeInsets.symmetric(
+                            padding: const EdgeInsets.symmetric(
                                 vertical: 12, horizontal: 20),
                             decoration: BoxDecoration(
                               color: isVisible == true
-                                  ? Color(0xFFEAEAEF)
-                                  : (selectedTimeSlot == '10:30'
+                                  ? const Color(0xFFEAEAEF)
+                                  : (selectedTimeSlot == '10.30'
                                       ? Constant.purple
                                       : Constant.white),
                               border: Border.all(
-                                color: Color(0xFFEAEAEF),
+                                color: const Color(0xFFEAEAEF),
                                 width: 1,
                               ),
-                              borderRadius: BorderRadius.all(
+                              borderRadius: const BorderRadius.all(
                                 Radius.circular(5),
                               ),
                             ),
@@ -790,7 +776,7 @@ class _CalendarPageState extends State<CalendarPage> {
                                 fontWeight: FontWeight.w500,
                                 color: isVisible == true
                                     ? Colors.black.withOpacity(0.35)
-                                    : selectedTimeSlot == '10:30'
+                                    : selectedTimeSlot == '10.30'
                                         ? Constant.white
                                         : Constant.black,
                               ),
@@ -803,23 +789,23 @@ class _CalendarPageState extends State<CalendarPage> {
                                   : isVisible == true
                                       ? null
                                       : setState(() {
-                                          selectedTimeSlot = '12:30';
+                                          selectedTimeSlot = '12.30';
                                           isKey = true;
                                         });
                             },
-                            padding: EdgeInsets.symmetric(
+                            padding: const EdgeInsets.symmetric(
                                 vertical: 12, horizontal: 20),
                             decoration: BoxDecoration(
                               color: isVisible == true
-                                  ? Color(0xFFEAEAEF)
-                                  : (selectedTimeSlot == '12:30'
+                                  ? const Color(0xFFEAEAEF)
+                                  : (selectedTimeSlot == '12.30'
                                       ? Constant.purple
                                       : Constant.white),
                               border: Border.all(
-                                color: Color(0xFFEAEAEF),
+                                color: const Color(0xFFEAEAEF),
                                 width: 1,
                               ),
-                              borderRadius: BorderRadius.all(
+                              borderRadius: const BorderRadius.all(
                                 Radius.circular(5),
                               ),
                             ),
@@ -830,7 +816,7 @@ class _CalendarPageState extends State<CalendarPage> {
                                 fontWeight: FontWeight.w500,
                                 color: isVisible == true
                                     ? Colors.black.withOpacity(0.35)
-                                    : selectedTimeSlot == '12:30'
+                                    : selectedTimeSlot == '12.30'
                                         ? Constant.white
                                         : Constant.black,
                               ),
@@ -843,23 +829,23 @@ class _CalendarPageState extends State<CalendarPage> {
                                   : isVisible == true
                                       ? null
                                       : setState(() {
-                                          selectedTimeSlot = '14:30';
+                                          selectedTimeSlot = '14.30';
                                           isKey = true;
                                         });
                             },
-                            padding: EdgeInsets.symmetric(
+                            padding: const EdgeInsets.symmetric(
                                 vertical: 12, horizontal: 20),
                             decoration: BoxDecoration(
                               color: isVisible == true
-                                  ? Color(0xFFEAEAEF)
-                                  : (selectedTimeSlot == '14:30'
+                                  ? const Color(0xFFEAEAEF)
+                                  : (selectedTimeSlot == '14.30'
                                       ? Constant.purple
                                       : Constant.white),
                               border: Border.all(
-                                color: Color(0xFFEAEAEF),
+                                color: const Color(0xFFEAEAEF),
                                 width: 1,
                               ),
-                              borderRadius: BorderRadius.all(
+                              borderRadius: const BorderRadius.all(
                                 Radius.circular(5),
                               ),
                             ),
@@ -870,7 +856,7 @@ class _CalendarPageState extends State<CalendarPage> {
                                 fontWeight: FontWeight.w500,
                                 color: isVisible == true
                                     ? Colors.black.withOpacity(0.35)
-                                    : selectedTimeSlot == '14:30'
+                                    : selectedTimeSlot == '14.30'
                                         ? Constant.white
                                         : Constant.black,
                               ),
@@ -883,23 +869,23 @@ class _CalendarPageState extends State<CalendarPage> {
                                   : isVisible == true
                                       ? null
                                       : setState(() {
-                                          selectedTimeSlot = '16:30';
+                                          selectedTimeSlot = '16.30';
                                           isKey = true;
                                         });
                             },
-                            padding: EdgeInsets.symmetric(
+                            padding: const EdgeInsets.symmetric(
                                 vertical: 12, horizontal: 20),
                             decoration: BoxDecoration(
                               color: isVisible == true
-                                  ? Color(0xFFEAEAEF)
-                                  : (selectedTimeSlot == '16:30'
+                                  ? const Color(0xFFEAEAEF)
+                                  : (selectedTimeSlot == '16.30'
                                       ? Constant.purple
                                       : Constant.white),
                               border: Border.all(
-                                color: Color(0xFFEAEAEF),
+                                color: const Color(0xFFEAEAEF),
                                 width: 1,
                               ),
-                              borderRadius: BorderRadius.all(
+                              borderRadius: const BorderRadius.all(
                                 Radius.circular(5),
                               ),
                             ),
@@ -910,7 +896,7 @@ class _CalendarPageState extends State<CalendarPage> {
                                 fontWeight: FontWeight.w500,
                                 color: isVisible == true
                                     ? Colors.black.withOpacity(0.35)
-                                    : selectedTimeSlot == '16:30'
+                                    : selectedTimeSlot == '16.30'
                                         ? Constant.white
                                         : Constant.black,
                               ),
@@ -931,7 +917,8 @@ class _CalendarPageState extends State<CalendarPage> {
                   isKey ? fetchLogin() : null;
                 },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: isKey ? Constant.purple : Color(0xFFEAEAEF),
+                  backgroundColor:
+                      isKey ? Constant.purple : const Color(0xFFEAEAEF),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10),
                   ),

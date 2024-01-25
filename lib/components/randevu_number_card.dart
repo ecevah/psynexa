@@ -24,7 +24,7 @@ class numberCard extends StatelessWidget {
           height: 25,
           width: 23,
         ),
-        SizedBox(
+        const SizedBox(
           width: 4,
         ),
         Column(
@@ -33,19 +33,19 @@ class numberCard extends StatelessWidget {
           children: [
             Text(
               title,
-              style: TextStyle(
+              style: const TextStyle(
                   fontSize: 10,
                   fontWeight: FontWeight.w400,
                   color: Color.fromARGB(80, 0, 0, 0),
                   fontFamily: 'Proxima Nova',
                   letterSpacing: -0.1),
             ),
-            SizedBox(
+            const SizedBox(
               height: 3,
             ),
             Text(
               number,
-              style: TextStyle(
+              style: const TextStyle(
                   fontSize: 11,
                   fontWeight: FontWeight.w600,
                   color: Constant.darkpurple,

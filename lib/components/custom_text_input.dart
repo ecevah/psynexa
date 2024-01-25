@@ -38,7 +38,7 @@ class CustomText extends StatelessWidget {
             focusColor: Constant.inputText,
             filled: true,
             fillColor: Constant.darkwhite,
-            contentPadding: EdgeInsets.symmetric(horizontal: 20),
+            contentPadding: const EdgeInsets.symmetric(horizontal: 20),
           ),
         ),
       ),

@@ -1,9 +1,9 @@
+import 'package:Psynexa/riverpod/home_riverpod.dart';
 import 'package:flutter/material.dart';
 import 'package:Psynexa/assets.dart';
 import 'package:Psynexa/components/custom_first_btn.dart';
 import 'package:Psynexa/constant/constant.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:Psynexa/riverpod/base_scaffold_riverpod.dart';
 import 'package:Psynexa/view/acc_reservation.dart';
 import 'package:Psynexa/view/last_reservation.dart';
 import 'package:Psynexa/view/login.dart';
@@ -11,6 +11,9 @@ import 'package:Psynexa/view/profile.dart';
 import '../components/custom_appbar.dart';
 import 'package:grock/grock.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+final homePageRiverpod = ChangeNotifierProvider((ref) => HomePageRiverpod());
 
 class Account extends ConsumerStatefulWidget {
   const Account({super.key});
@@ -20,11 +23,41 @@ class Account extends ConsumerStatefulWidget {
 }
 
 class _AccountState extends ConsumerState<Account> {
+  late SharedPreferences prefs;
+  bool prefsInitialized = false;
+
+  @override
+  void initState() {
+    super.initState();
+    initPreferences();
+  }
+
+  Future<void> initPreferences() async {
+    prefs = await SharedPreferences.getInstance();
+    if (mounted) {
+      setState(() {
+        prefsInitialized = true;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    if (!prefsInitialized) {
+      // Return a loading indicator or handle the case where prefs is not initialized
+      return const Center(
+        child: CircularProgressIndicator(),
+      );
+    }
+    if (!prefs.containsKey('name') || !prefs.containsKey('surname')) {
+      // If the required keys are not present in prefs, return an error message or handle it accordingly
+      return const Center(
+        child: Text('Error: SharedPreferences data not found'),
+      );
+    }
     return Scaffold(
       backgroundColor: Constant.darkwhite,
-      appBar: CustomAppBar(
+      appBar: const CustomAppBar(
         appbarTitle: "Hesabım",
       ),
       body: Column(
@@ -36,13 +69,13 @@ class _AccountState extends ConsumerState<Account> {
                 padding:
                     const EdgeInsets.symmetric(horizontal: 25, vertical: 20),
                 child: Container(
-                  padding: EdgeInsets.only(left: 28),
+                  padding: const EdgeInsets.only(left: 28),
                   width: MediaQuery.sizeOf(context).width,
                   height: 190,
                   decoration: BoxDecoration(
                     color: Constant.white,
                     borderRadius: BorderRadius.circular(15),
-                    boxShadow: [
+                    boxShadow: const [
                       BoxShadow(
                           color: Color.fromARGB(81, 217, 217, 217),
                           spreadRadius: 2,
@@ -53,14 +86,14 @@ class _AccountState extends ConsumerState<Account> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Column(
+                      Column(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text(
+                              const Text(
                                 'İsim',
                                 style: TextStyle(
                                     color: Color.fromARGB(181, 51, 51, 51),
@@ -68,8 +101,9 @@ class _AccountState extends ConsumerState<Account> {
                                     fontWeight: FontWeight.w300),
                               ),
                               Text(
-                                'Ahmet',
-                                style: TextStyle(
+                                prefs.getString('name') ??
+                                    'N/A', // Provide a default value if null
+                                style: const TextStyle(
                                     color: Color.fromARGB(181, 51, 51, 51),
                                     fontSize: 12,
                                     fontWeight: FontWeight.w400),
@@ -79,7 +113,7 @@ class _AccountState extends ConsumerState<Account> {
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text(
+                              const Text(
                                 'Soyisim',
                                 style: TextStyle(
                                     color: Color.fromARGB(181, 51, 51, 51),
@@ -87,8 +121,9 @@ class _AccountState extends ConsumerState<Account> {
                                     fontWeight: FontWeight.w300),
                               ),
                               Text(
-                                'Ecevit',
-                                style: TextStyle(
+                                prefs.getString('surname') ??
+                                    'N/A', // Provide a default value if null
+                                style: const TextStyle(
                                     color: Color.fromARGB(181, 51, 51, 51),
                                     fontSize: 12,
                                     fontWeight: FontWeight.w400),
@@ -98,7 +133,7 @@ class _AccountState extends ConsumerState<Account> {
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text(
+                              const Text(
                                 'E-mail',
                                 style: TextStyle(
                                     color: Color.fromARGB(181, 51, 51, 51),
@@ -106,8 +141,8 @@ class _AccountState extends ConsumerState<Account> {
                                     fontWeight: FontWeight.w300),
                               ),
                               Text(
-                                'eecevah@gmail.com',
-                                style: TextStyle(
+                                '${prefs.getString('name')?.toLowerCase() ?? 'N/A'}${prefs.getString('surname')?.toLowerCase() ?? 'N/A'}@gmail.com',
+                                style: const TextStyle(
                                     color: Color.fromARGB(181, 51, 51, 51),
                                     fontSize: 12,
                                     fontWeight: FontWeight.w400),
@@ -116,7 +151,7 @@ class _AccountState extends ConsumerState<Account> {
                           ),
                         ],
                       ),
-                      Column(
+                      const Column(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -181,11 +216,11 @@ class _AccountState extends ConsumerState<Account> {
                       ),
                       GrockContainer(
                         onTap: () {
-                          Grock.to(Profile());
+                          Grock.to(const Profile());
                         },
                         width: 67,
                         height: 67,
-                        decoration: BoxDecoration(
+                        decoration: const BoxDecoration(
                           color: Constant.purple,
                           borderRadius: BorderRadiusDirectional.only(
                             topEnd: Radius.circular(15),
@@ -209,12 +244,13 @@ class _AccountState extends ConsumerState<Account> {
                 padding:
                     const EdgeInsets.symmetric(horizontal: 25, vertical: 4),
                 child: Container(
-                  padding: EdgeInsets.symmetric(horizontal: 30, vertical: 15),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
                   width: MediaQuery.sizeOf(context).width,
                   decoration: BoxDecoration(
                     color: Constant.white,
                     borderRadius: BorderRadius.circular(15),
-                    boxShadow: [
+                    boxShadow: const [
                       BoxShadow(
                           color: Color.fromARGB(81, 217, 217, 217),
                           spreadRadius: 2,
@@ -229,7 +265,8 @@ class _AccountState extends ConsumerState<Account> {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => AccReservation()));
+                                  builder: (context) =>
+                                      const AccReservation()));
                         },
                         icon: Assets.icons.icAccRandevularSVG,
                       ),
@@ -239,7 +276,8 @@ class _AccountState extends ConsumerState<Account> {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => LastReservation()));
+                                  builder: (context) =>
+                                      const LastReservation()));
                         },
                         icon: Assets.icons.icGecmisSVG,
                       ),
@@ -262,7 +300,7 @@ class _AccountState extends ConsumerState<Account> {
                           child: Padding(
                             padding: const EdgeInsets.only(bottom: 30.0),
                             child: Container(
-                              padding: EdgeInsets.symmetric(
+                              padding: const EdgeInsets.symmetric(
                                   horizontal: 32, vertical: 36),
                               width: MediaQuery.sizeOf(context).width - 48,
                               height: 260,
@@ -309,7 +347,7 @@ class _AccountState extends ConsumerState<Account> {
                                             borderRadius:
                                                 BorderRadius.circular(10),
                                           ),
-                                          child: Center(
+                                          child: const Center(
                                             child: Text(
                                               "Çıkış Yap",
                                               style: TextStyle(
@@ -339,7 +377,7 @@ class _AccountState extends ConsumerState<Account> {
                                             borderRadius:
                                                 BorderRadius.circular(10),
                                           ),
-                                          child: Center(
+                                          child: const Center(
                                             child: Text(
                                               "İptal Et",
                                               style: TextStyle(
@@ -378,8 +416,7 @@ class _buttonCard extends StatefulWidget {
   String icon;
   Function onTab;
 
-  _buttonCard(
-      {super.key, required this.icon, required this.onTab, required this.text});
+  _buttonCard({required this.icon, required this.onTab, required this.text});
 
   @override
   State<_buttonCard> createState() => __buttonCardState();
@@ -403,16 +440,16 @@ class __buttonCardState extends State<_buttonCard> {
               children: [
                 SvgPicture.asset(
                   widget.icon,
-                  color: Color.fromARGB(181, 51, 51, 51),
+                  color: const Color.fromARGB(181, 51, 51, 51),
                   width: 23,
                   height: 23,
                 ),
-                SizedBox(
+                const SizedBox(
                   width: 10,
                 ),
                 Text(
                   widget.text,
-                  style: TextStyle(
+                  style: const TextStyle(
                       color: Color.fromARGB(181, 51, 51, 51),
                       fontSize: 15,
                       fontWeight: FontWeight.w500),
@@ -426,13 +463,13 @@ class __buttonCardState extends State<_buttonCard> {
                 color: Constant.darkwhite,
                 shape: BoxShape.circle,
                 border: Border.all(
-                  color: Color.fromARGB(36, 51, 51, 51),
+                  color: const Color.fromARGB(36, 51, 51, 51),
                   width: 1,
                 ),
               ),
-              child: Center(
+              child: const Center(
                 child: Padding(
-                  padding: const EdgeInsets.only(left: 3.0),
+                  padding: EdgeInsets.only(left: 3.0),
                   child: Icon(
                     Icons.arrow_forward_ios,
                     size: 17,

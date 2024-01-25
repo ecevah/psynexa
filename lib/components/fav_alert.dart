@@ -12,7 +12,8 @@ Future<bool> onFavPop(BuildContext context, String id) async {
               child: Padding(
                 padding: const EdgeInsets.only(bottom: 25.0),
                 child: Container(
-                  padding: EdgeInsets.symmetric(horizontal: 32, vertical: 36),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 32, vertical: 36),
                   width: MediaQuery.sizeOf(context).width - 48,
                   height: 260,
                   decoration: BoxDecoration(
@@ -50,7 +51,7 @@ Future<bool> onFavPop(BuildContext context, String id) async {
                                 color: Constant.purple.withOpacity(0.10),
                                 borderRadius: BorderRadius.circular(10),
                               ),
-                              child: Center(
+                              child: const Center(
                                 child: Text(
                                   "Favorilerimden Çıkar",
                                   style: TextStyle(
@@ -77,7 +78,7 @@ Future<bool> onFavPop(BuildContext context, String id) async {
                                 color: Constant.purple,
                                 borderRadius: BorderRadius.circular(10),
                               ),
-                              child: Center(
+                              child: const Center(
                                 child: Text(
                                   "Vazgeçtim",
                                   style: TextStyle(

@@ -11,13 +11,14 @@ class RandevuDetayCard extends StatelessWidget {
   String rol;
   String imagePath;
   DateTime time;
-  RandevuDetayCard({
-    super.key,
-    required this.rol,
-    required this.time,
-    required this.title,
-    required this.imagePath,
-  });
+  int star;
+  RandevuDetayCard(
+      {super.key,
+      required this.rol,
+      required this.time,
+      required this.title,
+      required this.imagePath,
+      required this.star});
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +29,7 @@ class RandevuDetayCard extends StatelessWidget {
           child: Row(
             children: [
               ClipOval(
-                child: Image.asset(
+                child: Image.network(
                   imagePath,
                   width: 88,
                   height: 88,
@@ -42,7 +43,7 @@ class RandevuDetayCard extends StatelessWidget {
                   children: [
                     Text(
                       title,
-                      style: TextStyle(
+                      style: const TextStyle(
                           fontSize: 14,
                           fontWeight: FontWeight.w500,
                           color: Constant.black75,
@@ -53,7 +54,7 @@ class RandevuDetayCard extends StatelessWidget {
                       padding: const EdgeInsets.only(top: 3.0, bottom: 1),
                       child: Text(
                         rol,
-                        style: TextStyle(
+                        style: const TextStyle(
                             fontSize: 9.69,
                             fontWeight: FontWeight.w400,
                             color: Constant.black35,
@@ -69,14 +70,15 @@ class RandevuDetayCard extends StatelessWidget {
                           height: 10,
                           color: Constant.purple,
                         ),
-                        SizedBox(
+                        const SizedBox(
                           width: 3,
                         ),
                         Padding(
                           padding: const EdgeInsets.only(bottom: 1.0),
                           child: Text(
-                            '${DateFormat('dd MMMM y - HH:mm').format(time)}',
-                            style: TextStyle(
+                            DateFormat('dd MMMM y - HH:mm', 'tr_TR')
+                                .format(time),
+                            style: const TextStyle(
                                 fontSize: 10,
                                 fontWeight: FontWeight.w400,
                                 color: Constant.black35,
@@ -91,7 +93,7 @@ class RandevuDetayCard extends StatelessWidget {
             ],
           ),
         ),
-        SizedBox(
+        const SizedBox(
           height: 30,
         ),
         Padding(
@@ -102,11 +104,11 @@ class RandevuDetayCard extends StatelessWidget {
               numberCard(
                 svgPath: Assets.icons.icUserCaroSVG,
                 number: "2.6K",
-                title: 'Hasta',
+                title: 'Danışan',
               ),
               numberCard(
                 svgPath: Assets.icons.icStarSVG,
-                number: "5.84K",
+                number: '$star',
                 title: 'İnceleme',
               ),
               numberCard(

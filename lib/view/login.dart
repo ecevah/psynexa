@@ -1,5 +1,4 @@
 import 'package:Psynexa/components/exit_alert.dart';
-import 'package:Psynexa/components/snackbar.dart';
 import 'package:Psynexa/models/login/login_request.dart';
 import 'package:Psynexa/services/login_service.dart';
 import 'package:flutter/material.dart';
@@ -9,8 +8,6 @@ import 'package:grock/grock.dart';
 import 'package:Psynexa/components/custom_first_btn.dart';
 import 'package:Psynexa/components/custom_text_input.dart';
 import 'package:Psynexa/constant/constant.dart';
-import 'package:Psynexa/view/base_scaffold.dart';
-import 'package:Psynexa/view/meet.dart';
 import 'package:Psynexa/view/register.dart';
 import '../assets.dart';
 import '../components/custom_pass_input.dart';
@@ -74,7 +71,7 @@ class _LoginState extends ConsumerState<Login> {
                           ),
                         ),
                         CustomText(
-                          text: 'Mail Adresi',
+                          text: 'Kullanıcı Adı',
                           controller: username,
                         ),
                         CustomPassword(
@@ -104,8 +101,6 @@ class _LoginState extends ConsumerState<Login> {
                           padding: const EdgeInsets.only(top: 40.0),
                           child: FirstBtn(
                               onTap: () async {
-                                print([username.text, password.text]);
-
                                 if (formKey.currentState?.validate() ?? false) {
                                   final res = await loginService.fetchLogin(
                                       UserRequestModel(
@@ -139,7 +134,7 @@ class _LoginState extends ConsumerState<Login> {
                   TextButton(
                     onPressed: () {
                       Grock.to(
-                        Register(),
+                        const Register(),
                       );
                     },
                     style: TextButton.styleFrom(

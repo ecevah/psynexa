@@ -70,6 +70,7 @@ class _AssetsImages {
   _AssetsImages._();
 
 
+  final demansSVG = 'assets/images/demans.svg';
   final imChatbotPNG = 'assets/images/im_chatbot.png';
   final imDepresyonSVG = 'assets/images/im_depresyon.svg';
   final imHomeKariPNG = 'assets/images/im_homeKari.png';
@@ -78,6 +79,7 @@ class _AssetsImages {
   final imOnBoardSVG = 'assets/images/im_onBoard.svg';
   final imStresSVG = 'assets/images/im_stres.svg';
   final imXLogoSvgSVG = 'assets/images/im_xLogoSvg.svg';
+  final imageinputSVG = 'assets/images/imageinput.svg';
   final nexaGIF = 'assets/images/nexa.gif';
   final pp1PNG = 'assets/images/pp1.png';
   final pp2PNG = 'assets/images/pp2.png';

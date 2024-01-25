@@ -1,16 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:Psynexa/assets.dart';
-import 'package:Psynexa/components/custom_first_btn.dart';
 import 'package:Psynexa/constant/constant.dart';
 import 'package:grock/grock.dart';
 import 'package:Psynexa/view/base_scaffold.dart';
 import 'package:Psynexa/view/degerlendirme.dart';
-import 'package:Psynexa/view/home.dart';
 
 class GorusmeSonu extends StatelessWidget {
-  String image = Assets.images.imKariPNG;
-
-  GorusmeSonu({super.key});
+  String image;
+  String title;
+  String rol;
+  GorusmeSonu(
+      {super.key, required this.title, required this.image, required this.rol});
 
   @override
   Widget build(BuildContext context) {
@@ -21,24 +20,24 @@ class GorusmeSonu extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            SizedBox(
+            const SizedBox(
               height: 110,
             ),
             Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 ClipOval(
-                  child: Image.asset(
+                  child: Image.network(
                     image,
                     width: 200,
                     height: 200,
                     scale: 0.5,
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 13,
                 ),
-                Text(
+                const Text(
                   'Arama Sonlandı',
                   style: TextStyle(
                       fontSize: 15,
@@ -54,16 +53,20 @@ class GorusmeSonu extends StatelessWidget {
                   height: 50,
                   child: ElevatedButton(
                     onPressed: () {
-                      Grock.to(Degerlendirme());
+                      Grock.to(Degerlendirme(
+                        image: image,
+                        title: title,
+                        rol: rol,
+                      ));
                     },
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Color.fromARGB(76, 103, 71, 199),
+                      backgroundColor: const Color.fromARGB(76, 103, 71, 199),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12),
                       ),
                       elevation: 0,
                     ),
-                    child: Text(
+                    child: const Text(
                       'Değerlendirme Ekleyin',
                       style: TextStyle(
                           fontSize: 15,
@@ -72,7 +75,7 @@ class GorusmeSonu extends StatelessWidget {
                     ),
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 10,
                 ),
                 SizedBox(
@@ -89,7 +92,7 @@ class GorusmeSonu extends StatelessWidget {
                       ),
                       elevation: 0,
                     ),
-                    child: Text(
+                    child: const Text(
                       'Randevularım',
                       style: TextStyle(
                           fontSize: 15,

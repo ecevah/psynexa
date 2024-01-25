@@ -8,19 +8,19 @@ class search_doctor_model {
     if (json['data'] != null) {
       data = <Data>[];
       json['data'].forEach((v) {
-        data!.add(new Data.fromJson(v));
+        data!.add(Data.fromJson(v));
       });
     }
-    meta = json['meta'] != null ? new Meta.fromJson(json['meta']) : null;
+    meta = json['meta'] != null ? Meta.fromJson(json['meta']) : null;
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
+    final Map<String, dynamic> data = <String, dynamic>{};
     if (this.data != null) {
       data['data'] = this.data!.map((v) => v.toJson()).toList();
     }
-    if (this.meta != null) {
-      data['meta'] = this.meta!.toJson();
+    if (meta != null) {
+      data['meta'] = meta!.toJson();
     }
     return data;
   }
@@ -73,17 +73,16 @@ class Data {
     updatedAt = json['updatedAt'];
     jobStartDate = json['jobStartDate'];
     applicationStatus = json['applicationStatus'];
-    avatar =
-        json['avatar'] != null ? new Avatar.fromJson(json['avatar']) : null;
+    avatar = json['avatar'] != null ? Avatar.fromJson(json['avatar']) : null;
     if (json['comments'] != null) {
       comments = <Null>[];
       json['comments'].forEach((v) {});
     }
-    user = json['user'] != null ? new User.fromJson(json['user']) : null;
+    user = json['user'] != null ? User.fromJson(json['user']) : null;
     if (json['clients'] != null) {
       clients = <Clients>[];
       json['clients'].forEach((v) {
-        clients!.add(new Clients.fromJson(v));
+        clients!.add(Clients.fromJson(v));
       });
     }
     if (json['meetings'] != null) {
@@ -94,28 +93,28 @@ class Data {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['about'] = this.about;
-    data['fullName'] = this.fullName;
-    data['hourlyPrice'] = this.hourlyPrice;
-    data['profession'] = this.profession;
-    data['title'] = this.title;
-    data['createdAt'] = this.createdAt;
-    data['updatedAt'] = this.updatedAt;
-    data['jobStartDate'] = this.jobStartDate;
-    data['applicationStatus'] = this.applicationStatus;
-    if (this.avatar != null) {
-      data['avatar'] = this.avatar!.toJson();
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = id;
+    data['about'] = about;
+    data['fullName'] = fullName;
+    data['hourlyPrice'] = hourlyPrice;
+    data['profession'] = profession;
+    data['title'] = title;
+    data['createdAt'] = createdAt;
+    data['updatedAt'] = updatedAt;
+    data['jobStartDate'] = jobStartDate;
+    data['applicationStatus'] = applicationStatus;
+    if (avatar != null) {
+      data['avatar'] = avatar!.toJson();
     }
 
-    if (this.user != null) {
-      data['user'] = this.user!.toJson();
+    if (user != null) {
+      data['user'] = user!.toJson();
     }
-    if (this.clients != null) {
-      data['clients'] = this.clients!.map((v) => v.toJson()).toList();
+    if (clients != null) {
+      data['clients'] = clients!.map((v) => v.toJson()).toList();
     }
-    data['documents'] = this.documents;
+    data['documents'] = documents;
     return data;
   }
 }
@@ -166,7 +165,7 @@ class Avatar {
     width = json['width'];
     height = json['height'];
     formats =
-        json['formats'] != null ? new Formats.fromJson(json['formats']) : null;
+        json['formats'] != null ? Formats.fromJson(json['formats']) : null;
     hash = json['hash'];
     ext = json['ext'];
     mime = json['mime'];
@@ -180,26 +179,26 @@ class Avatar {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['name'] = this.name;
-    data['alternativeText'] = this.alternativeText;
-    data['caption'] = this.caption;
-    data['width'] = this.width;
-    data['height'] = this.height;
-    if (this.formats != null) {
-      data['formats'] = this.formats!.toJson();
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = id;
+    data['name'] = name;
+    data['alternativeText'] = alternativeText;
+    data['caption'] = caption;
+    data['width'] = width;
+    data['height'] = height;
+    if (formats != null) {
+      data['formats'] = formats!.toJson();
     }
-    data['hash'] = this.hash;
-    data['ext'] = this.ext;
-    data['mime'] = this.mime;
-    data['size'] = this.size;
-    data['url'] = this.url;
-    data['previewUrl'] = this.previewUrl;
-    data['provider'] = this.provider;
-    data['provider_metadata'] = this.providerMetadata;
-    data['createdAt'] = this.createdAt;
-    data['updatedAt'] = this.updatedAt;
+    data['hash'] = hash;
+    data['ext'] = ext;
+    data['mime'] = mime;
+    data['size'] = size;
+    data['url'] = url;
+    data['previewUrl'] = previewUrl;
+    data['provider'] = provider;
+    data['provider_metadata'] = providerMetadata;
+    data['createdAt'] = createdAt;
+    data['updatedAt'] = updatedAt;
     return data;
   }
 }
@@ -211,14 +210,14 @@ class Formats {
 
   Formats.fromJson(Map<String, dynamic> json) {
     thumbnail = json['thumbnail'] != null
-        ? new Thumbnail.fromJson(json['thumbnail'])
+        ? Thumbnail.fromJson(json['thumbnail'])
         : null;
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    if (this.thumbnail != null) {
-      data['thumbnail'] = this.thumbnail!.toJson();
+    final Map<String, dynamic> data = <String, dynamic>{};
+    if (thumbnail != null) {
+      data['thumbnail'] = thumbnail!.toJson();
     }
     return data;
   }
@@ -259,16 +258,16 @@ class Thumbnail {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['name'] = this.name;
-    data['hash'] = this.hash;
-    data['ext'] = this.ext;
-    data['mime'] = this.mime;
-    data['path'] = this.path;
-    data['width'] = this.width;
-    data['height'] = this.height;
-    data['size'] = this.size;
-    data['url'] = this.url;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['name'] = name;
+    data['hash'] = hash;
+    data['ext'] = ext;
+    data['mime'] = mime;
+    data['path'] = path;
+    data['width'] = width;
+    data['height'] = height;
+    data['size'] = size;
+    data['url'] = url;
     return data;
   }
 }
@@ -305,15 +304,15 @@ class User {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['username'] = this.username;
-    data['email'] = this.email;
-    data['provider'] = this.provider;
-    data['confirmed'] = this.confirmed;
-    data['blocked'] = this.blocked;
-    data['createdAt'] = this.createdAt;
-    data['updatedAt'] = this.updatedAt;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = id;
+    data['username'] = username;
+    data['email'] = email;
+    data['provider'] = provider;
+    data['confirmed'] = confirmed;
+    data['blocked'] = blocked;
+    data['createdAt'] = createdAt;
+    data['updatedAt'] = updatedAt;
     return data;
   }
 }
@@ -347,14 +346,14 @@ class Clients {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['birthday'] = this.birthday;
-    data['gender'] = this.gender;
-    data['createdAt'] = this.createdAt;
-    data['updatedAt'] = this.updatedAt;
-    data['fullName'] = this.fullName;
-    data['totalAnalysis'] = this.totalAnalysis;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = id;
+    data['birthday'] = birthday;
+    data['gender'] = gender;
+    data['createdAt'] = createdAt;
+    data['updatedAt'] = updatedAt;
+    data['fullName'] = fullName;
+    data['totalAnalysis'] = totalAnalysis;
     return data;
   }
 }
@@ -366,14 +365,14 @@ class Meta {
 
   Meta.fromJson(Map<String, dynamic> json) {
     pagination = json['pagination'] != null
-        ? new Pagination.fromJson(json['pagination'])
+        ? Pagination.fromJson(json['pagination'])
         : null;
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    if (this.pagination != null) {
-      data['pagination'] = this.pagination!.toJson();
+    final Map<String, dynamic> data = <String, dynamic>{};
+    if (pagination != null) {
+      data['pagination'] = pagination!.toJson();
     }
     return data;
   }
@@ -395,11 +394,11 @@ class Pagination {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['page'] = this.page;
-    data['pageSize'] = this.pageSize;
-    data['pageCount'] = this.pageCount;
-    data['total'] = this.total;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['page'] = page;
+    data['pageSize'] = pageSize;
+    data['pageCount'] = pageCount;
+    data['total'] = total;
     return data;
   }
 }

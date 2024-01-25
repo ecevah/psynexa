@@ -43,7 +43,6 @@ class _SpeechScreenState extends State<SpeechScreen> {
     setState(() {
       _lastWords = result.recognizedWords;
       data.add(result.recognizedWords[result.recognizedWords.length - 1]);
-      print(data);
       _startListening();
     });
   }
@@ -52,15 +51,15 @@ class _SpeechScreenState extends State<SpeechScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Speech Demo'),
+        title: const Text('Speech Demo'),
       ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Container(
-              padding: EdgeInsets.all(16),
-              child: Text(
+              padding: const EdgeInsets.all(16),
+              child: const Text(
                 'Recognized words:',
                 style: TextStyle(fontSize: 20.0),
               ),
@@ -68,11 +67,11 @@ class _SpeechScreenState extends State<SpeechScreen> {
             Text('${data.length}'),
             Expanded(
               child: Container(
-                padding: EdgeInsets.all(16),
+                padding: const EdgeInsets.all(16),
                 child: Text(
                   // If listening is active show the recognized words
                   _speechToText.isListening
-                      ? '$_lastWords'
+                      ? _lastWords
                       // If listening isn't active but could be tell the user
                       // how to start it, otherwise indicate that speech
                       // recognition is not yet ready or not supported on

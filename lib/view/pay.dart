@@ -19,17 +19,17 @@ class PayPage extends StatelessWidget {
     }
 
     return Scaffold(
-      appBar: CustomAccAppBar(appbarTitle: 'Ödeme Detayları'),
+      appBar: const CustomAccAppBar(appbarTitle: 'Ödeme Detayları'),
       body: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 36, vertical: 8),
+        padding: const EdgeInsets.symmetric(horizontal: 36, vertical: 8),
         child: Column(
           children: [
             Container(
-              padding: EdgeInsets.symmetric(vertical: 30, horizontal: 30),
+              padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 30),
               decoration: BoxDecoration(
                 color: Constant.white,
                 borderRadius: BorderRadius.circular(10),
-                boxShadow: [
+                boxShadow: const [
                   BoxShadow(
                       color: Color.fromARGB(81, 217, 217, 217),
                       spreadRadius: 5,
@@ -40,7 +40,7 @@ class PayPage extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
+                  const Text(
                     'Ödeme Detayı',
                     style: TextStyle(
                       fontSize: 15,
@@ -49,14 +49,14 @@ class PayPage extends StatelessWidget {
                       fontFamily: 'Proxima Nova',
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 12,
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      Text(
+                      const Text(
                         'Muayene Ücreti:',
                         style: TextStyle(
                             fontSize: 12,
@@ -66,7 +66,7 @@ class PayPage extends StatelessWidget {
                       ),
                       Text(
                         '$price₺',
-                        style: TextStyle(
+                        style: const TextStyle(
                             fontSize: 12,
                             fontWeight: FontWeight.w400,
                             color: Constant.black50,
@@ -74,14 +74,14 @@ class PayPage extends StatelessWidget {
                       )
                     ],
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 12,
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      Text(
+                      const Text(
                         'KDV:',
                         style: TextStyle(
                             fontSize: 12,
@@ -91,7 +91,7 @@ class PayPage extends StatelessWidget {
                       ),
                       Text(
                         '${price * 0.20}₺',
-                        style: TextStyle(
+                        style: const TextStyle(
                             fontSize: 12,
                             fontWeight: FontWeight.w400,
                             color: Constant.black50,
@@ -99,22 +99,22 @@ class PayPage extends StatelessWidget {
                       )
                     ],
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 12,
                   ),
                   Container(
                     width: MediaQuery.sizeOf(context).width,
                     height: 1,
-                    color: Color(0xFFE8E6EA),
+                    color: const Color(0xFFE8E6EA),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 12,
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      Text(
+                      const Text(
                         'Toplam Tutar:',
                         style: TextStyle(
                             fontSize: 12,
@@ -124,7 +124,7 @@ class PayPage extends StatelessWidget {
                       ),
                       Text(
                         '${price + (price * 0.20)}₺',
-                        style: TextStyle(
+                        style: const TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.w500,
                             color: Constant.black75,
@@ -135,15 +135,15 @@ class PayPage extends StatelessWidget {
                 ],
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 37,
             ),
             Container(
-              padding: EdgeInsets.symmetric(vertical: 30, horizontal: 30),
+              padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 30),
               decoration: BoxDecoration(
                 color: Constant.white,
                 borderRadius: BorderRadius.circular(10),
-                boxShadow: [
+                boxShadow: const [
                   BoxShadow(
                       color: Color.fromARGB(81, 217, 217, 217),
                       spreadRadius: 5,
@@ -154,7 +154,7 @@ class PayPage extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
+                  const Text(
                     'Nasıl ödeme yapmak istersiniz?',
                     style: TextStyle(
                       fontSize: 15,
@@ -163,10 +163,10 @@ class PayPage extends StatelessWidget {
                       fontFamily: 'Proxima Nova',
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 12,
                   ),
-                  Text(
+                  const Text(
                     'Ödeme yapmak için istediğiniz ödeme türünü seçin',
                     style: TextStyle(
                         fontSize: 12,
@@ -174,15 +174,15 @@ class PayPage extends StatelessWidget {
                         color: Constant.black50,
                         fontFamily: 'Proxima Nova'),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 12,
                   ),
                   Container(
                     width: MediaQuery.sizeOf(context).width,
                     height: 1,
-                    color: Color(0xFFE8E6EA),
+                    color: const Color(0xFFE8E6EA),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 12,
                   ),
                   Row(
@@ -209,7 +209,7 @@ class PayPage extends StatelessWidget {
                 ],
               ),
             ),
-            Spacer(),
+            const Spacer(),
             Padding(
               padding: const EdgeInsets.only(bottom: 34.0),
               child: FirstBtn(

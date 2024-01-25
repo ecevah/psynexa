@@ -19,13 +19,13 @@ class _CustomTestCardState extends State<CustomTestCard> {
     return Padding(
       padding: const EdgeInsets.only(bottom: 15.0),
       child: Container(
-        padding: EdgeInsets.all(25),
+        padding: const EdgeInsets.all(25),
         width: MediaQuery.sizeOf(context).width,
         decoration: BoxDecoration(
           border: Border.all(
             style: BorderStyle.solid,
             width: 1,
-            color: Color(0xFFEAEAEF),
+            color: const Color(0xFFEAEAEF),
           ),
           borderRadius: BorderRadius.circular(10),
         ),
@@ -35,14 +35,14 @@ class _CustomTestCardState extends State<CustomTestCard> {
           children: [
             Text(
               "${widget.number + 1}.",
-              style: TextStyle(
+              style: const TextStyle(
                 fontFamily: 'Proxima Nova',
                 fontSize: 15,
                 fontWeight: FontWeight.w500,
                 color: Constant.black,
               ),
             ),
-            SizedBox(
+            const SizedBox(
               width: 5,
             ),
             Column(
@@ -56,8 +56,8 @@ class _CustomTestCardState extends State<CustomTestCard> {
                   child: SizedBox(
                     width: MediaQuery.sizeOf(context).width - 116,
                     child: Text(
-                      '${widget.question}',
-                      style: TextStyle(
+                      widget.question,
+                      style: const TextStyle(
                         fontFamily: 'Proxima Nova',
                         fontSize: 15,
                         fontWeight: FontWeight.w500,
@@ -66,7 +66,7 @@ class _CustomTestCardState extends State<CustomTestCard> {
                     ),
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 15,
                 ),
                 Row(
@@ -85,7 +85,7 @@ class _CustomTestCardState extends State<CustomTestCard> {
                                   });
                                 }
                               },
-                              side: BorderSide(
+                              side: const BorderSide(
                                   style: BorderStyle.solid,
                                   color: Colors.black,
                                   width: 0.85),
@@ -93,13 +93,13 @@ class _CustomTestCardState extends State<CustomTestCard> {
                                 borderRadius: BorderRadius.circular(3.0),
                               ),
                               tristate: true,
-                              visualDensity: VisualDensity(
+                              visualDensity: const VisualDensity(
                                 horizontal: -4,
                                 vertical: -4,
                               ),
                               activeColor: Colors.black,
                             ),
-                            Text(
+                            const Text(
                               'Her Zaman',
                               style: TextStyle(
                                 fontFamily: 'Proxima Nova',
@@ -121,7 +121,7 @@ class _CustomTestCardState extends State<CustomTestCard> {
                                   });
                                 }
                               },
-                              side: BorderSide(
+                              side: const BorderSide(
                                   style: BorderStyle.solid,
                                   color: Colors.black,
                                   width: 0.85),
@@ -129,13 +129,13 @@ class _CustomTestCardState extends State<CustomTestCard> {
                                 borderRadius: BorderRadius.circular(3.0),
                               ),
                               tristate: true,
-                              visualDensity: VisualDensity(
+                              visualDensity: const VisualDensity(
                                 horizontal: -4,
                                 vertical: -4,
                               ),
                               activeColor: Colors.black,
                             ),
-                            Text(
+                            const Text(
                               'Sık Sık',
                               style: TextStyle(
                                 fontFamily: 'Proxima Nova',
@@ -157,7 +157,7 @@ class _CustomTestCardState extends State<CustomTestCard> {
                                   });
                                 }
                               },
-                              side: BorderSide(
+                              side: const BorderSide(
                                   style: BorderStyle.solid,
                                   color: Colors.black,
                                   width: 0.85),
@@ -165,13 +165,13 @@ class _CustomTestCardState extends State<CustomTestCard> {
                                 borderRadius: BorderRadius.circular(3.0),
                               ),
                               tristate: true,
-                              visualDensity: VisualDensity(
+                              visualDensity: const VisualDensity(
                                 horizontal: -4,
                                 vertical: -4,
                               ),
                               activeColor: Colors.black,
                             ),
-                            Text(
+                            const Text(
                               'Nadiren',
                               style: TextStyle(
                                 fontFamily: 'Proxima Nova',
@@ -193,7 +193,7 @@ class _CustomTestCardState extends State<CustomTestCard> {
                                   });
                                 }
                               },
-                              side: BorderSide(
+                              side: const BorderSide(
                                   style: BorderStyle.solid,
                                   color: Colors.black,
                                   width: 0.85),
@@ -201,13 +201,13 @@ class _CustomTestCardState extends State<CustomTestCard> {
                                 borderRadius: BorderRadius.circular(3.0),
                               ),
                               tristate: true,
-                              visualDensity: VisualDensity(
+                              visualDensity: const VisualDensity(
                                 horizontal: -4,
                                 vertical: -4,
                               ),
                               activeColor: Colors.black,
                             ),
-                            Text(
+                            const Text(
                               'Hiçbir Zaman',
                               style: TextStyle(
                                 fontFamily: 'Proxima Nova',

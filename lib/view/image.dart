@@ -1,11 +1,19 @@
+import 'package:Psynexa/assets.dart';
+import 'package:Psynexa/components/custom_back_appbar.dart';
 import 'package:Psynexa/constant/constant.dart';
+import 'package:Psynexa/view/testson.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:flutter_svg/svg.dart';
+import 'package:grock/grock.dart';
 
 class ImagePickerView extends StatefulWidget {
+  String image;
+  String title;
+  ImagePickerView({required this.image, required this.title});
   @override
   _ImagePickerViewState createState() => _ImagePickerViewState();
 }
@@ -47,7 +55,7 @@ class _ImagePickerViewState extends State<ImagePickerView> {
   Future<void> postData(
     String? base64,
   ) async {
-    final String apiUrl = '${Constant.domain}/ai/predict_spiral_parkinson';
+    const String apiUrl = '${Constant.domain}/ai/predict_spiral_parkinson';
     final Map<String, dynamic> data = {'image': base64, 'result': resultData};
     final response = await http.post(
       Uri.parse(apiUrl),
@@ -67,22 +75,70 @@ class _ImagePickerViewState extends State<ImagePickerView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Image Picker Örneği'),
-      ),
+      appBar: const CustomAccAppBar(appbarTitle: 'Demans Değerlendirme Testi'),
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            _image == null ? Text('Resim Seçilmedi') : Image.file(_image!),
-          ],
+        child: Expanded(
+          child: ListView(
+            children: [
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  _image == null
+                      ? Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            GrockContainer(
+                              onTap: _getImage,
+                              padding:
+                                  const EdgeInsets.fromLTRB(25, 50, 25, 15),
+                              child:
+                                  SvgPicture.asset(Assets.images.imageinputSVG),
+                            ),
+                            const Text(
+                              'Psikoloğun İstediği: Saat Çizimi',
+                              style: TextStyle(
+                                fontSize: 16,
+                                height: 1.2,
+                                fontWeight: FontWeight.w600,
+                                color: Constant.black75,
+                                fontFamily: 'Proxima Nova',
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 8,
+                            ),
+                            Text(
+                              'Saat çiziminiz, tedavi ve terapi sürecinizdeki ilerlemeyi izlememize yardımcı olacak önemli bir kaynaktır.',
+                              style: TextStyle(
+                                fontSize: 14,
+                                height: 1.2,
+                                fontWeight: FontWeight.w500,
+                                color: Constant.black.withOpacity(0.5),
+                                fontFamily: 'Proxima Nova',
+                              ),
+                              textAlign: TextAlign.center,
+                            )
+                          ],
+                        )
+                      : Image.file(_image!),
+                ],
+              ),
+            ],
+          ),
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _getImage,
-        tooltip: 'Resim Seç',
-        child: Icon(Icons.image),
-      ),
+      floatingActionButton: _image == null
+          ? null
+          : FloatingActionButton(
+              onPressed: () {
+                Grock.to(TestSon(title: widget.title, image: widget.image));
+              },
+              backgroundColor: Constant.purple,
+              child: SvgPicture.asset(
+                Assets.icons.icSendArrowSVG,
+                color: Colors.white,
+              ),
+            ),
     );
   }
 }

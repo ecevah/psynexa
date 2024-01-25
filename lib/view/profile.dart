@@ -1,24 +1,47 @@
+import 'package:Psynexa/riverpod/home_riverpod.dart';
 import 'package:flutter/material.dart';
 import 'package:Psynexa/assets.dart';
 import 'package:Psynexa/components/custom_back_appbar.dart';
 import 'package:Psynexa/components/custom_first_btn.dart';
 import 'package:Psynexa/constant/constant.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class Profile extends StatefulWidget {
+final homePageRiverpod = ChangeNotifierProvider((ref) => HomePageRiverpod());
+
+class Profile extends ConsumerStatefulWidget {
   final ad = 'Ayşe';
   final soyad = 'Yılmaz';
   const Profile({super.key});
 
   @override
-  State<Profile> createState() => _ProfileState();
+  ConsumerState<Profile> createState() => _ProfileState();
 }
 
-class _ProfileState extends State<Profile> {
+class _ProfileState extends ConsumerState<Profile> {
+  late SharedPreferences prefs;
+  bool prefsInitialized = false;
+
+  @override
+  void initState() {
+    super.initState();
+    initPreferences();
+  }
+
+  Future<void> initPreferences() async {
+    prefs = await SharedPreferences.getInstance();
+    if (mounted) {
+      setState(() {
+        prefsInitialized = true;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     List<String> _cinsiyet = ["Kadın", "Erkek", "Belirtmek İstemiyorum"];
-    String _secilenCinsiyet = "Kadın";
+    String _secilenCinsiyet = "Erkek";
 
     void _cinsiyetDegistir(String? yeniSecilen) {
       if (yeniSecilen != null) {
@@ -36,7 +59,7 @@ class _ProfileState extends State<Profile> {
       });
     }
 
-    String _telefon = ''; // Initialize with an empty string
+    String _telefon = '';
 
     void _setTelefon(String yeniTelefon) {
       setState(() {
@@ -46,7 +69,7 @@ class _ProfileState extends State<Profile> {
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      appBar: CustomAccAppBar(appbarTitle: 'Profilim'),
+      appBar: const CustomAccAppBar(appbarTitle: 'Profilim'),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 30.0, vertical: 20),
         child: Column(
@@ -59,7 +82,7 @@ class _ProfileState extends State<Profile> {
                       vertical: 12.0, horizontal: 10),
                   child: Column(
                     children: [
-                      Row(
+                      const Row(
                         children: [
                           Text(
                             'Ad',
@@ -82,7 +105,7 @@ class _ProfileState extends State<Profile> {
                           )
                         ],
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 5,
                       ),
                       SizedBox(
@@ -101,8 +124,8 @@ class _ProfileState extends State<Profile> {
                                   color: Constant.inputText, width: 1),
                               borderRadius: BorderRadius.circular(12),
                             ),
-                            hintText: widget.ad,
-                            hintStyle: TextStyle(
+                            hintText: prefs.getString('name') ?? 'N/A',
+                            hintStyle: const TextStyle(
                               fontSize: 14,
                               fontWeight: FontWeight.w400,
                               color: Constant.inputText,
@@ -118,7 +141,7 @@ class _ProfileState extends State<Profile> {
                       vertical: 12.0, horizontal: 10),
                   child: Column(
                     children: [
-                      Row(
+                      const Row(
                         children: [
                           Text(
                             'Soyad',
@@ -141,7 +164,7 @@ class _ProfileState extends State<Profile> {
                           )
                         ],
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 5,
                       ),
                       SizedBox(
@@ -160,8 +183,8 @@ class _ProfileState extends State<Profile> {
                                   color: Constant.inputText, width: 1),
                               borderRadius: BorderRadius.circular(12),
                             ),
-                            hintText: widget.soyad,
-                            hintStyle: TextStyle(
+                            hintText: prefs.getString('surname') ?? 'N/A',
+                            hintStyle: const TextStyle(
                               fontSize: 14,
                               fontWeight: FontWeight.w400,
                               color: Constant.inputText,
@@ -177,7 +200,7 @@ class _ProfileState extends State<Profile> {
                       vertical: 12.0, horizontal: 10),
                   child: Column(
                     children: [
-                      Row(
+                      const Row(
                         children: [
                           Text(
                             'Cinsiyet',
@@ -200,7 +223,7 @@ class _ProfileState extends State<Profile> {
                           ),
                         ],
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 5,
                       ),
                       Container(
@@ -235,10 +258,10 @@ class _ProfileState extends State<Profile> {
                                   children: [
                                     SvgPicture.asset(
                                         Assets.icons.icCinsiyetSVG),
-                                    SizedBox(width: 5),
+                                    const SizedBox(width: 5),
                                     Text(
                                       item,
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                         fontSize: 14,
                                         fontWeight: FontWeight.w400,
                                         color: Constant.inputText,
@@ -259,7 +282,7 @@ class _ProfileState extends State<Profile> {
                       vertical: 12.0, horizontal: 10),
                   child: Column(
                     children: [
-                      Row(
+                      const Row(
                         children: [
                           Text(
                             'Doğum Tarihi',
@@ -282,7 +305,7 @@ class _ProfileState extends State<Profile> {
                           )
                         ],
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 5,
                       ),
                       SizedBox(
@@ -302,13 +325,13 @@ class _ProfileState extends State<Profile> {
                                   color: Constant.inputText, width: 1),
                               borderRadius: BorderRadius.circular(12),
                             ),
-                            hintText: '28/11/1999',
-                            suffixIcon: Icon(
+                            hintText: '02/08/2000',
+                            suffixIcon: const Icon(
                               Icons.calendar_today_outlined,
                               size: 20,
                               color: Constant.inputText,
                             ),
-                            hintStyle: TextStyle(
+                            hintStyle: const TextStyle(
                               fontSize: 14,
                               fontWeight: FontWeight.w400,
                               color: Constant.inputText,
@@ -324,7 +347,7 @@ class _ProfileState extends State<Profile> {
                       vertical: 12.0, horizontal: 10),
                   child: Column(
                     children: [
-                      Row(
+                      const Row(
                         children: [
                           Text(
                             'Telefon',
@@ -347,7 +370,7 @@ class _ProfileState extends State<Profile> {
                           )
                         ],
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 5,
                       ),
                       SizedBox(
@@ -368,7 +391,7 @@ class _ProfileState extends State<Profile> {
                               borderRadius: BorderRadius.circular(12),
                             ),
                             hintText: '05** *** ** **',
-                            hintStyle: TextStyle(
+                            hintStyle: const TextStyle(
                               fontSize: 14,
                               fontWeight: FontWeight.w400,
                               color: Constant.inputText,

@@ -1,11 +1,7 @@
-import 'dart:io';
 import 'dart:convert';
 import 'package:Psynexa/constant/constant.dart';
-import 'package:Psynexa/models/login/login_request.dart';
 import 'package:Psynexa/models/searchDoctor/search_response.dart';
-import 'package:Psynexa/view/base_scaffold.dart';
 import 'package:dio/dio.dart';
-import 'package:grock/grock.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -35,14 +31,8 @@ class LoginService extends ISearchService {
       if (response.statusCode == 200) {
         final jsonResponse = json.decode(response.body);
         final userResponse = search_doctor_model.fromJson(jsonResponse);
-        print(userResponse);
-      } else {
-        print('Hata kodu: ${response.statusCode}');
-        print('Hata mesajı: ${response.body}');
       }
-    } catch (e) {
-      print('Hata Oluştu: $e');
-    }
+    } catch (e) {}
 
     return null;
   }

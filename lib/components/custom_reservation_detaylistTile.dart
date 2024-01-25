@@ -28,7 +28,7 @@ class _CustomReservationDetayListTileState
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
         border: Border(
           bottom: BorderSide(color: Constant.gray, width: 0.7),
         ),
@@ -39,7 +39,7 @@ class _CustomReservationDetayListTileState
         child: ListTile(
           title: Text(
             widget.title,
-            style: TextStyle(
+            style: const TextStyle(
                 fontSize: 14,
                 fontWeight: FontWeight.w500,
                 color: const Color.fromARGB(184, 0, 0, 0),
@@ -50,19 +50,19 @@ class _CustomReservationDetayListTileState
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(
+              const SizedBox(
                 height: 3,
               ),
               Text(
                 widget.rol,
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 10,
                   fontWeight: FontWeight.w400,
                   color: Color.fromARGB(129, 51, 51, 51),
                   fontFamily: 'Proxima Nova',
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 1,
               ),
               Row(
@@ -76,17 +76,17 @@ class _CustomReservationDetayListTileState
                       color: Constant.purple,
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     width: 3,
                   ),
                   Padding(
                     padding: const EdgeInsets.only(top: 2),
                     child: Text(
-                      '${DateFormat('dd MMMM y - HH:mm').format(widget.date)}',
-                      style: TextStyle(
+                      DateFormat('dd MMMM y - HH:mm').format(widget.date),
+                      style: const TextStyle(
                         fontSize: 10,
                         fontWeight: FontWeight.w400,
-                        color: const Color.fromARGB(129, 51, 51, 51),
+                        color: Color.fromARGB(129, 51, 51, 51),
                         fontFamily: 'Proxima Nova',
                       ),
                     ),
@@ -107,7 +107,7 @@ class _CustomReservationDetayListTileState
             ),
           ),
           trailing: GrockContainer(
-            padding: EdgeInsets.only(top: 1),
+            padding: const EdgeInsets.only(top: 1),
             onTap: () {
               Grock.to(DetayReservation(
                 id: "1",
@@ -119,7 +119,7 @@ class _CustomReservationDetayListTileState
                 Container(
                   width: 40,
                   height: 40,
-                  decoration: BoxDecoration(
+                  decoration: const BoxDecoration(
                     shape: BoxShape.circle,
                     color: Color.fromARGB(30, 0, 146, 179),
                   ),
@@ -132,10 +132,10 @@ class _CustomReservationDetayListTileState
                     ),
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 1,
                 ),
-                Text(
+                const Text(
                   'Detay',
                   style: TextStyle(
                     fontSize: 8,

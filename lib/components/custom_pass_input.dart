@@ -56,7 +56,7 @@ class _CustomPasswordState extends ConsumerState<CustomPassword> {
                   );
                 },
               ),
-              contentPadding: EdgeInsets.symmetric(horizontal: 20)),
+              contentPadding: const EdgeInsets.symmetric(horizontal: 20)),
         ),
       ),
     );

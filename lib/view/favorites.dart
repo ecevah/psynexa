@@ -1,8 +1,6 @@
-import 'package:Psynexa/components/fav_alert.dart';
 import 'package:flutter/material.dart';
 import 'package:Psynexa/assets.dart';
 import 'package:Psynexa/components/custom_appbar.dart';
-import 'package:Psynexa/components/custom_fav_listTile.dart';
 import 'package:Psynexa/constant/constant.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:grock/grock.dart';
@@ -54,34 +52,34 @@ class _FavoritesState extends State<Favorites> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(
+      appBar: const CustomAppBar(
         appbarTitle: "Favori Psikologlar",
       ),
       body: Padding(
         padding: const EdgeInsets.only(top: 5.0),
         child: ListView.builder(
-          physics: BouncingScrollPhysics(),
+          physics: const BouncingScrollPhysics(),
           itemCount: fawList.length,
           itemBuilder: (BuildContext context, int index) {
             return Padding(
               padding:
                   const EdgeInsets.symmetric(vertical: 5.0, horizontal: 19),
               child: Container(
-                padding: EdgeInsets.symmetric(
+                padding: const EdgeInsets.symmetric(
                   vertical: 15,
                 ),
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.all(Radius.circular(10)),
+                  borderRadius: const BorderRadius.all(Radius.circular(10)),
                   border: Border.all(
                       style: BorderStyle.solid,
                       width: 1,
-                      color: Color(0xFFEAEAEF)),
+                      color: const Color(0xFFEAEAEF)),
                   color: Constant.white,
                 ),
                 child: ListTile(
                   title: Text(
                     fawList[index].title,
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 15,
                       fontWeight: FontWeight.w500,
                       color: Constant.black75,
@@ -93,7 +91,7 @@ class _FavoritesState extends State<Favorites> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      SizedBox(
+                      const SizedBox(
                         height: 3,
                       ),
                       Row(
@@ -112,7 +110,8 @@ class _FavoritesState extends State<Favorites> {
                             maxValue: 5,
                             starSpacing: 0,
                             maxValueVisibility: true,
-                            starOffColor: Color.fromARGB(70, 255, 235, 59),
+                            starOffColor:
+                                const Color.fromARGB(70, 255, 235, 59),
                             starColor: Colors.yellow,
                           ),
                           Padding(
@@ -129,7 +128,7 @@ class _FavoritesState extends State<Favorites> {
                           )
                         ],
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 3,
                       ),
                       Text(
@@ -154,7 +153,7 @@ class _FavoritesState extends State<Favorites> {
                               child: Padding(
                                 padding: const EdgeInsets.only(bottom: 25.0),
                                 child: Container(
-                                  padding: EdgeInsets.symmetric(
+                                  padding: const EdgeInsets.symmetric(
                                       horizontal: 32, vertical: 36),
                                   width: MediaQuery.sizeOf(context).width - 48,
                                   height: 260,
@@ -205,7 +204,7 @@ class _FavoritesState extends State<Favorites> {
                                                 borderRadius:
                                                     BorderRadius.circular(10),
                                               ),
-                                              child: Center(
+                                              child: const Center(
                                                 child: Text(
                                                   "Favorilerimden Çıkar",
                                                   style: TextStyle(
@@ -236,7 +235,7 @@ class _FavoritesState extends State<Favorites> {
                                                 borderRadius:
                                                     BorderRadius.circular(10),
                                               ),
-                                              child: Center(
+                                              child: const Center(
                                                 child: Text(
                                                   "Vazgeçtim",
                                                   style: TextStyle(
@@ -267,7 +266,7 @@ class _FavoritesState extends State<Favorites> {
                       Assets.icons.icHeartSVG,
                       width: 16,
                       height: 15,
-                      color: Color(0xFFD63928),
+                      color: const Color(0xFFD63928),
                     ),
                   ),
                   leading: Container(

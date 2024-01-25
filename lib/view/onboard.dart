@@ -37,7 +37,7 @@ class _FirstPageState extends ConsumerState<FirstPage> {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              SizedBox(
+              const SizedBox(
                 height: 40,
               ),
               Padding(

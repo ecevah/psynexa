@@ -76,13 +76,13 @@ class _RegisterState extends ConsumerState<Register> {
                     child: Row(
                       children: [
                         const CheckboxExample(),
-                        SizedBox(
+                        const SizedBox(
                           width: 6.85,
                         ),
                         SizedBox(
                           width: 280,
                           child: RichText(
-                            text: TextSpan(
+                            text: const TextSpan(
                               text: 'Kişisel verilerinin işlenmesine yönelik ',
                               style: TextStyle(
                                 fontSize: 12,
@@ -121,11 +121,11 @@ class _RegisterState extends ConsumerState<Register> {
                     child: FirstBtn(onTap: () {}, text: 'Üye Ol'),
                   ),
                   Padding(
-                    padding: EdgeInsets.only(top: 10.0, left: 23.0),
+                    padding: const EdgeInsets.only(top: 10.0, left: 23.0),
                     child: Row(
                       children: [
                         RichText(
-                          text: TextSpan(
+                          text: const TextSpan(
                             text: 'Üye ola basarak ',
                             style: TextStyle(
                               fontSize: 12,
@@ -204,18 +204,6 @@ class _CheckboxExampleState extends State<CheckboxExample> {
 
   @override
   Widget build(BuildContext context) {
-    Color getColor(Set<MaterialState> states) {
-      const Set<MaterialState> interactiveStates = <MaterialState>{
-        MaterialState.pressed,
-        MaterialState.hovered,
-        MaterialState.focused,
-      };
-      if (states.any(interactiveStates.contains)) {
-        return Constant.purple;
-      }
-      return isChecked ? Constant.purple : Constant.white;
-    }
-
     return InkWell(
       onTap: () {
         setState(() {
@@ -227,7 +215,7 @@ class _CheckboxExampleState extends State<CheckboxExample> {
         height: 23.0,
         decoration: BoxDecoration(
           border: Border.all(
-            color: isChecked ? Constant.purple : Color(0xFFDADADA),
+            color: isChecked ? Constant.purple : const Color(0xFFDADADA),
             width: 1.96,
             style: BorderStyle.solid,
           ),
@@ -235,12 +223,12 @@ class _CheckboxExampleState extends State<CheckboxExample> {
           color: isChecked ? Constant.purple : Colors.white,
         ),
         child: isChecked
-            ? Icon(
+            ? const Icon(
                 Icons.check,
                 size: 18.0,
                 color: Colors.white,
               )
-            : SizedBox(),
+            : const SizedBox(),
       ),
     );
   }

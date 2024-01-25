@@ -1,13 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:Psynexa/assets.dart';
 import 'package:Psynexa/components/custom_back_appbar.dart';
-import 'package:Psynexa/components/custom_first_btn.dart';
-import 'package:Psynexa/components/randevu_detay.dart';
 import 'package:Psynexa/components/randevu_detay_card.dart';
-import 'package:Psynexa/components/randevu_number_card.dart';
 import 'package:Psynexa/constant/constant.dart';
-import 'package:Psynexa/models/reservation_model.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:grock/grock.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -45,10 +40,10 @@ class _DetayReservationState extends State<DetayReservation> {
     if (response.statusCode == 200) {
       // API'den gelen veriyi JSON formatından dönüştürün
       final data = json.decode(response.body);
-      final userResponse = psyc_id.fromJson(data);
-      name = '${userResponse.data!.title} ${userResponse.data!.fullName}';
-      rol = '${userResponse.data!.profession}';
-      image = '${Constant.domain}${userResponse.data!.avatar!.url}';
+      final userResponse = Psychologist.fromJson(data);
+      name = '${userResponse.name} ${userResponse.surName}';
+      rol = userResponse.unvan;
+      image = '${Constant.domain}/uploads/${userResponse.image}';
       show = false;
       setState(() {});
       // Veriyi kullanmak için burada işlemler yapabilirsiniz
@@ -59,12 +54,12 @@ class _DetayReservationState extends State<DetayReservation> {
   }
 
   List<String> comment = [
-    'Hastamın TSSB semptomlarındaki ilerleme son derece olumlu oldu. İlk değerlendirme sırasında yaşadığı yoğun korku, panik ataklar ve uykusuzluk gibi semptomlarının birçoğu azaldı veya tamamen ortadan kalktı. Terapi sırasında, hastam duygu düzenleme becerileri konusunda önemli bir ilerleme kaydetti ve bu beceriler, günlük hayatında da uygulayabileceği bir şekilde öğretildi. Tedavi sürecinde, hastamın kendine güveni de arttı ve daha önce yapamadığı birçok şeyi yapmak için cesaret kazandı. Hastamın hayat kalitesi ve işlevselliği önemli ölçüde arttı. Kendisiyle yaptığımız son görüşmede, artık TSSB semptomlarının daha az şiddetli ve daha az sıklıkla ortaya çıktığını bildirdi ve yaşam kalitesinin önemli ölçüde arttığını belirtti. Bu sonuçlar beni son derece mutlu ediyor ve hastamın tedavi sürecindeki başarısı için gurur duyuyorum.',
-    "Hastanın majör depresyon tedavisi boyunca gösterdiği ilerleme etkileyiciydi. İlk başta ağır bir depresyon yaşadığından, günlük aktiviteleri bile zorlanıyordu. Ancak tedavi sürecinde, antidepresan ilaçların ve terapinin kombinasyonuyla ruh hali önemli ölçüde iyileşti. İleriye dönük olarak, hastanın depresyon semptomlarının azalması ve hayat kalitesinin artması için umutluyuz.",
-    "Hastanın şizofreni tedavisi oldukça karmaşıktı, ancak önemli bir ilerleme kaydetti. İlaçlarla desteklenen psikoterapi ve destek programları, hastanın psikotik semptomlarını kontrol etmesine yardımcı oldu. İlerleme, sosyal izolasyonun azaltılması ve yaşam becerilerinin geliştirilmesi yoluyla daha da arttı. Tedaviye devam ederken hastanın daha da iyileşeceğine inanıyoruz.",
-    "Hastanın OKB semptomlarının yönetimi için verilen tedavi olumlu sonuçlar gösterdi. Obsesyonlar ve kompulsiyonlar üzerinde çalışmak için bilişsel davranışçı terapi kullanıldı ve hastanın semptomları azaldı. Terapinin bir parçası olarak öğrenilen beceriler, günlük yaşamda OKB semptomlarını daha iyi kontrol etmesine yardımcı oldu.",
-    "Hastanın bipolar bozukluk tedavisi, manik ve depresif dönemlerin daha iyi yönetilmesi için önemli bir ilerleme kaydetti. Duygusal dengeyi sağlamak için uygun ilaç kombinasyonları belirlendi ve hastanın dengesiz ruh hali üzerindeki kontrolü arttı. Tedavi süreci boyunca, hastanın duygu düzenleme becerileri de gelişti.",
-    "Hastanın anksiyete bozukluğu tedavisinde önemli bir iyileşme gözlemlendi. İlaçlar ve bilişsel davranışçı terapi, hastanın anksiyete semptomlarını yönetmesine yardımcı oldu. Özellikle, hastanın endişe seviyeleri azaldı ve günlük yaşam aktivitelerine daha rahat bir şekilde katılabildi. Tedavi sürecinin devam etmesiyle daha da fazla ilerleme bekliyoruz."
+    'Danışanmın TSSB semptomlarındaki ilerleme son derece olumlu oldu. İlk değerlendirme sırasında yaşadığı yoğun korku, panik ataklar ve uykusuzluk gibi semptomlarının birçoğu azaldı veya tamamen ortadan kalktı. Terapi sırasında, danışanm duygu düzenleme becerileri konusunda önemli bir ilerleme kaydetti ve bu beceriler, günlük hayatında da uygulayabileceği bir şekilde öğretildi. Tedavi sürecinde, danışanmın kendine güveni de arttı ve daha önce yapamadığı birçok şeyi yapmak için cesaret kazandı. Danışanmın hayat kalitesi ve işlevselliği önemli ölçüde arttı. Kendisiyle yaptığımız son görüşmede, artık TSSB semptomlarının daha az şiddetli ve daha az sıklıkla ortaya çıktığını bildirdi ve yaşam kalitesinin önemli ölçüde arttığını belirtti. Bu sonuçlar beni son derece mutlu ediyor ve danışanmın tedavi sürecindeki başarısı için gurur duyuyorum.',
+    "Danışannın majör depresyon tedavisi boyunca gösterdiği ilerleme etkileyiciydi. İlk başta ağır bir depresyon yaşadığından, günlük aktiviteleri bile zorlanıyordu. Ancak tedavi sürecinde, antidepresan ilaçların ve terapinin kombinasyonuyla ruh hali önemli ölçüde iyileşti. İleriye dönük olarak, danışannın depresyon semptomlarının azalması ve hayat kalitesinin artması için umutluyuz.",
+    "Danışannın şizofreni tedavisi oldukça karmaşıktı, ancak önemli bir ilerleme kaydetti. İlaçlarla desteklenen psikoterapi ve destek programları, danışannın psikotik semptomlarını kontrol etmesine yardımcı oldu. İlerleme, sosyal izolasyonun azaltılması ve yaşam becerilerinin geliştirilmesi yoluyla daha da arttı. Tedaviye devam ederken danışannın daha da iyileşeceğine inanıyoruz.",
+    "Danışannın OKB semptomlarının yönetimi için verilen tedavi olumlu sonuçlar gösterdi. Obsesyonlar ve kompulsiyonlar üzerinde çalışmak için bilişsel davranışçı terapi kullanıldı ve danışannın semptomları azaldı. Terapinin bir parçası olarak öğrenilen beceriler, günlük yaşamda OKB semptomlarını daha iyi kontrol etmesine yardımcı oldu.",
+    "Danışannın bipolar bozukluk tedavisi, manik ve depresif dönemlerin daha iyi yönetilmesi için önemli bir ilerleme kaydetti. Duygusal dengeyi sağlamak için uygun ilaç kombinasyonları belirlendi ve danışannın dengesiz ruh hali üzerindeki kontrolü arttı. Tedavi süreci boyunca, danışannın duygu düzenleme becerileri de gelişti.",
+    "Danışannın anksiyete bozukluğu tedavisinde önemli bir iyileşme gözlemlendi. İlaçlar ve bilişsel davranışçı terapi, danışannın anksiyete semptomlarını yönetmesine yardımcı oldu. Özellikle, danışannın endişe seviyeleri azaldı ve günlük yaşam aktivitelerine daha rahat bir şekilde katılabildi. Tedavi sürecinin devam etmesiyle daha da fazla ilerleme bekliyoruz."
   ];
   @override
   void initState() {
@@ -76,9 +71,9 @@ class _DetayReservationState extends State<DetayReservation> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAccAppBar(appbarTitle: 'Randevu Detayları'),
+      appBar: const CustomAccAppBar(appbarTitle: 'Randevu Detayları'),
       body: show
-          ? Center(
+          ? const Center(
               child: CircularProgressIndicator(),
             )
           : Column(
@@ -104,11 +99,11 @@ class _DetayReservationState extends State<DetayReservation> {
                     padding:
                         const EdgeInsets.only(left: 30.0, right: 30, top: 7),
                     child: Container(
-                      padding: EdgeInsets.all(25),
+                      padding: const EdgeInsets.all(25),
                       decoration: BoxDecoration(
                         color: Constant.white,
                         borderRadius: BorderRadius.circular(10),
-                        boxShadow: [
+                        boxShadow: const [
                           BoxShadow(
                               color: Color.fromARGB(81, 217, 217, 217),
                               spreadRadius: 2,
@@ -116,14 +111,14 @@ class _DetayReservationState extends State<DetayReservation> {
                         ],
                       ),
                       child: ListView(
-                        physics: BouncingScrollPhysics(),
-                        children: [
+                        physics: const BouncingScrollPhysics(),
+                        children: const [
                           Text(
                             'Psikiyatrist Yorumu',
                             style: TextStyle(
                                 fontSize: 13,
                                 fontWeight: FontWeight.w500,
-                                color: const Color.fromARGB(214, 0, 0, 0),
+                                color: Color.fromARGB(214, 0, 0, 0),
                                 fontFamily: 'Proxima Nova',
                                 letterSpacing: -0.1),
                           ),
@@ -131,7 +126,7 @@ class _DetayReservationState extends State<DetayReservation> {
                             height: 12,
                           ),
                           Text(
-                            'Hastamın TSSB semptomlarındaki ilerleme son derece olumlu oldu. İlk değerlendirme sırasında yaşadığı yoğun korku, panik ataklar ve uykusuzluk gibi semptomlarının birçoğu azaldı veya tamamen ortadan kalktı. Terapi sırasında, hastam duygu düzenleme becerileri konusunda önemli bir ilerleme kaydetti ve bu beceriler, günlük hayatında da uygulayabileceği bir şekilde öğretildi. Tedavi sürecinde, hastamın kendine güveni de arttı ve daha önce yapamadığı birçok şeyi yapmak için cesaret kazandı. Hastamın hayat kalitesi ve işlevselliği önemli ölçüde arttı. Kendisiyle yaptığımız son görüşmede, artık TSSB semptomlarının daha az şiddetli ve daha az sıklıkla ortaya çıktığını bildirdi ve yaşam kalitesinin önemli ölçüde arttığını belirtti. Bu sonuçlar beni son derece mutlu ediyor ve hastamın tedavi sürecindeki başarısı için gurur duyuyorum.',
+                            'Danışanmın TSSB semptomlarındaki ilerleme son derece olumlu oldu. İlk değerlendirme sırasında yaşadığı yoğun korku, panik ataklar ve uykusuzluk gibi semptomlarının birçoğu azaldı veya tamamen ortadan kalktı. Terapi sırasında, danışanm duygu düzenleme becerileri konusunda önemli bir ilerleme kaydetti ve bu beceriler, günlük hayatında da uygulayabileceği bir şekilde öğretildi. Tedavi sürecinde, danışanmın kendine güveni de arttı ve daha önce yapamadığı birçok şeyi yapmak için cesaret kazandı. Danışanmın hayat kalitesi ve işlevselliği önemli ölçüde arttı. Kendisiyle yaptığımız son görüşmede, artık TSSB semptomlarının daha az şiddetli ve daha az sıklıkla ortaya çıktığını bildirdi ve yaşam kalitesinin önemli ölçüde arttığını belirtti. Bu sonuçlar beni son derece mutlu ediyor ve danışanmın tedavi sürecindeki başarısı için gurur duyuyorum.',
                             style: TextStyle(
                                 fontSize: 13,
                                 fontWeight: FontWeight.w400,
@@ -143,7 +138,7 @@ class _DetayReservationState extends State<DetayReservation> {
                     ),
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 70,
                 )
               ],

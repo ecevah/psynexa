@@ -8,25 +8,19 @@ class ReservationResponse {
     if (json['data'] != null) {
       data = <Data>[];
       json['data'].forEach((v) {
-        data!.add(new Data.fromJson(v));
+        data!.add(Data.fromJson(v));
       });
     }
-    meta = json['meta'] != null ? new Meta.fromJson(json['meta']) : null;
+    meta = json['meta'] != null ? Meta.fromJson(json['meta']) : null;
   }
 
-  get title => null;
-
-  get image => null;
-
-  get rol => null;
-
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
+    final Map<String, dynamic> data = <String, dynamic>{};
     if (this.data != null) {
       data['data'] = this.data!.map((v) => v.toJson()).toList();
     }
-    if (this.meta != null) {
-      data['meta'] = this.meta!.toJson();
+    if (meta != null) {
+      data['meta'] = meta!.toJson();
     }
     return data;
   }
@@ -59,26 +53,25 @@ class Data {
     updatedAt = json['updatedAt'];
     isActive = json['isActive'];
     meetingId = json['meetingId'];
-    client =
-        json['client'] != null ? new Client.fromJson(json['client']) : null;
+    client = json['client'] != null ? Client.fromJson(json['client']) : null;
     psychologist = json['psychologist'] != null
-        ? new Psychologist.fromJson(json['psychologist'])
+        ? Psychologist.fromJson(json['psychologist'])
         : null;
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['meetingDate'] = this.meetingDate;
-    data['createdAt'] = this.createdAt;
-    data['updatedAt'] = this.updatedAt;
-    data['isActive'] = this.isActive;
-    data['meetingId'] = this.meetingId;
-    if (this.client != null) {
-      data['client'] = this.client!.toJson();
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = id;
+    data['meetingDate'] = meetingDate;
+    data['createdAt'] = createdAt;
+    data['updatedAt'] = updatedAt;
+    data['isActive'] = isActive;
+    data['meetingId'] = meetingId;
+    if (client != null) {
+      data['client'] = client!.toJson();
     }
-    if (this.psychologist != null) {
-      data['psychologist'] = this.psychologist!.toJson();
+    if (psychologist != null) {
+      data['psychologist'] = psychologist!.toJson();
     }
     return data;
   }
@@ -93,6 +86,7 @@ class Client {
   bool? blocked;
   String? createdAt;
   String? updatedAt;
+  Role? role; // Eğer Role bilgisini de almak isterseniz ekleyebilirsiniz.
 
   Client(
       {this.id,
@@ -102,7 +96,8 @@ class Client {
       this.confirmed,
       this.blocked,
       this.createdAt,
-      this.updatedAt});
+      this.updatedAt,
+      this.role});
 
   Client.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -113,18 +108,100 @@ class Client {
     blocked = json['blocked'];
     createdAt = json['createdAt'];
     updatedAt = json['updatedAt'];
+    role = json['role'] != null ? Role.fromJson(json['role']) : null;
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['username'] = this.username;
-    data['email'] = this.email;
-    data['provider'] = this.provider;
-    data['confirmed'] = this.confirmed;
-    data['blocked'] = this.blocked;
-    data['createdAt'] = this.createdAt;
-    data['updatedAt'] = this.updatedAt;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = id;
+    data['username'] = username;
+    data['email'] = email;
+    data['provider'] = provider;
+    data['confirmed'] = confirmed;
+    data['blocked'] = blocked;
+    data['createdAt'] = createdAt;
+    data['updatedAt'] = updatedAt;
+    if (role != null) {
+      data['role'] = role!.toJson();
+    }
+    return data;
+  }
+}
+
+class Role {
+  int? id;
+  String? name;
+  String? description;
+  String? type;
+  String? createdAt;
+  String? updatedAt;
+  List<Permission>? permissions;
+
+  Role(
+      {this.id,
+      this.name,
+      this.description,
+      this.type,
+      this.createdAt,
+      this.updatedAt,
+      this.permissions});
+
+  Role.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    name = json['name'];
+    description = json['description'];
+    type = json['type'];
+    createdAt = json['createdAt'];
+    updatedAt = json['updatedAt'];
+    if (json['permissions'] != null) {
+      permissions = <Permission>[];
+      json['permissions'].forEach((v) {
+        permissions!.add(Permission.fromJson(v));
+      });
+    }
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = id;
+    data['name'] = name;
+    data['description'] = description;
+    data['type'] = type;
+    data['createdAt'] = createdAt;
+    data['updatedAt'] = updatedAt;
+    if (permissions != null) {
+      data['permissions'] = permissions!.map((v) => v.toJson()).toList();
+    }
+    return data;
+  }
+}
+
+class Permission {
+  int? id;
+  String? action;
+  String? createdAt;
+  String? updatedAt;
+  Role? role;
+
+  Permission({this.id, this.action, this.createdAt, this.updatedAt, this.role});
+
+  Permission.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    action = json['action'];
+    createdAt = json['createdAt'];
+    updatedAt = json['updatedAt'];
+    role = json['role'] != null ? Role.fromJson(json['role']) : null;
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = id;
+    data['action'] = action;
+    data['createdAt'] = createdAt;
+    data['updatedAt'] = updatedAt;
+    if (role != null) {
+      data['role'] = role!.toJson();
+    }
     return data;
   }
 }
@@ -140,6 +217,7 @@ class Psychologist {
   String? updatedAt;
   String? jobStartDate;
   Null? applicationStatus;
+  Avatar? avatar;
 
   Psychologist(
       {this.id,
@@ -151,7 +229,8 @@ class Psychologist {
       this.createdAt,
       this.updatedAt,
       this.jobStartDate,
-      this.applicationStatus});
+      this.applicationStatus,
+      this.avatar});
 
   Psychologist.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -164,65 +243,93 @@ class Psychologist {
     updatedAt = json['updatedAt'];
     jobStartDate = json['jobStartDate'];
     applicationStatus = json['applicationStatus'];
+    avatar = json['avatar'] != null ? Avatar.fromJson(json['avatar']) : null;
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['about'] = this.about;
-    data['fullName'] = this.fullName;
-    data['hourlyPrice'] = this.hourlyPrice;
-    data['profession'] = this.profession;
-    data['title'] = this.title;
-    data['createdAt'] = this.createdAt;
-    data['updatedAt'] = this.updatedAt;
-    data['jobStartDate'] = this.jobStartDate;
-    data['applicationStatus'] = this.applicationStatus;
-    return data;
-  }
-}
-
-class Meta {
-  Pagination? pagination;
-
-  Meta({this.pagination});
-
-  Meta.fromJson(Map<String, dynamic> json) {
-    pagination = json['pagination'] != null
-        ? new Pagination.fromJson(json['pagination'])
-        : null;
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    if (this.pagination != null) {
-      data['pagination'] = this.pagination!.toJson();
+    final Map<String, dynamic> data = Map<String, dynamic>();
+    data['id'] = id;
+    data['about'] = about;
+    data['fullName'] = fullName;
+    data['hourlyPrice'] = hourlyPrice;
+    data['profession'] = profession;
+    data['title'] = title;
+    data['createdAt'] = createdAt;
+    data['updatedAt'] = updatedAt;
+    data['jobStartDate'] = jobStartDate;
+    data['applicationStatus'] = applicationStatus;
+    if (avatar != null) {
+      data['avatar'] = avatar!.toJson();
     }
     return data;
   }
 }
 
-class Pagination {
-  int? page;
-  int? pageSize;
-  int? pageCount;
-  int? total;
+class Avatar {
+  int? id;
+  String? name;
+  String? alternativeText;
+  String? caption;
+  int? width;
+  int? height;
+  String? ext;
+  String? mime;
+  double? size;
+  String? url;
 
-  Pagination({this.page, this.pageSize, this.pageCount, this.total});
+  Avatar(
+      {this.id,
+      this.name,
+      this.alternativeText,
+      this.caption,
+      this.width,
+      this.height,
+      this.ext,
+      this.mime,
+      this.size,
+      this.url});
 
-  Pagination.fromJson(Map<String, dynamic> json) {
-    page = json['page'];
-    pageSize = json['pageSize'];
-    pageCount = json['pageCount'];
-    total = json['total'];
+  Avatar.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    name = json['name'];
+    alternativeText = json['alternativeText'];
+    caption = json['caption'];
+    width = json['width'];
+    height = json['height'];
+    ext = json['ext'];
+    mime = json['mime'];
+    size = json['size'];
+    url = json['url'];
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['page'] = this.page;
-    data['pageSize'] = this.pageSize;
-    data['pageCount'] = this.pageCount;
-    data['total'] = this.total;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = id;
+    data['name'] = name;
+    data['alternativeText'] = alternativeText;
+    data['caption'] = caption;
+    data['width'] = width;
+    data['height'] = height;
+    data['ext'] = ext;
+    data['mime'] = mime;
+    data['size'] = size;
+    data['url'] = url;
+    return data;
+  }
+}
+
+class Meta {
+  int? totalCount;
+
+  Meta({this.totalCount});
+
+  Meta.fromJson(Map<String, dynamic> json) {
+    totalCount = json['totalCount'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['totalCount'] = totalCount;
     return data;
   }
 }

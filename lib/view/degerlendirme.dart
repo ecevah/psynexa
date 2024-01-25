@@ -1,7 +1,5 @@
-import 'package:Psynexa/riverpod/base_scaffold_riverpod.dart';
 import 'package:Psynexa/view/base_scaffold.dart';
 import 'package:flutter/material.dart';
-import 'package:Psynexa/assets.dart';
 import 'package:Psynexa/components/custom_back_appbar.dart';
 import 'package:Psynexa/components/custom_first_btn.dart';
 import 'package:Psynexa/constant/constant.dart';
@@ -11,21 +9,22 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:grock/grock.dart';
 
 class Degerlendirme extends ConsumerStatefulWidget {
-  const Degerlendirme({super.key});
+  String image;
+  String title;
+  String rol;
+  Degerlendirme(
+      {super.key, required this.title, required this.image, required this.rol});
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => _DegerlendirmeState();
 }
 
 class _DegerlendirmeState extends ConsumerState<Degerlendirme> {
-  String title = 'Prof. Dr. Ali Durmaz';
-  String rol = 'Travma Sonrası Stres Bozukluğu Uzmanı';
   double value = 0;
-  String image = Assets.images.imKariPNG;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAccAppBar(appbarTitle: 'Değerlendirme'),
+      appBar: const CustomAccAppBar(appbarTitle: 'Değerlendirme'),
       body: SingleChildScrollView(
         child: Padding(
           padding:
@@ -38,37 +37,37 @@ class _DegerlendirmeState extends ConsumerState<Degerlendirme> {
                   Column(
                     children: [
                       ClipOval(
-                        child: Image.asset(
-                          image,
+                        child: Image.network(
+                          widget.image,
                           width: 133,
                           height: 133,
-                          scale: 2,
+                          scale: 0.3,
                         ),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 14,
                       ),
                       Text(
-                        title,
-                        style: TextStyle(
+                        widget.title,
+                        style: const TextStyle(
                           color: Constant.black,
                           fontSize: 22,
                           fontWeight: FontWeight.w500,
                         ),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 3,
                       ),
                       Text(
-                        rol,
-                        style: TextStyle(
+                        widget.rol,
+                        style: const TextStyle(
                             fontSize: 13, fontWeight: FontWeight.w400),
                       ),
                     ],
                   ),
                 ],
               ),
-              SizedBox(
+              const SizedBox(
                 height: 13,
               ),
               RatingStars(
@@ -89,17 +88,17 @@ class _DegerlendirmeState extends ConsumerState<Degerlendirme> {
                 starSpacing: 2,
                 maxValueVisibility: true,
                 valueLabelVisibility: false,
-                animationDuration: Duration(milliseconds: 1000),
+                animationDuration: const Duration(milliseconds: 1000),
                 valueLabelPadding:
                     const EdgeInsets.symmetric(vertical: 1, horizontal: 8),
                 valueLabelMargin: const EdgeInsets.only(right: 8),
                 starOffColor: const Color(0xffe7e8ea),
                 starColor: Colors.yellow,
               ),
-              SizedBox(
+              const SizedBox(
                 height: 27,
               ),
-              Row(
+              const Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
@@ -119,7 +118,7 @@ class _DegerlendirmeState extends ConsumerState<Degerlendirme> {
                   ),
                 ],
               ),
-              SizedBox(
+              const SizedBox(
                 height: 10,
               ),
               Container(
@@ -132,12 +131,12 @@ class _DegerlendirmeState extends ConsumerState<Degerlendirme> {
                   maxLines: 13,
                   cursorColor: Constant.purple,
                   maxLength: 250,
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     hintText: 'Yorumunuzu yazın...',
                     hintStyle: TextStyle(
                         fontSize: 13,
                         fontWeight: FontWeight.w400,
-                        color: const Color.fromARGB(110, 51, 51, 51)),
+                        color: Color.fromARGB(110, 51, 51, 51)),
                     contentPadding:
                         EdgeInsets.symmetric(vertical: 15, horizontal: 20),
                     border: InputBorder.none,
@@ -145,7 +144,7 @@ class _DegerlendirmeState extends ConsumerState<Degerlendirme> {
                   ),
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 40,
               ),
               FirstBtn(
@@ -159,7 +158,7 @@ class _DegerlendirmeState extends ConsumerState<Degerlendirme> {
                             child: Padding(
                               padding: const EdgeInsets.only(bottom: 30.0),
                               child: Container(
-                                padding: EdgeInsets.symmetric(
+                                padding: const EdgeInsets.symmetric(
                                     horizontal: 32, vertical: 36),
                                 width: MediaQuery.sizeOf(context).width - 48,
                                 height: 260,
@@ -201,7 +200,7 @@ class _DegerlendirmeState extends ConsumerState<Degerlendirme> {
                                           borderRadius:
                                               BorderRadius.circular(10),
                                         ),
-                                        child: Center(
+                                        child: const Center(
                                           child: Text(
                                             "Randevularım",
                                             style: TextStyle(

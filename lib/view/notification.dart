@@ -1,13 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
-import 'package:Psynexa/assets.dart';
 import 'package:Psynexa/components/custom_back_appbar.dart';
 import 'package:Psynexa/components/custom_noti_listTile.dart';
-import 'package:Psynexa/constant/constant.dart';
-import 'package:flutter_svg/svg.dart';
-import 'package:grock/grock.dart';
-import 'package:Psynexa/view/aktif_reservation.dart';
-import 'package:Psynexa/view/detay_reservation.dart';
 
 class NotificationPage extends StatefulWidget {
   const NotificationPage({Key? key}) : super(key: key);
@@ -35,15 +28,15 @@ class _NotificationPageState extends State<NotificationPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAccAppBar(appbarTitle: 'Bildirimler'),
+      appBar: const CustomAccAppBar(appbarTitle: 'Bildirimler'),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Expanded(
             child: Padding(
-              padding: EdgeInsets.symmetric(vertical: 20),
+              padding: const EdgeInsets.symmetric(vertical: 20),
               child: ListView.builder(
-                physics: BouncingScrollPhysics(),
+                physics: const BouncingScrollPhysics(),
                 itemCount: notiList.length,
                 itemBuilder: (BuildContext context, int index) {
                   return CustomNatiListTile(

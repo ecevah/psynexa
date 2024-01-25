@@ -8,7 +8,6 @@ final baseScaffoldRiverpod =
     ChangeNotifierProvider((ref) => BaseScaffoldRiverpod());
 
 class BaseScaffold extends ConsumerStatefulWidget {
-  BaseScaffold({super.key});
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => _BaseScaffoldState();
 }

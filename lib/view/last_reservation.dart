@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:Psynexa/assets.dart';
 import 'package:Psynexa/components/custom_back_appbar.dart';
 import 'package:Psynexa/components/custom_reservation_detaylistTile.dart';
-import 'package:Psynexa/constant/constant.dart';
-import 'package:grock/grock.dart';
 
 class LastReservation extends StatelessWidget {
   const LastReservation({super.key});
@@ -32,21 +30,21 @@ class LastReservation extends StatelessWidget {
     ];
     DateTime now = DateTime.now();
     List<_resListModel> gecmisList = iptalList
-        .where(
-            (item) => item.date.isBefore(now.subtract(Duration(minutes: 15))))
+        .where((item) =>
+            item.date.isBefore(now.subtract(const Duration(minutes: 15))))
         .toList();
     return Scaffold(
-      appBar: CustomAccAppBar(
+      appBar: const CustomAccAppBar(
         appbarTitle: 'Geçmiş Randevular',
       ),
       body: Column(
         children: [
-          SizedBox(
+          const SizedBox(
             height: 18,
           ),
           Expanded(
             child: ListView.builder(
-              physics: BouncingScrollPhysics(),
+              physics: const BouncingScrollPhysics(),
               itemCount: gecmisList.length,
               itemBuilder: (BuildContext context, int index) {
                 return CustomReservationDetayListTile(

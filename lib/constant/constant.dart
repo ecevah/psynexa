@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class Constant {
   //[Domain]
-  static const String domain = 'http://api.psynexa.com';
+  static const String domain = 'http://192.168.1.7:3001';
 
   //[Colors]
   static const Color purple = Color(0xff6747C7);
@@ -21,7 +21,7 @@ class Constant {
   static const Color black50 = Color.fromARGB(121, 0, 0, 0);
 
   //[Conference]
-  static const int appID = 2016142059;
+  static const int appID = 441661153;
   static const String appSing =
-      '8f1977a0654aad8dc8bf08ffa6f17c69a8afc0c95a3f74492f31d9ab0785ab3c';
+      'e0e87276af45c6374a9722f8d6b4f31093c5007154cf86fd695a3e8c03678171';
 }

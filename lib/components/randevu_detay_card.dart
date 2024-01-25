@@ -47,33 +47,33 @@ class RandevuImageCard extends StatelessWidget {
                     height: 120,
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 16,
                 ),
                 Text(
                   title,
-                  style: TextStyle(
+                  style: const TextStyle(
                       color: Color.fromARGB(216, 0, 0, 0),
                       fontSize: 19,
                       fontWeight: FontWeight.w700,
                       letterSpacing: -0.4,
                       fontFamily: 'Proxima Nova'),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 4,
                 ),
                 Text(
                   rol,
-                  style: TextStyle(
+                  style: const TextStyle(
                       fontSize: 11,
                       fontWeight: FontWeight.w400,
                       fontFamily: 'Proxima Nova',
-                      color: const Color.fromARGB(74, 0, 0, 0),
+                      color: Color.fromARGB(74, 0, 0, 0),
                       letterSpacing: -0.3),
                 )
               ],
             ),
-            SizedBox(
+            const SizedBox(
               height: 15,
             ),
             Padding(

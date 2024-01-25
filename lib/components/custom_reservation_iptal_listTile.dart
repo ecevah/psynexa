@@ -11,12 +11,14 @@ class CustomReservationIptalListTile extends StatefulWidget {
   DateTime date;
   String rol;
   String image;
+  int star;
   CustomReservationIptalListTile(
       {super.key,
       required this.title,
       required this.date,
       required this.rol,
-      required this.image});
+      required this.image,
+      required this.star});
 
   @override
   State<CustomReservationIptalListTile> createState() =>
@@ -28,7 +30,7 @@ class _CustomReservationIptalListTileState
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
         border: Border(
           bottom: BorderSide(color: Constant.gray, width: 0.7),
         ),
@@ -44,11 +46,13 @@ class _CustomReservationIptalListTileState
                 rol: widget.rol,
                 date: widget.date,
                 conferenceID: 'asdasd',
+                image: widget.image,
+                star: widget.star,
               ));
             },
             child: Text(
               widget.title,
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 14,
                 fontWeight: FontWeight.w500,
                 color: const Color.fromARGB(184, 0, 0, 0),
@@ -64,25 +68,27 @@ class _CustomReservationIptalListTileState
                 rol: widget.rol,
                 date: widget.date,
                 conferenceID: 'asdasd',
+                image: widget.image,
+                star: widget.star,
               ));
             },
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                SizedBox(
+                const SizedBox(
                   height: 3,
                 ),
                 Text(
                   widget.rol,
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 10,
                     fontWeight: FontWeight.w400,
                     color: Color.fromARGB(129, 51, 51, 51),
                     fontFamily: 'Proxima Nova',
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 1,
                 ),
                 Row(
@@ -96,17 +102,17 @@ class _CustomReservationIptalListTileState
                         color: Constant.purple,
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       width: 3,
                     ),
                     Padding(
                       padding: const EdgeInsets.only(top: 2.0),
                       child: Text(
-                        '${DateFormat('dd MMMM y - HH:mm').format(widget.date)}',
-                        style: TextStyle(
+                        DateFormat('dd MMMM y - HH:mm').format(widget.date),
+                        style: const TextStyle(
                           fontSize: 10,
                           fontWeight: FontWeight.w400,
-                          color: const Color.fromARGB(129, 51, 51, 51),
+                          color: Color.fromARGB(129, 51, 51, 51),
                           fontFamily: 'Proxima Nova',
                         ),
                       ),
@@ -123,6 +129,8 @@ class _CustomReservationIptalListTileState
                 rol: widget.rol,
                 date: widget.date,
                 conferenceID: 'asdasd',
+                image: widget.image,
+                star: widget.star,
               ));
             },
             width: 70,
@@ -136,7 +144,7 @@ class _CustomReservationIptalListTileState
             ),
           ),
           trailing: GrockContainer(
-            padding: EdgeInsets.only(top: 1),
+            padding: const EdgeInsets.only(top: 1),
             onTap: () {
               showDialog(
                 context: context,
@@ -147,7 +155,7 @@ class _CustomReservationIptalListTileState
                       child: Padding(
                         padding: const EdgeInsets.only(bottom: 30.0),
                         child: Container(
-                          padding: EdgeInsets.symmetric(
+                          padding: const EdgeInsets.symmetric(
                               horizontal: 32, vertical: 36),
                           width: MediaQuery.sizeOf(context).width - 48,
                           height: 260,
@@ -191,7 +199,7 @@ class _CustomReservationIptalListTileState
                                             Constant.purple.withOpacity(0.10),
                                         borderRadius: BorderRadius.circular(10),
                                       ),
-                                      child: Center(
+                                      child: const Center(
                                         child: Text(
                                           "Vazgeçtim",
                                           style: TextStyle(
@@ -219,7 +227,8 @@ class _CustomReservationIptalListTileState
                                                 padding: const EdgeInsets.only(
                                                     bottom: 30.0),
                                                 child: Container(
-                                                  padding: EdgeInsets.symmetric(
+                                                  padding: const EdgeInsets
+                                                      .symmetric(
                                                       horizontal: 32,
                                                       vertical: 36),
                                                   width:
@@ -281,7 +290,7 @@ class _CustomReservationIptalListTileState
                                                                     .circular(
                                                                         10),
                                                           ),
-                                                          child: Center(
+                                                          child: const Center(
                                                             child: Text(
                                                               "Ana Sayfa",
                                                               style: TextStyle(
@@ -321,7 +330,7 @@ class _CustomReservationIptalListTileState
                                         color: Constant.purple,
                                         borderRadius: BorderRadius.circular(10),
                                       ),
-                                      child: Center(
+                                      child: const Center(
                                         child: Text(
                                           "İptal Et",
                                           style: TextStyle(
@@ -353,7 +362,7 @@ class _CustomReservationIptalListTileState
                 Container(
                   width: 40,
                   height: 40,
-                  decoration: BoxDecoration(
+                  decoration: const BoxDecoration(
                     shape: BoxShape.circle,
                     color: Color.fromARGB(30, 240, 115, 90),
                   ),
@@ -362,10 +371,10 @@ class _CustomReservationIptalListTileState
                         width: 14, height: 14, color: Constant.red),
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 1,
                 ),
-                Text(
+                const Text(
                   'İptal Et',
                   style: TextStyle(
                     fontSize: 8,

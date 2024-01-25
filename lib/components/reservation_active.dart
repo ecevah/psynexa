@@ -15,15 +15,16 @@ class reservationActiveCard extends StatefulWidget {
   String image;
   double padding;
   String conferenceID;
+  int star;
   reservationActiveCard(
       {super.key,
       required this.title,
       required this.date,
       required this.rol,
-      this.image =
-          "https://plus.unsplash.com/premium_photo-1664391847942-f9c4562ad692?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1966&q=80",
+      required this.image,
       required this.padding,
-      required this.conferenceID});
+      required this.conferenceID,
+      required this.star});
 
   @override
   State<reservationActiveCard> createState() => _reservationActiveCardState();
@@ -37,26 +38,33 @@ class _reservationActiveCardState extends State<reservationActiveCard> {
       child: GrockContainer(
         onTap: () async {
           final SharedPreferences prefs = await SharedPreferences.getInstance();
-          widget.date.isBefore(DateTime.now().add(Duration(minutes: 15)))
+          widget.date.isBefore(DateTime.now().add(const Duration(minutes: 15)))
               ? Grock.to(VideoConferencePage(
                   conferenceID: widget.conferenceID,
                   name: prefs.getString('name') ?? 'Ahmet',
-                  id: prefs.getString('id') ?? '1'))
+                  id: prefs.getString('id') ?? '1',
+                  title: widget.title,
+                  rol: widget.rol,
+                  image: widget.image,
+                ))
               : Grock.to(AktifReservation(
                   title: widget.title,
                   rol: widget.rol,
                   date: widget.date,
                   conferenceID: widget.conferenceID,
-                ));
+                  image: widget.image,
+                  star: widget.star));
         },
-        padding: EdgeInsets.symmetric(
+        padding: const EdgeInsets.symmetric(
           vertical: 15,
           horizontal: 16,
         ),
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.all(Radius.circular(10)),
+          borderRadius: const BorderRadius.all(Radius.circular(10)),
           border: Border.all(
-              style: BorderStyle.solid, width: 1, color: Color(0xFFEAEAEF)),
+              style: BorderStyle.solid,
+              width: 1,
+              color: const Color(0xFFEAEAEF)),
           color: Constant.white,
         ),
         child: Row(
@@ -70,12 +78,12 @@ class _reservationActiveCardState extends State<reservationActiveCard> {
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
                     image: DecorationImage(
-                      image: AssetImage(widget.image),
+                      image: NetworkImage(widget.image),
                       fit: BoxFit.contain,
                     ),
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   width: 12,
                 ),
                 Column(
@@ -85,7 +93,7 @@ class _reservationActiveCardState extends State<reservationActiveCard> {
                       width: 110,
                       child: Text(
                         widget.title,
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontFamily: 'Proxima Nova',
                           fontSize: 14,
                           fontWeight: FontWeight.w600,
@@ -94,14 +102,14 @@ class _reservationActiveCardState extends State<reservationActiveCard> {
                         ),
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 4,
                     ),
                     SizedBox(
                       width: 110,
                       child: Text(
                         widget.rol,
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontFamily: 'Proxima Nova',
                           fontSize: 11,
                           fontWeight: FontWeight.w400,
@@ -117,14 +125,14 @@ class _reservationActiveCardState extends State<reservationActiveCard> {
             Container(
               height: 15,
               width: 1,
-              color: Color(0xFFEAEAEF),
+              color: const Color(0xFFEAEAEF),
             ),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
                   '${DateFormat('HH:mm').format(widget.date)} - ${DateFormat('HH:mm').format(widget.date.add(Duration(minutes: 45)))}',
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontFamily: 'Proxima Nova',
                     fontSize: 12,
                     fontWeight: FontWeight.w600,
@@ -132,11 +140,11 @@ class _reservationActiveCardState extends State<reservationActiveCard> {
                     color: Constant.black,
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 3,
                 ),
                 Text(
-                  '${DateFormat('dd MMMM, EE', 'tr_TR').format(widget.date)}',
+                  DateFormat('dd MMMM, EE', 'tr_TR').format(widget.date),
                   style: TextStyle(
                     fontFamily: 'Proxima Nova',
                     fontSize: 11,
@@ -151,10 +159,10 @@ class _reservationActiveCardState extends State<reservationActiveCard> {
               width: 45,
               height: 45,
               decoration: BoxDecoration(
-                color: widget.date
-                        .isBefore(DateTime.now().add(Duration(minutes: 15)))
+                color: widget.date.isBefore(
+                        DateTime.now().add(const Duration(minutes: 15)))
                     ? Constant.purple.withOpacity(0.15)
-                    : Color(0xFFF5F5F5),
+                    : const Color(0xFFF5F5F5),
                 shape: BoxShape.circle,
               ),
               child: Padding(
@@ -164,8 +172,8 @@ class _reservationActiveCardState extends State<reservationActiveCard> {
                   Assets.icons.icCameraSVG,
                   width: 16,
                   height: 10,
-                  color: widget.date
-                          .isBefore(DateTime.now().add(Duration(minutes: 15)))
+                  color: widget.date.isBefore(
+                          DateTime.now().add(const Duration(minutes: 15)))
                       ? Constant.purple
                       : Constant.black,
                 ),

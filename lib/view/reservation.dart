@@ -1,21 +1,16 @@
 import 'package:Psynexa/components/reservation_active.dart';
 import 'package:Psynexa/components/reservation_detay.dart';
 import 'package:Psynexa/models/reservation/reservation_list.dart';
-import 'package:Psynexa/models/reservation/reservation_response.dart';
 import 'package:flutter/material.dart';
-import 'package:Psynexa/assets.dart';
-import 'package:Psynexa/components/custom_reservation_detaylistTile.dart';
-import 'package:Psynexa/components/custom_reservation_iptal_listTile.dart';
 import 'package:Psynexa/constant/constant.dart';
 import '../components/custom_appbar.dart';
-import 'package:flutter_svg/svg.dart';
-import 'package:grock/grock.dart';
 import 'package:Psynexa/riverpod/home_riverpod.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 import 'package:intl/intl.dart';
+import 'package:Psynexa/models/reservation/reservations_response.dart';
 
 final homePageRiverpod = ChangeNotifierProvider((ref) => HomePageRiverpod());
 
@@ -28,40 +23,59 @@ class Reservation extends ConsumerStatefulWidget {
 class _ReservationState extends ConsumerState<Reservation> {
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     fetchData();
   }
 
-  final headers = {
-    'Content-Type': 'application/json',
-    'Authorization':
-        'Bearer 0b6c05e02ee081f0f9d3d733e6dadefcc7d3e5bb2c10f3195927e2794002eefdf5f6f2774afeba9188a133385082a36818baca38f93bf05be5a9c68672a84f3efde436ce64afeedf5e3d79f36980e9e8cd9ed4f41939dd2a666f386118604991d5ada44ca4ca9c02881e1692e8cd5ad4f6016cea4390fb0931ae7c3ae9ad573e'
-  };
-
-  Future fetchData() async {
+  Future<void> fetchData() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
     final response = await http.get(
-        Uri.parse(
-            '${Constant.domain}/api/meetings?sort[0]=meetingDate:desc&populate=*'),
-        headers: headers);
-
+      Uri.parse(
+        '${Constant.domain}/api/reservation/find?client=${prefs.getString('id')}',
+      ),
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'x-access-token': prefs.getString("token") ??
+            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwc3ljaG9sb2dpc3QiOnsiX2lkIjoiNjVhODI2NGUyMTY0ODg0ZWYyZjc1M2E5IiwibmFtZSI6IlBzeWMgQWhtZXQiLCJzdXJOYW1lIjoiRWNldml0IiwicGFzcyI6IiQyYSQwOCR1bVpYeTU3VXFudnVmdEZ4emZCNW8uSVN1QUFzNHk5b1BBYU1uR1YwWFRzVGdwakRjZVNMUyIsImVNYWlsIjoiZWVjZXZhaEBnbWFpbC5jb20iLCJ0YWciOlsidXptYW4iXSwiaW1hZ2UiOiJpbWFnZS0xNzA1NTE4NjcwODUwLmpwZWciLCJ1bnZhbiI6ImtsaW5payBwc2lrb2xvaCIsInN0YXIiOltdLCJzdGFyQXZnIjpbXSwiYWN0aXZlIjpmYWxzZSwiYWNjQWN0aXZlIjp0cnVlLCJjcmVhdGVBdCI6IjIwMjQtMDEtMTdUMTk6MTE6MTAuODcyWiIsInVwZGF0ZUF0IjoiMjAyNC0wMS0xN1QxOToxMToxMC44NzJaIiwiX192IjowfSwiaWF0IjoxNzA1NTIwMTM1fQ.ad3WLnfmxtpnob3kSqVRZHtUZuOv8nX-CMkQHHdRth4"
+      },
+    );
     if (response.statusCode == 200) {
       final data = json.decode(response.body);
 
-      final userResponse = ReservationResponse.fromJson(data);
+      final userResponse = reservations.fromJson(data);
+
       if (ref.watch(homePageRiverpod).currentIndex == 0) {
-        for (int i = 0; i < userResponse.data!.length; i++)
-          ref.read(homePageRiverpod).setList(
-              ResListModel(
-                  title: userResponse.data![i].psychologist!.fullName!,
-                  date: userResponse.data![i].meetingDate!.toDate,
-                  rol: userResponse.data![i].psychologist!.profession!,
-                  image: Assets.images.imHomeKariPNG,
-                  conferanceId: userResponse.data![i].meetingId!),
-              1);
+        for (int i = 0; i < userResponse.reservation!.length; i++) {
+          try {
+            // Adjust date parsing logic to handle different formats
+            DateTime parseDateTime = DateTime.parse(
+              userResponse.reservation![i].day!,
+            );
+            List<String> timeSplit =
+                userResponse.reservation![i].time!.split(".");
+            DateTime combinedDateTime = DateTime(
+                parseDateTime.year,
+                parseDateTime.month,
+                parseDateTime.day,
+                int.parse(timeSplit[0]),
+                int.parse(timeSplit[1]));
+
+            ref.read(homePageRiverpod).setList(
+                  ResListModel(
+                      title:
+                          '${userResponse.reservation![i].psycId!.name!.toString()} ${userResponse.reservation![i].psycId!.surName!.toString()}',
+                      date: combinedDateTime,
+                      rol: userResponse.reservation![i].psycId!.unvan!,
+                      image:
+                          '${Constant.domain}/uploads/${userResponse.reservation![i].psycId!.image}',
+                      conferanceId: userResponse.reservation![i].sId!,
+                      star: userResponse.reservation![i].psycId!.star!.length),
+                  1,
+                );
+          } catch (e) {}
+        }
       }
     } else {
-      // Hata durumunda işlem yapabilirsiniz
       throw Exception('API isteği başarısız oldu ${jsonDecode(response.body)}');
     }
   }
@@ -72,14 +86,13 @@ class _ReservationState extends ConsumerState<Reservation> {
     final DateTime now = DateTime.now();
     Set<String> uniqueDates = Set();
     var watch = ref.watch(homePageRiverpod);
-    var read = ref.read(homePageRiverpod);
 
     List<ResListModel> aktifList = watch.resList.where((item) {
       DateTime itemDate = dateFormat.parse(item.date.toString());
 
-      if (itemDate.isAfter(now.subtract(Duration(minutes: 5)))) {
+      if (itemDate.isAfter(now.subtract(const Duration(minutes: 5)))) {
         // Tarih 5 dakika geriden sonraysa ve eşsizse, Set'e ekliyoruz ve true dönüyoruz
-        if (!uniqueDates.contains(item.date)) {
+        if (!uniqueDates.contains(item.date.toString())) {
           uniqueDates.add(item.date.toString());
           return true;
         }
@@ -90,18 +103,19 @@ class _ReservationState extends ConsumerState<Reservation> {
 
     List<ResListModel> gecmisList = watch.resList.where((item) {
       DateTime itemDate = dateFormat.parse(item.date.toString());
-      return itemDate.isBefore(now.subtract(Duration(minutes: 5)));
+      return itemDate.isBefore(now.subtract(const Duration(minutes: 5)));
     }).toList();
-
+    ref.read(homePageRiverpod).setLastAfter(aktifList);
+    ref.read(homePageRiverpod).setBeforeAfter(gecmisList);
     return DefaultTabController(
       length: 2,
       child: Scaffold(
-        appBar: CustomAppBar(
+        appBar: const CustomAppBar(
           appbarTitle: "Randevularım",
         ),
         body: Column(
           children: [
-            Container(
+            SizedBox(
               height: 40,
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 30.0),
@@ -121,8 +135,8 @@ class _ReservationState extends ConsumerState<Reservation> {
                         child: Align(
                           alignment: Alignment.center,
                           child: Container(
-                            padding: EdgeInsets.all(10),
-                            child: Text('Aktif'),
+                            padding: const EdgeInsets.all(10),
+                            child: const Text('Aktif'),
                           ),
                         ),
                       ),
@@ -130,8 +144,8 @@ class _ReservationState extends ConsumerState<Reservation> {
                         child: Align(
                           alignment: Alignment.center,
                           child: Container(
-                            padding: EdgeInsets.all(10),
-                            child: Text('Geçmiş'),
+                            padding: const EdgeInsets.all(10),
+                            child: const Text('Geçmiş'),
                           ),
                         ),
                       ),
@@ -142,25 +156,38 @@ class _ReservationState extends ConsumerState<Reservation> {
             ),
             Expanded(
               child: TabBarView(
-                physics: BouncingScrollPhysics(),
+                physics: const BouncingScrollPhysics(),
                 children: [
                   Column(
                     children: [
-                      SizedBox(
+                      const SizedBox(
                         height: 18,
                       ),
                       Expanded(
                         child: ListView.builder(
-                          physics: BouncingScrollPhysics(),
-                          padding: EdgeInsets.symmetric(horizontal: 19),
-                          itemCount: aktifList.length,
+                          physics: const BouncingScrollPhysics(),
+                          padding: const EdgeInsets.symmetric(horizontal: 19),
+                          itemCount: watch.aktifList.length,
                           itemBuilder: (BuildContext context, int index) {
                             return reservationActiveCard(
-                              title: aktifList[index].title,
-                              image: aktifList[index].image,
-                              rol: aktifList[index].rol,
-                              date: aktifList[index].date,
-                              conferenceID: aktifList[index].conferanceId,
+                              title: watch
+                                  .aktifList[watch.aktifList.length - index - 1]
+                                  .title,
+                              image: watch
+                                  .aktifList[watch.aktifList.length - index - 1]
+                                  .image,
+                              rol: watch
+                                  .aktifList[watch.aktifList.length - index - 1]
+                                  .rol,
+                              date: watch
+                                  .aktifList[watch.aktifList.length - index - 1]
+                                  .date,
+                              conferenceID: watch
+                                  .aktifList[watch.aktifList.length - index - 1]
+                                  .conferanceId,
+                              star: watch
+                                  .aktifList[watch.aktifList.length - index - 1]
+                                  .star,
                               padding: 10,
                             );
                           },
@@ -170,20 +197,28 @@ class _ReservationState extends ConsumerState<Reservation> {
                   ),
                   Column(
                     children: [
-                      SizedBox(
+                      const SizedBox(
                         height: 18,
                       ),
                       Expanded(
                         child: ListView.builder(
-                          physics: BouncingScrollPhysics(),
-                          padding: EdgeInsets.symmetric(horizontal: 19),
-                          itemCount: gecmisList.length,
+                          physics: const BouncingScrollPhysics(),
+                          padding: const EdgeInsets.symmetric(horizontal: 19),
+                          itemCount: watch.pasifList.length,
                           itemBuilder: (BuildContext context, int index) {
                             return reservationDetayCard(
-                              title: gecmisList[index].title,
-                              image: gecmisList[index].image,
-                              rol: gecmisList[index].rol,
-                              date: gecmisList[index].date,
+                              title: watch
+                                  .pasifList[watch.pasifList.length - index - 1]
+                                  .title,
+                              image: watch
+                                  .pasifList[watch.pasifList.length - index - 1]
+                                  .image,
+                              rol: watch
+                                  .pasifList[watch.pasifList.length - index - 1]
+                                  .rol,
+                              date: watch
+                                  .pasifList[watch.pasifList.length - index - 1]
+                                  .date,
                               id: "1",
                             );
                           },

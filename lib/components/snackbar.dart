@@ -125,8 +125,8 @@ Widget ErrorSnackbar(BuildContext context) {
           child: Row(
             children: [
               Image.asset("assets/snackbar/error.png"),
-              SizedBox(width: 30),
-              Column(
+              const SizedBox(width: 30),
+              const Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(

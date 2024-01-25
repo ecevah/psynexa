@@ -25,7 +25,9 @@ class HomePageRiverpod extends ChangeNotifier {
 
   List<ResListModel> resList = [];
   List<ResListModel> aktifList = [];
-  List<ResListModel> gecmisList = [];
+  List<ResListModel> pasifList = [];
+  List<String> nameSurname = [];
+
   void setList(ResListModel index, int current) {
     resList.add(index);
     currentIndex = current;
@@ -37,15 +39,18 @@ class HomePageRiverpod extends ChangeNotifier {
     notifyListeners();
   }
 
-  void setDateList(List<ResListModel> index) {
-    aktifList = index
-        .where((item) =>
-            item.date.isAfter(DateTime.now().subtract(Duration(minutes: 5))))
-        .toList();
-    gecmisList = index
-        .where((item) =>
-            item.date.isBefore(DateTime.now().subtract(Duration(minutes: 5))))
-        .toList();
+  void setName(String string) {
+    nameSurname = string.split(' ');
+    notifyListeners();
+  }
+
+  void setLastAfter(List<ResListModel> index) {
+    aktifList = index;
+    notifyListeners();
+  }
+
+  void setBeforeAfter(List<ResListModel> index) {
+    pasifList = index;
     notifyListeners();
   }
 }

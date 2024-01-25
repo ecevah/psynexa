@@ -1,5 +1,3 @@
-import 'package:Psynexa/view/base_scaffold.dart';
-import 'package:Psynexa/view/login.dart';
 import 'package:flutter/material.dart';
 // ignore: depend_on_referenced_packages
 import 'package:flutter_svg/svg.dart';
@@ -7,7 +5,6 @@ import 'package:flutter_svg/svg.dart';
 import 'package:grock/grock.dart';
 import 'package:Psynexa/view/onboard.dart';
 import '../assets.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class Splash extends StatefulWidget {
   const Splash({super.key});
@@ -30,8 +27,8 @@ class _SplashState extends State<Splash> with TickerProviderStateMixin {
   }
 
   void _loadPrefsAndNavigate() async {
-    await Future.delayed(Duration(seconds: 2));
-    Grock.toRemove(FirstPage());
+    await Future.delayed(const Duration(seconds: 2));
+    Grock.toRemove(const FirstPage());
   }
 
   @override
@@ -53,7 +50,7 @@ class _SplashState extends State<Splash> with TickerProviderStateMixin {
                 height: 28.54,
                 width: 150,
               ),
-              SizedBox(
+              const SizedBox(
                 height: 14,
               ),
               Stack(

@@ -26,14 +26,16 @@ class _CustomNatiListTileState extends State<CustomNatiListTile> {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 19.0, vertical: 5),
       child: GrockContainer(
-        padding: EdgeInsets.symmetric(
+        padding: const EdgeInsets.symmetric(
           vertical: 15,
           horizontal: 32,
         ),
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.all(Radius.circular(10)),
+          borderRadius: const BorderRadius.all(Radius.circular(10)),
           border: Border.all(
-              style: BorderStyle.solid, width: 1, color: Color(0xFFEAEAEF)),
+              style: BorderStyle.solid,
+              width: 1,
+              color: const Color(0xFFEAEAEF)),
           color: Constant.white,
         ),
         child: Row(
@@ -45,7 +47,7 @@ class _CustomNatiListTileState extends State<CustomNatiListTile> {
                 color: widget.tur
                     ? Constant.error.withOpacity(0.1)
                     : Constant.purple.withOpacity(0.1),
-                borderRadius: BorderRadius.all(Radius.circular(25)),
+                borderRadius: const BorderRadius.all(Radius.circular(25)),
               ),
               child: Padding(
                 padding: const EdgeInsets.only(
@@ -58,7 +60,7 @@ class _CustomNatiListTileState extends State<CustomNatiListTile> {
                 ),
               ),
             ),
-            SizedBox(
+            const SizedBox(
               width: 15,
             ),
             Expanded(
@@ -66,7 +68,7 @@ class _CustomNatiListTileState extends State<CustomNatiListTile> {
                   ? RichText(
                       text: TextSpan(
                         text: 'Bugün saat ',
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontFamily: 'Proxima Nova',
                           fontWeight: FontWeight.w400,
                           fontSize: 13,
@@ -75,8 +77,8 @@ class _CustomNatiListTileState extends State<CustomNatiListTile> {
                         ),
                         children: <TextSpan>[
                           TextSpan(
-                            text: '${DateFormat('HH:mm').format(widget.date)}',
-                            style: TextStyle(
+                            text: DateFormat('HH:mm').format(widget.date),
+                            style: const TextStyle(
                               fontFamily: 'Proxima Nova',
                               fontWeight: FontWeight.w600,
                               fontSize: 13,
@@ -84,7 +86,7 @@ class _CustomNatiListTileState extends State<CustomNatiListTile> {
                               color: Constant.black,
                             ),
                           ),
-                          TextSpan(
+                          const TextSpan(
                             text: "'te ",
                             style: TextStyle(
                               fontFamily: 'Proxima Nova',
@@ -95,8 +97,8 @@ class _CustomNatiListTileState extends State<CustomNatiListTile> {
                             ),
                           ),
                           TextSpan(
-                            text: '${widget.title}',
-                            style: TextStyle(
+                            text: widget.title,
+                            style: const TextStyle(
                               fontFamily: 'Proxima Nova',
                               fontWeight: FontWeight.w600,
                               fontSize: 13,
@@ -104,7 +106,7 @@ class _CustomNatiListTileState extends State<CustomNatiListTile> {
                               color: Constant.black,
                             ),
                           ),
-                          TextSpan(
+                          const TextSpan(
                             text: " ile randevunuz bulunmakta.",
                             style: TextStyle(
                               fontFamily: 'Proxima Nova',
@@ -122,14 +124,14 @@ class _CustomNatiListTileState extends State<CustomNatiListTile> {
                         RichText(
                           text: TextSpan(
                             text: '${widget.title},',
-                            style: TextStyle(
+                            style: const TextStyle(
                               fontFamily: 'Proxima Nova',
                               fontWeight: FontWeight.w600,
                               fontSize: 13,
                               height: 1.2,
                               color: Constant.black,
                             ),
-                            children: <TextSpan>[
+                            children: const <TextSpan>[
                               TextSpan(
                                 text:
                                     ' sizin için bir psikolojik test gönderdi.',
@@ -144,12 +146,12 @@ class _CustomNatiListTileState extends State<CustomNatiListTile> {
                             ],
                           ),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 4,
                         ),
                         Row(
                           children: [
-                            Spacer(),
+                            const Spacer(),
                             SizedBox(
                               width: 99,
                               height: 26,
@@ -159,6 +161,7 @@ class _CustomNatiListTileState extends State<CustomNatiListTile> {
                                     TestView(
                                       title: 'Depresyon',
                                       image: Assets.images.imDepresyonSVG,
+                                      type: 'depresyon',
                                     ),
                                   );
                                 },

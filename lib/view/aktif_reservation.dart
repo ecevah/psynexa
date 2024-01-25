@@ -1,68 +1,86 @@
 import 'package:flutter/material.dart';
-import 'package:Psynexa/assets.dart';
 import 'package:Psynexa/components/custom_back_appbar.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:grock/grock.dart';
 import 'package:intl/intl.dart';
 import 'package:Psynexa/components/custom_first_btn.dart';
 import 'package:Psynexa/components/randevu_detay.dart';
 import 'package:Psynexa/constant/constant.dart';
 import 'package:Psynexa/view/meet.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:Psynexa/riverpod/home_riverpod.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class AktifReservation extends StatefulWidget {
-  String title;
+final homePageRiverpod = ChangeNotifierProvider((ref) => HomePageRiverpod());
+
+class AktifReservation extends ConsumerStatefulWidget {
   DateTime date;
   String rol;
+  String title;
   String image;
   String conferenceID;
+  int star;
   AktifReservation(
       {super.key,
       required this.title,
       required this.date,
       required this.rol,
-      this.image =
-          "https://plus.unsplash.com/premium_photo-1664391847942-f9c4562ad692?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1966&q=80",
-      required this.conferenceID});
+      required this.image,
+      required this.conferenceID,
+      required this.star});
 
   @override
-  State<AktifReservation> createState() => _AktifReservationState();
+  ConsumerState<AktifReservation> createState() => _AktifReservationState();
 }
 
-class _AktifReservationState extends State<AktifReservation> {
-  String name = 'Ahmet Ecevit';
+class _AktifReservationState extends ConsumerState<AktifReservation> {
   String phone = '0555 555 55 55';
-  String conferenceID = '2EwSO9l6';
-  double price = 500.00;
+  double price = 800;
   int age = 23;
-  DateTime date = DateTime(2023, 8, 26, 22, 22, 56, 486, 933);
+
+  Future<String> getNameFromPrefs() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String name = prefs.getString('name') ?? '';
+    return name;
+  }
 
   String getFormattedDate(DateTime dateTime) {
-    return DateFormat('d MMMM y').format(dateTime);
+    var format = DateFormat('d MMMM y', 'tr_TR');
+    return format.format(dateTime);
   }
 
   String getFormattedTimeRange(DateTime startTime, DateTime endTime) {
-    return DateFormat('HH:mm').format(startTime) +
-        ' - ' +
-        DateFormat('HH:mm').format(endTime);
+    var timeFormat = DateFormat('HH:mm', 'tr_TR');
+    return timeFormat.format(startTime) + ' - ' + timeFormat.format(endTime);
   }
 
   Stream<String> getRemainingTimeStream(DateTime dateTime) async* {
-    while (DateTime.now().isBefore(dateTime)) {
-      Duration remainingDuration = dateTime.difference(DateTime.now());
+    while (DateTime.now().add(const Duration(hours: 3)).isBefore(dateTime)) {
+      Duration remainingDuration =
+          dateTime.difference(DateTime.now().add(const Duration(hours: 3)));
       int remainingHours = remainingDuration.inHours;
       int remainingMinutes = remainingDuration.inMinutes.remainder(60);
       int remainingSeconds = remainingDuration.inSeconds.remainder(60);
 
       yield '$remainingHours Saat $remainingMinutes Dakika $remainingSeconds Saniye';
-      await Future.delayed(Duration(seconds: 1));
+      await Future.delayed(const Duration(seconds: 1));
     }
     yield 'Randevu Başladı';
+  }
+
+  void initState() {
+    super.initState();
+    fatchName();
+  }
+
+  Future fatchName() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    ref.read(homePageRiverpod).setName(prefs.getString('name')!);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAccAppBar(appbarTitle: 'Aktif Randevu'),
+      appBar: const CustomAccAppBar(appbarTitle: 'Aktif Randevu'),
       body: Padding(
         padding: const EdgeInsets.only(top: 20.0, bottom: 30),
         child: Column(
@@ -71,11 +89,12 @@ class _AktifReservationState extends State<AktifReservation> {
               title: widget.title,
               rol: widget.rol,
               time: widget.date,
-              imagePath: Assets.images.imKariPNG,
+              imagePath: widget.image,
+              star: widget.star,
             ),
             Expanded(
               child: ListView(
-                physics: BouncingScrollPhysics(),
+                physics: const BouncingScrollPhysics(),
                 children: [
                   Column(
                     children: [
@@ -83,12 +102,12 @@ class _AktifReservationState extends State<AktifReservation> {
                         padding: const EdgeInsets.only(
                             left: 40, right: 40, top: 35, bottom: 18),
                         child: Container(
-                          padding: EdgeInsets.symmetric(
+                          padding: const EdgeInsets.symmetric(
                               vertical: 20, horizontal: 30),
                           decoration: BoxDecoration(
                             color: Constant.white,
                             borderRadius: BorderRadius.circular(15),
-                            boxShadow: [
+                            boxShadow: const [
                               BoxShadow(
                                   color: Color.fromARGB(81, 217, 217, 217),
                                   spreadRadius: 5,
@@ -99,7 +118,7 @@ class _AktifReservationState extends State<AktifReservation> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text(
+                              const Text(
                                 'Randevu zamanı',
                                 style: TextStyle(
                                   fontSize: 13,
@@ -108,87 +127,23 @@ class _AktifReservationState extends State<AktifReservation> {
                                   fontFamily: 'Proxima Nova',
                                 ),
                               ),
-                              SizedBox(
+                              const SizedBox(
                                 height: 10,
                               ),
                               Text(
                                 'Tarih: ${getFormattedDate(widget.date)}',
-                                style: TextStyle(
-                                    fontSize: 11,
-                                    fontWeight: FontWeight.w400,
-                                    color: Constant.black75,
-                                    fontFamily: 'Proxima Nova'),
-                              ),
-                              SizedBox(
-                                height: 7,
-                              ),
-                              Text(
-                                'Saat: ${getFormattedTimeRange(widget.date, widget.date.add(Duration(minutes: 50)))}',
-                                style: TextStyle(
-                                    fontSize: 11,
-                                    fontWeight: FontWeight.w400,
-                                    color: Constant.black75,
-                                    fontFamily: 'Proxima Nova'),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 40),
-                        child: Container(
-                          padding: EdgeInsets.symmetric(
-                              vertical: 19, horizontal: 30),
-                          decoration: BoxDecoration(
-                            color: Constant.white,
-                            borderRadius: BorderRadius.circular(15),
-                            boxShadow: [
-                              BoxShadow(
-                                  color: Color.fromARGB(81, 217, 217, 217),
-                                  spreadRadius: 5,
-                                  blurRadius: 4),
-                            ],
-                          ),
-                          width: MediaQuery.sizeOf(context).width,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                'Hasta Detayı',
-                                style: TextStyle(
-                                    fontSize: 13,
-                                    fontWeight: FontWeight.w500,
-                                    color: Constant.black75,
-                                    fontFamily: 'Proxima Nova'),
-                              ),
-                              SizedBox(
-                                height: 10,
-                              ),
-                              Text(
-                                'Ad Soyad: $name',
-                                style: TextStyle(
+                                style: const TextStyle(
                                     fontSize: 11,
                                     fontWeight: FontWeight.w400,
                                     color: Constant.black50,
                                     fontFamily: 'Proxima Nova'),
                               ),
-                              SizedBox(
+                              const SizedBox(
                                 height: 7,
                               ),
                               Text(
-                                'Yaş: $age',
-                                style: TextStyle(
-                                    fontSize: 11,
-                                    fontWeight: FontWeight.w400,
-                                    color: Constant.black50,
-                                    fontFamily: 'Proxima Nova'),
-                              ),
-                              SizedBox(
-                                height: 7,
-                              ),
-                              Text(
-                                'Telefon No: $phone',
-                                style: TextStyle(
+                                'Saat: ${getFormattedTimeRange(widget.date, widget.date.add(const Duration(minutes: 50)))}',
+                                style: const TextStyle(
                                     fontSize: 11,
                                     fontWeight: FontWeight.w400,
                                     color: Constant.black50,
@@ -199,15 +154,17 @@ class _AktifReservationState extends State<AktifReservation> {
                         ),
                       ),
                       Padding(
-                        padding:
-                            const EdgeInsets.only(left: 40, right: 40, top: 18),
+                        padding: const EdgeInsets.only(
+                          left: 40,
+                          right: 40,
+                        ),
                         child: Container(
-                          padding: EdgeInsets.symmetric(
+                          padding: const EdgeInsets.symmetric(
                               vertical: 19, horizontal: 30),
                           decoration: BoxDecoration(
                             color: Constant.white,
                             borderRadius: BorderRadius.circular(15),
-                            boxShadow: [
+                            boxShadow: const [
                               BoxShadow(
                                   color: Color.fromARGB(81, 217, 217, 217),
                                   spreadRadius: 5,
@@ -218,7 +175,7 @@ class _AktifReservationState extends State<AktifReservation> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text(
+                              const Text(
                                 'Ödeme Detayı',
                                 style: TextStyle(
                                   fontSize: 15,
@@ -226,7 +183,7 @@ class _AktifReservationState extends State<AktifReservation> {
                                   color: Constant.black75,
                                 ),
                               ),
-                              SizedBox(
+                              const SizedBox(
                                 height: 10,
                               ),
                               Row(
@@ -234,7 +191,7 @@ class _AktifReservationState extends State<AktifReservation> {
                                     MainAxisAlignment.spaceBetween,
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
-                                  Text(
+                                  const Text(
                                     'Muayene Ücreti:',
                                     style: TextStyle(
                                         fontSize: 11,
@@ -244,7 +201,7 @@ class _AktifReservationState extends State<AktifReservation> {
                                   ),
                                   Text(
                                     '$price₺',
-                                    style: TextStyle(
+                                    style: const TextStyle(
                                         fontSize: 11,
                                         fontWeight: FontWeight.w400,
                                         color: Constant.black50,
@@ -252,7 +209,7 @@ class _AktifReservationState extends State<AktifReservation> {
                                   )
                                 ],
                               ),
-                              SizedBox(
+                              const SizedBox(
                                 height: 7,
                               ),
                               Row(
@@ -260,7 +217,7 @@ class _AktifReservationState extends State<AktifReservation> {
                                     MainAxisAlignment.spaceBetween,
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
-                                  Text(
+                                  const Text(
                                     'KDV:',
                                     style: TextStyle(
                                         fontSize: 11,
@@ -270,7 +227,7 @@ class _AktifReservationState extends State<AktifReservation> {
                                   ),
                                   Text(
                                     '${price * 0.20}₺',
-                                    style: TextStyle(
+                                    style: const TextStyle(
                                         fontSize: 11,
                                         fontWeight: FontWeight.w400,
                                         color: Constant.black50,
@@ -278,7 +235,7 @@ class _AktifReservationState extends State<AktifReservation> {
                                   )
                                 ],
                               ),
-                              SizedBox(
+                              const SizedBox(
                                 height: 7,
                               ),
                               Container(
@@ -286,7 +243,7 @@ class _AktifReservationState extends State<AktifReservation> {
                                 height: 1,
                                 color: Constant.gray,
                               ),
-                              SizedBox(
+                              const SizedBox(
                                 height: 4,
                               ),
                               Row(
@@ -294,7 +251,7 @@ class _AktifReservationState extends State<AktifReservation> {
                                     MainAxisAlignment.spaceBetween,
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
-                                  Text(
+                                  const Text(
                                     'Toplam Tutar:',
                                     style: TextStyle(
                                         fontSize: 11,
@@ -304,7 +261,7 @@ class _AktifReservationState extends State<AktifReservation> {
                                   ),
                                   Text(
                                     '${price + (price * 0.20)}₺',
-                                    style: TextStyle(
+                                    style: const TextStyle(
                                         fontSize: 11,
                                         fontWeight: FontWeight.w400,
                                         color: Constant.black50,
@@ -329,19 +286,24 @@ class _AktifReservationState extends State<AktifReservation> {
                   if (snapshot.hasData) {
                     return FirstBtn(
                       onTap: () {
-                        if (snapshot.data == "Randevu Başladı")
+                        if (snapshot.data == "Randevu Başladı") {
                           Grock.to(
                             VideoConferencePage(
-                              conferenceID: conferenceID,
-                              name: 'Ahmet Ecevit',
+                              conferenceID: widget.conferenceID,
+                              name:
+                                  '${ref.watch(homePageRiverpod).nameSurname[0] ?? ''} ${ref.watch(homePageRiverpod).nameSurname.sublist(1).join(' ') ?? " "}',
                               id: 'ahmets',
+                              image: widget.image,
+                              title: widget.title,
+                              rol: widget.rol,
                             ),
                           );
+                        }
                       },
                       text: snapshot.data!,
                     );
                   } else {
-                    return CircularProgressIndicator();
+                    return const CircularProgressIndicator();
                   }
                 },
               ),

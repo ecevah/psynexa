@@ -3,6 +3,7 @@ class DetailDart {
     required this.data,
     required this.meta,
   });
+
   late final Data data;
   late final Meta meta;
 
@@ -38,6 +39,7 @@ class Data {
     required this.meetings,
     this.documents,
   });
+
   late final int id;
   late final String about;
   late final String fullName;
@@ -47,13 +49,13 @@ class Data {
   late final String createdAt;
   late final String updatedAt;
   late final String jobStartDate;
-  late final Null applicationStatus;
+  late final dynamic applicationStatus;
   late final Avatar avatar;
   late final List<dynamic> comments;
   late final User user;
   late final List<Clients> clients;
   late final List<dynamic> meetings;
-  late final Null documents;
+  late final dynamic documents;
 
   Data.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -65,35 +67,35 @@ class Data {
     createdAt = json['createdAt'];
     updatedAt = json['updatedAt'];
     jobStartDate = json['jobStartDate'];
-    applicationStatus = null;
+    applicationStatus = json['applicationStatus'];
     avatar = Avatar.fromJson(json['avatar']);
     comments = List.castFrom<dynamic, dynamic>(json['comments']);
     user = User.fromJson(json['user']);
     clients =
         List.from(json['clients']).map((e) => Clients.fromJson(e)).toList();
     meetings = List.castFrom<dynamic, dynamic>(json['meetings']);
-    documents = null;
+    documents = json['documents'];
   }
 
   Map<String, dynamic> toJson() {
-    final _data = <String, dynamic>{};
-    _data['id'] = id;
-    _data['about'] = about;
-    _data['fullName'] = fullName;
-    _data['hourlyPrice'] = hourlyPrice;
-    _data['profession'] = profession;
-    _data['title'] = title;
-    _data['createdAt'] = createdAt;
-    _data['updatedAt'] = updatedAt;
-    _data['jobStartDate'] = jobStartDate;
-    _data['applicationStatus'] = applicationStatus;
-    _data['avatar'] = avatar.toJson();
-    _data['comments'] = comments;
-    _data['user'] = user.toJson();
-    _data['clients'] = clients.map((e) => e.toJson()).toList();
-    _data['meetings'] = meetings;
-    _data['documents'] = documents;
-    return _data;
+    final data = <String, dynamic>{};
+    data['id'] = id;
+    data['about'] = about;
+    data['fullName'] = fullName;
+    data['hourlyPrice'] = hourlyPrice;
+    data['profession'] = profession;
+    data['title'] = title;
+    data['createdAt'] = createdAt;
+    data['updatedAt'] = updatedAt;
+    data['jobStartDate'] = jobStartDate;
+    data['applicationStatus'] = applicationStatus;
+    data['avatar'] = avatar.toJson();
+    data['comments'] = comments;
+    data['user'] = user.toJson();
+    data['clients'] = clients.map((e) => e.toJson()).toList();
+    data['meetings'] = meetings;
+    data['documents'] = documents;
+    return data;
   }
 }
 
@@ -117,130 +119,65 @@ class Avatar {
     required this.createdAt,
     required this.updatedAt,
   });
+
   late final int id;
   late final String name;
-  late final Null alternativeText;
-  late final Null caption;
+  late final dynamic alternativeText;
+  late final dynamic caption;
   late final int width;
   late final int height;
-  late final Formats formats;
+  late final dynamic formats;
   late final String hash;
   late final String ext;
   late final String mime;
   late final double size;
   late final String url;
-  late final Null previewUrl;
+  late final dynamic previewUrl;
   late final String provider;
-  late final Null providerMetadata;
+  late final dynamic providerMetadata;
   late final String createdAt;
   late final String updatedAt;
 
   Avatar.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     name = json['name'];
-    alternativeText = null;
-    caption = null;
+    alternativeText = json['alternativeText'];
+    caption = json['caption'];
     width = json['width'];
     height = json['height'];
-    formats = Formats.fromJson(json['formats']);
+    formats = json['formats'];
     hash = json['hash'];
     ext = json['ext'];
     mime = json['mime'];
     size = json['size'];
     url = json['url'];
-    previewUrl = null;
+    previewUrl = json['previewUrl'];
     provider = json['provider'];
-    providerMetadata = null;
+    providerMetadata = json['provider_metadata'];
     createdAt = json['createdAt'];
     updatedAt = json['updatedAt'];
   }
 
   Map<String, dynamic> toJson() {
-    final _data = <String, dynamic>{};
-    _data['id'] = id;
-    _data['name'] = name;
-    _data['alternativeText'] = alternativeText;
-    _data['caption'] = caption;
-    _data['width'] = width;
-    _data['height'] = height;
-    _data['formats'] = formats.toJson();
-    _data['hash'] = hash;
-    _data['ext'] = ext;
-    _data['mime'] = mime;
-    _data['size'] = size;
-    _data['url'] = url;
-    _data['previewUrl'] = previewUrl;
-    _data['provider'] = provider;
-    _data['provider_metadata'] = providerMetadata;
-    _data['createdAt'] = createdAt;
-    _data['updatedAt'] = updatedAt;
-    return _data;
-  }
-}
-
-class Formats {
-  Formats({
-    required this.thumbnail,
-  });
-  late final Thumbnail thumbnail;
-
-  Formats.fromJson(Map<String, dynamic> json) {
-    thumbnail = Thumbnail.fromJson(json['thumbnail']);
-  }
-
-  Map<String, dynamic> toJson() {
-    final _data = <String, dynamic>{};
-    _data['thumbnail'] = thumbnail.toJson();
-    return _data;
-  }
-}
-
-class Thumbnail {
-  Thumbnail({
-    required this.name,
-    required this.hash,
-    required this.ext,
-    required this.mime,
-    this.path,
-    required this.width,
-    required this.height,
-    required this.size,
-    required this.url,
-  });
-  late final String name;
-  late final String hash;
-  late final String ext;
-  late final String mime;
-  late final Null path;
-  late final int width;
-  late final int height;
-  late final double size;
-  late final String url;
-
-  Thumbnail.fromJson(Map<String, dynamic> json) {
-    name = json['name'];
-    hash = json['hash'];
-    ext = json['ext'];
-    mime = json['mime'];
-    path = null;
-    width = json['width'];
-    height = json['height'];
-    size = json['size'];
-    url = json['url'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final _data = <String, dynamic>{};
-    _data['name'] = name;
-    _data['hash'] = hash;
-    _data['ext'] = ext;
-    _data['mime'] = mime;
-    _data['path'] = path;
-    _data['width'] = width;
-    _data['height'] = height;
-    _data['size'] = size;
-    _data['url'] = url;
-    return _data;
+    final data = <String, dynamic>{};
+    data['id'] = id;
+    data['name'] = name;
+    data['alternativeText'] = alternativeText;
+    data['caption'] = caption;
+    data['width'] = width;
+    data['height'] = height;
+    data['formats'] = formats;
+    data['hash'] = hash;
+    data['ext'] = ext;
+    data['mime'] = mime;
+    data['size'] = size;
+    data['url'] = url;
+    data['previewUrl'] = previewUrl;
+    data['provider'] = provider;
+    data['provider_metadata'] = providerMetadata;
+    data['createdAt'] = createdAt;
+    data['updatedAt'] = updatedAt;
+    return data;
   }
 }
 
@@ -255,6 +192,7 @@ class User {
     required this.createdAt,
     required this.updatedAt,
   });
+
   late final int id;
   late final String username;
   late final String email;
@@ -276,16 +214,16 @@ class User {
   }
 
   Map<String, dynamic> toJson() {
-    final _data = <String, dynamic>{};
-    _data['id'] = id;
-    _data['username'] = username;
-    _data['email'] = email;
-    _data['provider'] = provider;
-    _data['confirmed'] = confirmed;
-    _data['blocked'] = blocked;
-    _data['createdAt'] = createdAt;
-    _data['updatedAt'] = updatedAt;
-    return _data;
+    final data = <String, dynamic>{};
+    data['id'] = id;
+    data['username'] = username;
+    data['email'] = email;
+    data['provider'] = provider;
+    data['confirmed'] = confirmed;
+    data['blocked'] = blocked;
+    data['createdAt'] = createdAt;
+    data['updatedAt'] = updatedAt;
+    return data;
   }
 }
 
@@ -299,13 +237,14 @@ class Clients {
     required this.fullName,
     this.totalAnalysis,
   });
+
   late final int id;
   late final String birthday;
   late final String gender;
   late final String createdAt;
   late final String updatedAt;
   late final String fullName;
-  late final Null totalAnalysis;
+  late final dynamic totalAnalysis;
 
   Clients.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -314,29 +253,29 @@ class Clients {
     createdAt = json['createdAt'];
     updatedAt = json['updatedAt'];
     fullName = json['fullName'];
-    totalAnalysis = null;
+    totalAnalysis = json['totalAnalysis'];
   }
 
   Map<String, dynamic> toJson() {
-    final _data = <String, dynamic>{};
-    _data['id'] = id;
-    _data['birthday'] = birthday;
-    _data['gender'] = gender;
-    _data['createdAt'] = createdAt;
-    _data['updatedAt'] = updatedAt;
-    _data['fullName'] = fullName;
-    _data['totalAnalysis'] = totalAnalysis;
-    return _data;
+    final data = <String, dynamic>{};
+    data['id'] = id;
+    data['birthday'] = birthday;
+    data['gender'] = gender;
+    data['createdAt'] = createdAt;
+    data['updatedAt'] = updatedAt;
+    data['fullName'] = fullName;
+    data['totalAnalysis'] = totalAnalysis;
+    return data;
   }
 }
 
 class Meta {
   Meta();
 
-  Meta.fromJson(Map json);
+  Meta.fromJson(Map<String, dynamic> json);
 
   Map<String, dynamic> toJson() {
-    final _data = <String, dynamic>{};
-    return _data;
+    final data = <String, dynamic>{};
+    return data;
   }
 }

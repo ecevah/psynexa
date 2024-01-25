@@ -1,29 +1,22 @@
 import 'package:Psynexa/components/reservation_active.dart';
 import 'package:Psynexa/models/reservation/reservation_list.dart';
-import 'package:Psynexa/models/reservation/reservation_response.dart';
+import 'package:Psynexa/models/reservation/reservations_response.dart';
 import 'package:Psynexa/view/acc_reservation.dart';
-import 'package:Psynexa/view/deneme.dart';
 import 'package:Psynexa/view/image.dart';
 import 'package:Psynexa/view/test.dart';
 import 'package:flutter/material.dart';
 import 'package:Psynexa/assets.dart';
-import 'package:Psynexa/components/image_button.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:Psynexa/constant/constant.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:grock/grock.dart';
 import 'package:Psynexa/riverpod/home_riverpod.dart';
-import 'package:Psynexa/view/calendar.dart';
-import 'package:Psynexa/view/degerlendirme.dart';
-import 'package:Psynexa/view/detay_reservation.dart';
-import 'package:Psynexa/view/gorusme_sonland%C4%B1.dart';
 import 'package:Psynexa/view/notification.dart';
-import 'package:Psynexa/view/psikiyatri_detay.dart';
 import 'package:Psynexa/view/seach_doctor.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
-import 'package:Psynexa/models/detailDoctor/detail_response.dart';
+import 'package:intl/intl.dart';
 
 final homePageRiverpod = ChangeNotifierProvider((ref) => HomePageRiverpod());
 
@@ -40,73 +33,124 @@ class _HomeState extends ConsumerState<Home> {
     // TODO: implement initState
     super.initState();
     fetchData();
+    solution();
   }
 
   List<ResListModel> aktiflist = [];
-  final headers = {
-    'Content-Type': 'application/json',
-    'Authorization':
-        'Bearer 0b6c05e02ee081f0f9d3d733e6dadefcc7d3e5bb2c10f3195927e2794002eefdf5f6f2774afeba9188a133385082a36818baca38f93bf05be5a9c68672a84f3efde436ce64afeedf5e3d79f36980e9e8cd9ed4f41939dd2a666f386118604991d5ada44ca4ca9c02881e1692e8cd5ad4f6016cea4390fb0931ae7c3ae9ad573e'
-  };
   Future fetchData() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     final response = await http.get(
-        Uri.parse(
-            '${Constant.domain}/api/meetings?sort[0]=meetingDate:desc&populate=*'),
-        headers: headers);
-
-    print(response);
+      Uri.parse(
+        '${Constant.domain}/api/reservation/find?client=${prefs.getString('id')}',
+      ),
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'x-access-token': prefs.getString("token") ??
+            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwc3ljaG9sb2dpc3QiOnsiX2lkIjoiNjVhODI2NGUyMTY0ODg0ZWYyZjc1M2E5IiwibmFtZSI6IlBzeWMgQWhtZXQiLCJzdXJOYW1lIjoiRWNldml0IiwicGFzcyI6IiQyYSQwOCR1bVpYeTU3VXFudnVmdEZ4emZCNW8uSVN1QUFzNHk5b1BBYU1uR1YwWFRzVGdwakRjZVNMUyIsImVNYWlsIjoiZWVjZXZhaEBnbWFpbC5jb20iLCJ0YWciOlsidXptYW4iXSwiaW1hZ2UiOiJpbWFnZS0xNzA1NTE4NjcwODUwLmpwZWciLCJ1bnZhbiI6ImtsaW5payBwc2lrb2xvaCIsInN0YXIiOltdLCJzdGFyQXZnIjpbXSwiYWN0aXZlIjpmYWxzZSwiYWNjQWN0aXZlIjp0cnVlLCJjcmVhdGVBdCI6IjIwMjQtMDEtMTdUMTk6MTE6MTAuODcyWiIsInVwZGF0ZUF0IjoiMjAyNC0wMS0xN1QxOToxMToxMC44NzJaIiwiX192IjowfSwiaWF0IjoxNzA1NTIwMTM1fQ.ad3WLnfmxtpnob3kSqVRZHtUZuOv8nX-CMkQHHdRth4"
+      },
+    );
     if (response.statusCode == 200) {
       final data = json.decode(response.body);
 
-      final userResponse = ReservationResponse.fromJson(data);
-      for (int i = 0; i < userResponse.data!.length; i++)
-        ref.read(homePageRiverpod).setList(
-            ResListModel(
-                title: userResponse.data![i].psychologist!.fullName!,
-                date: userResponse.data![i].meetingDate!.toDate,
-                rol: userResponse.data![i].psychologist!.profession!,
-                image: Assets.images.imHomeKariPNG,
-                conferanceId: userResponse.data![i].meetingId!),
-            1);
+      final userResponse = reservations.fromJson(data);
+
+      for (int i = 0; i < userResponse.reservation!.length; i++) {
+        try {
+          // Adjust date parsing logic to handle different formats
+          DateTime parseDateTime = DateTime.parse(
+            userResponse.reservation![i].day!,
+          );
+          List<String> timeSplit =
+              userResponse.reservation![i].time!.split(".");
+          DateTime combinedDateTime = DateTime(
+              parseDateTime.year,
+              parseDateTime.month,
+              parseDateTime.day,
+              int.parse(timeSplit[0]),
+              int.parse(timeSplit[1]));
+
+          ref.read(homePageRiverpod).setList(
+                ResListModel(
+                    title:
+                        '${userResponse.reservation![i].psycId!.name!.toString()} ${userResponse.reservation![i].psycId!.surName!.toString()}',
+                    date: combinedDateTime,
+                    rol: userResponse.reservation![i].psycId!.unvan!,
+                    image:
+                        '${Constant.domain}/uploads/${userResponse.reservation![i].psycId!.image}',
+                    conferanceId: userResponse.reservation![i].sId!,
+                    star: userResponse.reservation![i].psycId!.star!.length),
+                1,
+              );
+        } catch (e) {}
+      }
     } else {
       // Hata durumunda işlem yapabilirsiniz
       throw Exception('API isteği başarısız oldu ${jsonDecode(response.body)}');
     }
   }
 
+  Future solution() async {
+    final DateFormat dateFormat = DateFormat("yyyy-MM-dd HH:mm:ss.SSS");
+    Set<String> uniqueDates = Set();
+    List<ResListModel> aktifList =
+        ref.watch(homePageRiverpod).resList.where((item) {
+      DateTime itemDate = dateFormat.parse(item.date.toString());
+
+      if (itemDate
+          .isAfter(DateTime.now().subtract(const Duration(minutes: 5)))) {
+        if (!uniqueDates.contains(item.date.toString())) {
+          uniqueDates.add(item.date.toString());
+          return true;
+        }
+      }
+      setState(() {});
+      return false;
+    }).toList();
+
+    ref.read(homePageRiverpod).setLastAfter(aktifList);
+  }
+
   @override
   Widget build(BuildContext context) {
+    final DateFormat dateFormat = DateFormat("yyyy-MM-dd HH:mm:ss.SSS");
+    final DateTime now = DateTime.now();
+    Set<String> uniqueDates = Set();
     List<_testModel> testModel = [
       _testModel(
-        image: Assets.images.imDepresyonSVG,
-        subtitle: 'Değerlendirme Testi',
-        title: 'Depresyon',
-      ),
+          image: Assets.images.imDepresyonSVG,
+          subtitle: 'Değerlendirme Testi',
+          title: 'Depresyon',
+          type: 'depresyon'),
       _testModel(
-        image: Assets.images.imStresSVG,
-        title: 'Stres Yönetimi',
-        subtitle: 'İncelemesi',
-      ),
+          image: Assets.images.imStresSVG,
+          title: 'Stres Yönetimi',
+          subtitle: 'İncelemesi',
+          type: 'stres'),
       _testModel(
-        image: Assets.images.imStresSVG,
-        title: 'Stres Yönetimi',
-        subtitle: 'İncelemesi',
-      )
-    ];
-
-    List<_resListModel> iptalList = [
-      _resListModel(
-        title: "Ahmet Ecevit",
-        date: DateTime(2023, 10, 6, 20, 16, 56, 486, 933),
-        rol: 'Travma Sonrası Stres Bozukluğu',
-        image: Assets.images.imKariPNG,
-      ),
+          image: Assets.images.demansSVG,
+          title: 'Demans',
+          subtitle: 'Değerlendirme Testi',
+          type: 'demans')
     ];
 
     var watch = ref.watch(homePageRiverpod);
     var read = ref.read(homePageRiverpod);
 
+    List<ResListModel> aktifList = watch.resList.where((item) {
+      DateTime itemDate = dateFormat.parse(item.date.toString());
+
+      if (itemDate.isAfter(now.subtract(const Duration(minutes: 5)))) {
+        // Tarih 5 dakika geriden sonraysa ve eşsizse, Set'e ekliyoruz ve true dönüyoruz
+        if (!uniqueDates.contains(item.date.toString())) {
+          uniqueDates.add(item.date.toString());
+          return true;
+        }
+      }
+
+      return false;
+    }).toList();
+
+    ref.read(homePageRiverpod).setLastAfter(aktifList);
     return Scaffold(
       appBar: AppBar(
         toolbarHeight: 105,
@@ -144,7 +188,7 @@ class _HomeState extends ConsumerState<Home> {
                                   const TextStyle(color: Constant.inputText),
                               focusColor: Constant.inputText,
                               filled: true,
-                              fillColor: Color(0xFFF5F5F5),
+                              fillColor: const Color(0xFFF5F5F5),
                               hintText: 'Psikolog veya alan ara',
                               hintStyle: const TextStyle(
                                 fontSize: 14,
@@ -160,7 +204,7 @@ class _HomeState extends ConsumerState<Home> {
                           ),
                         ),
                       ),
-                      Spacer(),
+                      const Spacer(),
                       Expanded(
                         flex: 3,
                         child: Stack(
@@ -169,7 +213,7 @@ class _HomeState extends ConsumerState<Home> {
                             GrockContainer(
                               onTap: () {
                                 read.setNoti();
-                                Grock.to(NotificationPage());
+                                Grock.to(const NotificationPage());
                               },
                               width: 35,
                               height: 35,
@@ -183,7 +227,7 @@ class _HomeState extends ConsumerState<Home> {
                                   Assets.icons.icNotificationSVG,
                                   width: 15,
                                   height: 17,
-                                  color: Color(0xFF333333),
+                                  color: const Color(0xFF333333),
                                 ),
                               ),
                             ),
@@ -194,14 +238,14 @@ class _HomeState extends ConsumerState<Home> {
                                 child: Container(
                                   width: 13,
                                   height: 13,
-                                  decoration: BoxDecoration(
+                                  decoration: const BoxDecoration(
                                     shape: BoxShape.circle,
                                     color: Constant.purple,
                                   ),
                                   child: Center(
                                       child: Text(
                                     watch.notification.toString(),
-                                    style: TextStyle(
+                                    style: const TextStyle(
                                         fontSize: 12,
                                         fontWeight: FontWeight.w400,
                                         color: Constant.white),
@@ -217,7 +261,7 @@ class _HomeState extends ConsumerState<Home> {
                 SizedBox(
                   height: 31,
                   child: ListView.separated(
-                    physics: BouncingScrollPhysics(),
+                    physics: const BouncingScrollPhysics(),
                     padding: const EdgeInsets.symmetric(horizontal: 18),
                     separatorBuilder: (context, index) =>
                         const SizedBox(width: 12),
@@ -246,26 +290,27 @@ class _HomeState extends ConsumerState<Home> {
           ),
         ],
       ),
-      backgroundColor: Color(0xFFF5F5F5),
+      backgroundColor: const Color(0xFFF5F5F5),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           Expanded(
             child: ListView(
-              physics: BouncingScrollPhysics(),
-              padding: EdgeInsets.only(bottom: 20),
+              physics: const BouncingScrollPhysics(),
+              padding: const EdgeInsets.only(bottom: 20),
               children: [
-                Padding(
-                  padding: const EdgeInsets.only(bottom: 15.0),
+                const Padding(
+                  padding: EdgeInsets.only(bottom: 15.0),
                   child: _homeCardRandevuAl(),
                 ),
                 Padding(
-                  padding: EdgeInsets.only(bottom: 12, left: 19, right: 19),
+                  padding:
+                      const EdgeInsets.only(bottom: 12, left: 19, right: 19),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
-                      Text(
+                      const Text(
                         'Randevularım',
                         style: TextStyle(
                           fontFamily: 'Proxima Nova',
@@ -277,9 +322,9 @@ class _HomeState extends ConsumerState<Home> {
                       ),
                       GrockContainer(
                         onTap: () {
-                          Grock.to(AccReservation());
+                          Grock.to(const AccReservation());
                         },
-                        child: Text(
+                        child: const Text(
                           'Hepsini Göster',
                           style: TextStyle(
                             fontFamily: 'Proxima Nova',
@@ -293,23 +338,23 @@ class _HomeState extends ConsumerState<Home> {
                     ],
                   ),
                 ),
-                watch.resList.length == 0
+                watch.aktifList.isEmpty
                     ? Padding(
-                        padding:
-                            EdgeInsets.only(left: 19.0, right: 19, bottom: 25),
+                        padding: const EdgeInsets.only(
+                            left: 19.0, right: 19, bottom: 25),
                         child: Container(
-                          padding: EdgeInsets.symmetric(vertical: 33),
+                          padding: const EdgeInsets.symmetric(vertical: 33),
                           decoration: BoxDecoration(
                             color: Constant.white,
                             borderRadius: BorderRadius.circular(8),
                             border: Border.all(
                               style: BorderStyle.solid,
                               width: 1,
-                              color: Color(0xFFEAEAEF),
+                              color: const Color(0xFFEAEAEF),
                             ),
                           ),
                           width: MediaQuery.sizeOf(context).width,
-                          child: Center(
+                          child: const Center(
                               child: Text(
                             'Planlanan randevu bulunmamaktadır.',
                             style: TextStyle(
@@ -325,18 +370,19 @@ class _HomeState extends ConsumerState<Home> {
                     : SizedBox(
                         height: 175,
                         child: ListView.builder(
-                          physics: NeverScrollableScrollPhysics(),
-                          padding: EdgeInsets.symmetric(horizontal: 19),
-                          itemCount: watch.resList.length > 2
+                          physics: const NeverScrollableScrollPhysics(),
+                          padding: const EdgeInsets.symmetric(horizontal: 19),
+                          itemCount: watch.aktifList.length > 2
                               ? 2
-                              : watch.resList.length,
+                              : watch.aktifList.length,
                           itemBuilder: (BuildContext context, int index) {
                             return reservationActiveCard(
-                              title: watch.resList[index].title,
-                              image: watch.resList[index].image,
-                              rol: watch.resList[index].rol,
-                              date: watch.resList[index].date,
-                              conferenceID: watch.resList[index].conferanceId,
+                              title: watch.aktifList[index].title,
+                              image: watch.aktifList[index].image,
+                              rol: watch.aktifList[index].rol,
+                              date: watch.aktifList[index].date,
+                              conferenceID: watch.aktifList[index].conferanceId,
+                              star: watch.aktifList[index].star,
                               padding: 5,
                             );
                           },
@@ -344,7 +390,7 @@ class _HomeState extends ConsumerState<Home> {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Padding(
+                    const Padding(
                       padding: EdgeInsets.symmetric(horizontal: 19),
                       child: Text(
                         'Psikolojik Sağlık İncelemesi',
@@ -357,41 +403,43 @@ class _HomeState extends ConsumerState<Home> {
                         ),
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 12,
                     ),
                     SizedBox(
-                      height: testModel.length > 0 ? 180 : 110,
-                      child: testModel.length > 0
+                      height: testModel.isNotEmpty ? 180 : 110,
+                      child: testModel.isNotEmpty
                           ? ListView.builder(
-                              physics: BouncingScrollPhysics(),
-                              padding: EdgeInsets.symmetric(horizontal: 10),
+                              physics: const BouncingScrollPhysics(),
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 10),
                               scrollDirection: Axis.horizontal,
                               itemCount: testModel.length,
                               itemBuilder: (BuildContext context, int index) {
                                 return _TestBoxCard(
-                                  image: testModel[index].image,
-                                  subtitle: testModel[index].subtitle,
-                                  title: testModel[index].title,
-                                );
+                                    image: testModel[index].image,
+                                    subtitle: testModel[index].subtitle,
+                                    title: testModel[index].title,
+                                    type: testModel[index].type);
                               },
                             )
                           : Padding(
-                              padding: EdgeInsets.only(
+                              padding: const EdgeInsets.only(
                                   left: 19.0, right: 19, bottom: 25),
                               child: Container(
-                                padding: EdgeInsets.symmetric(vertical: 33),
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 33),
                                 decoration: BoxDecoration(
                                   color: Constant.white,
                                   borderRadius: BorderRadius.circular(8),
                                   border: Border.all(
                                     style: BorderStyle.solid,
                                     width: 1,
-                                    color: Color(0xFFEAEAEF),
+                                    color: const Color(0xFFEAEAEF),
                                   ),
                                 ),
                                 width: MediaQuery.sizeOf(context).width,
-                                child: Center(
+                                child: const Center(
                                     child: Text(
                                   'Planlanan test bulunmamaktadır.',
                                   style: TextStyle(
@@ -420,13 +468,14 @@ class _TestBoxCard extends StatelessWidget {
   String title;
   String subtitle;
   String image;
+  String type;
 
-  _TestBoxCard({
-    super.key,
-    required this.image,
-    required this.subtitle,
-    required this.title,
-  });
+  _TestBoxCard(
+      {super.key,
+      required this.image,
+      required this.subtitle,
+      required this.title,
+      required this.type});
 
   @override
   Widget build(BuildContext context) {
@@ -434,12 +483,15 @@ class _TestBoxCard extends StatelessWidget {
       padding: const EdgeInsets.only(left: 10),
       child: GrockContainer(
         onTap: () {
-          Grock.to(
-            TestView(
-              title: title,
-              image: image,
-            ),
-          );
+          type == 'demans'
+              ? Grock.to(ImagePickerView(image: image, title: title))
+              : Grock.to(
+                  TestView(
+                    title: title,
+                    image: image,
+                    type: type,
+                  ),
+                );
         },
         width: 180,
         decoration: BoxDecoration(
@@ -448,7 +500,7 @@ class _TestBoxCard extends StatelessWidget {
           border: Border.all(
             style: BorderStyle.solid,
             width: 1,
-            color: Color(0xFFEAEAEF),
+            color: const Color(0xFFEAEAEF),
           ),
         ),
         child: Column(
@@ -456,12 +508,12 @@ class _TestBoxCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             SvgPicture.asset(image),
-            SizedBox(
+            const SizedBox(
               height: 10,
             ),
             Text(
               title,
-              style: TextStyle(
+              style: const TextStyle(
                 fontFamily: 'Proxima Nova',
                 fontSize: 14,
                 fontWeight: FontWeight.w600,
@@ -469,7 +521,7 @@ class _TestBoxCard extends StatelessWidget {
                 color: Constant.black,
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 3,
             ),
             Text(
@@ -553,12 +605,12 @@ class _homeCardRandevuAl extends StatelessWidget {
               border: Border.all(
                 style: BorderStyle.solid,
                 width: 1,
-                color: Color(0xFFEAEAEF),
+                color: const Color(0xFFEAEAEF),
               ),
             ),
             child: Row(
               children: [
-                SizedBox(
+                const SizedBox(
                   width: 37,
                 ),
                 Padding(
@@ -573,7 +625,7 @@ class _homeCardRandevuAl extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(
+                            const Text(
                               'Psikolojik Destek Alarak Yaşamınızı İyileştirin',
                               style: TextStyle(
                                 fontSize: 15,
@@ -583,20 +635,20 @@ class _homeCardRandevuAl extends StatelessWidget {
                                 fontFamily: 'Proxima Nova',
                               ),
                             ),
-                            SizedBox(
+                            const SizedBox(
                               height: 4,
                             ),
-                            Text(
+                            const Text(
                               'Şimdi randevu alın ve özel indirimlerden faydalanın.',
                               style: TextStyle(
                                 fontSize: 9,
                                 fontWeight: FontWeight.w500,
                                 letterSpacing: 0,
                                 fontFamily: 'Proxima Nova',
-                                color: const Color.fromARGB(109, 51, 51, 51),
+                                color: Color.fromARGB(109, 51, 51, 51),
                               ),
                             ),
-                            SizedBox(
+                            const SizedBox(
                               height: 10,
                             ),
                             SizedBox(
@@ -611,7 +663,7 @@ class _homeCardRandevuAl extends StatelessWidget {
                                           borderRadius:
                                               BorderRadius.circular(10))),
                                   onPressed: () {
-                                    Grock.to(SearchDoctor());
+                                    Grock.to(const SearchDoctor());
                                   },
                                   child: const Row(
                                     mainAxisAlignment: MainAxisAlignment.center,
@@ -673,9 +725,10 @@ class _testModel {
   String title;
   String subtitle;
   String image;
-  _testModel({
-    required this.image,
-    required this.title,
-    required this.subtitle,
-  });
+  String type;
+  _testModel(
+      {required this.image,
+      required this.title,
+      required this.subtitle,
+      required this.type});
 }

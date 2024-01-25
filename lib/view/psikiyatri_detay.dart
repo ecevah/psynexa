@@ -1,23 +1,32 @@
 import 'package:flutter/material.dart';
 import 'package:Psynexa/assets.dart';
-import 'package:Psynexa/components/custom_back_appbar.dart';
 import 'package:Psynexa/components/custom_first_btn.dart';
-import 'package:Psynexa/components/randevu_detay.dart';
-import 'package:Psynexa/components/randevu_detay_card.dart';
-import 'package:Psynexa/components/randevu_number_card.dart';
 import 'package:Psynexa/constant/constant.dart';
-import 'package:Psynexa/models/reservation_model.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:grock/grock.dart';
 import 'package:Psynexa/view/calendar.dart';
 import 'package:flutter_rating_stars/flutter_rating_stars.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import 'package:Psynexa/models/detailDoctor/detail_response.dart';
+import 'package:Psynexa/models/psyc/psyc_response.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class DetayPsikiyatri extends StatefulWidget {
-  int id;
-  DetayPsikiyatri({super.key, required this.id});
+  String id;
+  String title;
+  double float;
+  int number;
+  String rol;
+  String imagePath;
+  DetayPsikiyatri({
+    super.key,
+    required this.id,
+    required this.float,
+    required this.imagePath,
+    required this.number,
+    required this.rol,
+    required this.title,
+  });
 
   @override
   State<DetayPsikiyatri> createState() => _DetayPsikiyatriState();
@@ -34,29 +43,25 @@ class _DetayPsikiyatriState extends State<DetayPsikiyatri> {
   List<String> rols = [];
   late String? title;
 
-  final headers = {
-    'Content-Type': 'application/x-www-form-urlencoded',
-    'Authorization':
-        'Bearer 0b6c05e02ee081f0f9d3d733e6dadefcc7d3e5bb2c10f3195927e2794002eefdf5f6f2774afeba9188a133385082a36818baca38f93bf05be5a9c68672a84f3efde436ce64afeedf5e3d79f36980e9e8cd9ed4f41939dd2a666f386118604991d5ada44ca4ca9c02881e1692e8cd5ad4f6016cea4390fb0931ae7c3ae9ad573e'
-  };
   Future fetchData() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+
     final response = await http.get(
-        Uri.parse(
-            '${Constant.domain}/api/psychologists/${widget.id}?populate=*'),
-        headers: headers);
+      Uri.parse('${Constant.domain}/api/psyc/find/${widget.id}'),
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'x-access-token': prefs.getString("token") ??
+            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwc3ljaG9sb2dpc3QiOnsiX2lkIjoiNjVhODI2NGUyMTY0ODg0ZWYyZjc1M2E5IiwibmFtZSI6IlBzeWMgQWhtZXQiLCJzdXJOYW1lIjoiRWNldml0IiwicGFzcyI6IiQyYSQwOCR1bVpYeTU3VXFudnVmdEZ4emZCNW8uSVN1QUFzNHk5b1BBYU1uR1YwWFRzVGdwakRjZVNMUyIsImVNYWlsIjoiZWVjZXZhaEBnbWFpbC5jb20iLCJ0YWciOlsidXptYW4iXSwiaW1hZ2UiOiJpbWFnZS0xNzA1NTE4NjcwODUwLmpwZWciLCJ1bnZhbiI6ImtsaW5payBwc2lrb2xvaCIsInN0YXIiOltdLCJzdGFyQXZnIjpbXSwiYWN0aXZlIjpmYWxzZSwiYWNjQWN0aXZlIjp0cnVlLCJjcmVhdGVBdCI6IjIwMjQtMDEtMTdUMTk6MTE6MTAuODcyWiIsInVwZGF0ZUF0IjoiMjAyNC0wMS0xN1QxOToxMToxMC44NzJaIiwiX192IjowfSwiaWF0IjoxNzA1NTIwMTM1fQ.ad3WLnfmxtpnob3kSqVRZHtUZuOv8nX-CMkQHHdRth4"
+      },
+    );
     if (response.statusCode == 200) {
-      // API'den gelen veriyi JSON formatından dönüştürün
       final data = json.decode(response.body);
-      print(data);
-      final userResponse = DetailDart.fromJson(data);
-      print(userResponse.data);
-      // Veriyi kullanmak için burada işlemler yapabilirsiniz
-      name = userResponse.data.fullName;
-      image = '${Constant.domain}${userResponse.data.avatar.url}';
-      price = userResponse.data.hourlyPrice;
-      rols.add(userResponse.data.title);
-      title = userResponse.data.profession;
-      ;
+      final userResponse = Psychologist.fromJson(data);
+      name = '${userResponse.name} ${userResponse.surName}';
+      image = '${Constant.domain}/uploads/${userResponse.image}';
+      price = 1000;
+      rols.add(userResponse.unvan);
+      title = userResponse.unvan;
       loading = false;
       setState(() {});
     } else {
@@ -67,7 +72,6 @@ class _DetayPsikiyatriState extends State<DetayPsikiyatri> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     fetchData();
   }
@@ -80,11 +84,11 @@ class _DetayPsikiyatriState extends State<DetayPsikiyatri> {
         appBar: AppBar(
           elevation: 0,
           centerTitle: true,
-          title: Padding(
-            padding: const EdgeInsets.only(top: 9.0),
+          title: const Padding(
+            padding: EdgeInsets.only(top: 9.0),
             child: Text(
               'Psikolog Detayları',
-              style: const TextStyle(
+              style: TextStyle(
                 color: Constant.black,
                 fontWeight: FontWeight.w500,
                 fontSize: 15,
@@ -106,7 +110,7 @@ class _DetayPsikiyatriState extends State<DetayPsikiyatri> {
           backgroundColor: Constant.white,
         ),
         body: loading
-            ? Center(
+            ? const Center(
                 child: CircularProgressIndicator(),
               )
             : Column(
@@ -117,12 +121,12 @@ class _DetayPsikiyatriState extends State<DetayPsikiyatri> {
                       children: [
                         ClipOval(
                           child: Image.network(
-                            '$image',
+                            widget.imagePath,
                             width: 125,
                             height: 125,
                           ),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 12,
                         ),
                         Row(
@@ -130,15 +134,15 @@ class _DetayPsikiyatriState extends State<DetayPsikiyatri> {
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             Text(
-                              '$title $name',
-                              style: TextStyle(
+                              widget.title,
+                              style: const TextStyle(
                                   color: Constant.black,
                                   fontSize: 20,
                                   fontWeight: FontWeight.w600,
                                   letterSpacing: -0.4,
                                   fontFamily: 'Proxima Nova'),
                             ),
-                            SizedBox(
+                            const SizedBox(
                               width: 7,
                             ),
                             SvgPicture.asset(
@@ -148,11 +152,11 @@ class _DetayPsikiyatriState extends State<DetayPsikiyatri> {
                             ),
                           ],
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 7.5,
                         ),
                         Text(
-                          rols[0],
+                          widget.rol,
                           style: TextStyle(
                               fontSize: 13,
                               fontWeight: FontWeight.w400,
@@ -160,12 +164,12 @@ class _DetayPsikiyatriState extends State<DetayPsikiyatri> {
                               color: Constant.black.withOpacity(0.5),
                               letterSpacing: -0.3),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 12,
                         ),
                         RatingStars(
                           valueLabelVisibility: false,
-                          value: 3,
+                          value: widget.float,
                           starBuilder: (index, color) => Icon(
                             Icons.star,
                             color: color,
@@ -176,14 +180,14 @@ class _DetayPsikiyatriState extends State<DetayPsikiyatri> {
                           maxValue: 5,
                           starSpacing: 0,
                           maxValueVisibility: true,
-                          starOffColor: Color.fromARGB(70, 255, 235, 59),
+                          starOffColor: const Color.fromARGB(70, 255, 235, 59),
                           starColor: Colors.yellow,
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 8,
                         ),
                         Text(
-                          '$starRange ($comment Oylama)',
+                          '${widget.float} (${widget.number} Oylama)',
                           style: TextStyle(
                             color: Constant.black.withOpacity(0.5),
                             fontSize: 12,
@@ -195,7 +199,7 @@ class _DetayPsikiyatriState extends State<DetayPsikiyatri> {
                       ],
                     ),
                   ),
-                  Container(
+                  SizedBox(
                     height: 42,
                     child: Padding(
                       padding: const EdgeInsets.symmetric(
@@ -217,8 +221,8 @@ class _DetayPsikiyatriState extends State<DetayPsikiyatri> {
                               child: Align(
                                 alignment: Alignment.center,
                                 child: Container(
-                                  padding: EdgeInsets.all(9),
-                                  child: Text(
+                                  padding: const EdgeInsets.all(9),
+                                  child: const Text(
                                     'Hakkında',
                                     style: TextStyle(
                                       fontSize: 13,
@@ -234,8 +238,8 @@ class _DetayPsikiyatriState extends State<DetayPsikiyatri> {
                               child: Align(
                                 alignment: Alignment.center,
                                 child: Container(
-                                  padding: EdgeInsets.all(10),
-                                  child: Text(
+                                  padding: const EdgeInsets.all(10),
+                                  child: const Text(
                                     'Uzmanlık Alanı',
                                     style: TextStyle(
                                       fontSize: 13,
@@ -257,7 +261,7 @@ class _DetayPsikiyatriState extends State<DetayPsikiyatri> {
                       children: [
                         Column(
                           children: [
-                            SizedBox(
+                            const SizedBox(
                               height: 15,
                             ),
                             Expanded(
@@ -265,15 +269,15 @@ class _DetayPsikiyatriState extends State<DetayPsikiyatri> {
                                 padding: const EdgeInsets.symmetric(
                                     horizontal: 50.0),
                                 child: ListView(
-                                  physics: BouncingScrollPhysics(),
+                                  physics: const BouncingScrollPhysics(),
                                   children: [
                                     Container(
-                                      padding:
-                                          EdgeInsets.symmetric(vertical: 12),
+                                      padding: const EdgeInsets.symmetric(
+                                          vertical: 12),
                                       decoration: BoxDecoration(
                                         borderRadius: BorderRadius.circular(10),
                                         border: Border.all(
-                                          color: Color(0xFFEAEAEF),
+                                          color: const Color(0xFFEAEAEF),
                                           width: 1,
                                         ),
                                       ),
@@ -291,11 +295,11 @@ class _DetayPsikiyatriState extends State<DetayPsikiyatri> {
                                         ),
                                       ),
                                     ),
-                                    SizedBox(
+                                    const SizedBox(
                                       height: 10,
                                     ),
                                     Text(
-                                      'Uyum bozuklukları uzmanı, psikolojik danışmanlık ve terapi hizmetleri sunan bir sağlık profesyonelidir. Uyum bozuklukları, bireylerin hayatlarında önemli bir stres kaynağı olabilir ve iş, okul ve sosyal ilişkiler gibi yaşamın birçok alanını etkileyebilir. Bu nedenle, uyum bozuklukları uzmanları, hastalarının günlük yaşamlarında karşılaştıkları zorluklara yardımcı olmak için özel olarak eğitilirler.Uyum bozuklukları uzmanları, çeşitli terapi teknikleri kullanarak hastalarının uyum sorunlarını ele alır. Bunlar arasında bilişsel davranışçı terapi, kişilerarası terapi, aile terapisi ve psikodinamik terapi gibi terapiler yer alır. Uzmanlar, hastalarının yaşadıkları sorunları ve hissettikleri duyguları anlamak için bireysel danışmanlık, grup terapisi veya aile terapisi gibi farklı terapi yöntemleri kullanabilirler.',
+                                      'Uyum bozuklukları uzmanı, psikolojik danışmanlık ve terapi hizmetleri sunan bir sağlık profesyonelidir. Uyum bozuklukları, bireylerin hayatlarında önemli bir stres kaynağı olabilir ve iş, okul ve sosyal ilişkiler gibi yaşamın birçok alanını etkileyebilir. Bu nedenle, uyum bozuklukları uzmanları, danışanlarının günlük yaşamlarında karşılaştıkları zorluklara yardımcı olmak için özel olarak eğitilirler.Uyum bozuklukları uzmanları, çeşitli terapi teknikleri kullanarak danışanlarının uyum sorunlarını ele alır. Bunlar arasında bilişsel davranışçı terapi, kişilerarası terapi, aile terapisi ve psikodinamik terapi gibi terapiler yer alır. Uzmanlar, danışanlarının yaşadıkları sorunları ve hissettikleri duyguları anlamak için bireysel danışmanlık, grup terapisi veya aile terapisi gibi farklı terapi yöntemleri kullanabilirler.',
                                       style: TextStyle(
                                         fontSize: 13,
                                         fontFamily: 'Proxima Nova',
@@ -313,12 +317,12 @@ class _DetayPsikiyatriState extends State<DetayPsikiyatri> {
                         ),
                         Column(
                           children: [
-                            SizedBox(
+                            const SizedBox(
                               height: 18,
                             ),
                             Expanded(
                               child: ListView.builder(
-                                physics: BouncingScrollPhysics(),
+                                physics: const BouncingScrollPhysics(),
                                 itemBuilder: (context, index) {
                                   return Padding(
                                     padding: const EdgeInsets.symmetric(
@@ -326,19 +330,19 @@ class _DetayPsikiyatriState extends State<DetayPsikiyatri> {
                                     child: Column(
                                       children: [
                                         Container(
-                                          padding: EdgeInsets.symmetric(
+                                          padding: const EdgeInsets.symmetric(
                                               vertical: 12),
                                           decoration: BoxDecoration(
                                             borderRadius:
                                                 BorderRadius.circular(10),
                                             border: Border.all(
-                                              color: Color(0xFFEAEAEF),
+                                              color: const Color(0xFFEAEAEF),
                                               width: 1,
                                             ),
                                           ),
                                           child: Center(
                                             child: Text(
-                                              '${rols[index]}',
+                                              widget.rol,
                                               style: TextStyle(
                                                 fontSize: 13,
                                                 fontFamily: 'Proxima Nova',
@@ -350,7 +354,7 @@ class _DetayPsikiyatriState extends State<DetayPsikiyatri> {
                                             ),
                                           ),
                                         ),
-                                        SizedBox(
+                                        const SizedBox(
                                           height: 10,
                                         ),
                                       ],
@@ -392,6 +396,5 @@ class _DetayPsikiyatriState extends State<DetayPsikiyatri> {
               ),
       ),
     );
-    ;
   }
 }

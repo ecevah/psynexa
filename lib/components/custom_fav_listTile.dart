@@ -31,19 +31,21 @@ class listOge extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 5.0, horizontal: 19),
       child: Container(
-        padding: EdgeInsets.symmetric(
+        padding: const EdgeInsets.symmetric(
           vertical: 15,
         ),
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.all(Radius.circular(10)),
+          borderRadius: const BorderRadius.all(Radius.circular(10)),
           border: Border.all(
-              style: BorderStyle.solid, width: 1, color: Color(0xFFEAEAEF)),
+              style: BorderStyle.solid,
+              width: 1,
+              color: const Color(0xFFEAEAEF)),
           color: Constant.white,
         ),
         child: ListTile(
           title: Text(
             title,
-            style: TextStyle(
+            style: const TextStyle(
               fontSize: 15,
               fontWeight: FontWeight.w500,
               color: Constant.black75,
@@ -55,7 +57,7 @@ class listOge extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              SizedBox(
+              const SizedBox(
                 height: 3,
               ),
               Row(
@@ -74,7 +76,7 @@ class listOge extends StatelessWidget {
                     maxValue: 5,
                     starSpacing: 0,
                     maxValueVisibility: true,
-                    starOffColor: Color.fromARGB(70, 255, 235, 59),
+                    starOffColor: const Color.fromARGB(70, 255, 235, 59),
                     starColor: Colors.yellow,
                   ),
                   Padding(
@@ -91,7 +93,7 @@ class listOge extends StatelessWidget {
                   )
                 ],
               ),
-              SizedBox(
+              const SizedBox(
                 height: 3,
               ),
               Text(
@@ -113,7 +115,7 @@ class listOge extends StatelessWidget {
               Assets.icons.icHeartSVG,
               width: 16,
               height: 15,
-              color: Color(0xFFD63928),
+              color: const Color(0xFFD63928),
             ),
           ),
           leading: Container(
