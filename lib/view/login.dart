@@ -1,6 +1,7 @@
 import 'package:Psynexa/components/exit_alert.dart';
 import 'package:Psynexa/models/login/login_request.dart';
 import 'package:Psynexa/services/login_service.dart';
+import 'package:Psynexa/view/meet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
@@ -83,7 +84,18 @@ class _LoginState extends ConsumerState<Login> {
                             Padding(
                               padding: const EdgeInsets.only(right: 15.0),
                               child: TextButton(
-                                onPressed: () {},
+                                onPressed: () {
+                                  Grock.to(
+                                    VideoConferencePage(
+                                      conferenceID: "ahmet",
+                                      name: "ahmet",
+                                      id: 'ahmets',
+                                      image: Assets.images.imKariPNG,
+                                      title: "ahöet",
+                                      rol: "widget.rol",
+                                    ),
+                                  );
+                                },
                                 child: const Text(
                                   'Şifremi Unuttum',
                                   style: TextStyle(

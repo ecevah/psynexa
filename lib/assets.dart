@@ -1,4 +1,3 @@
-
 class Assets {
   Assets._();
 
@@ -6,12 +5,10 @@ class Assets {
   static final icons = _AssetsIcons._();
   static final images = _AssetsImages._();
   static final snackbar = _AssetsSnackbar._();
-
 }
 
 class _AssetsCheckout {
   _AssetsCheckout._();
-
 
   final maestroSVG = 'assets/checkout/Maestro.svg';
   final mastercardSVG = 'assets/checkout/Mastercard.svg';
@@ -25,7 +22,6 @@ class _AssetsCheckout {
 
 class _AssetsIcons {
   _AssetsIcons._();
-
 
   final maestroSVG = 'assets/icons/Maestro.svg';
   final mastercardSVG = 'assets/icons/Mastercard.svg';
@@ -64,11 +60,12 @@ class _AssetsIcons {
   final icUserPurpleSVG = 'assets/icons/ic_userPurple.svg';
   final icVerifyTickSVG = 'assets/icons/ic_verify_tick.svg';
   final icZamanSVG = 'assets/icons/ic_zaman.svg';
+  final eyeOffSVG = 'assets/icons/eye_off.svg';
+  final circleSVG = 'assets/icons/circle.svg';
 }
 
 class _AssetsImages {
   _AssetsImages._();
-
 
   final demansSVG = 'assets/images/demans.svg';
   final imChatbotPNG = 'assets/images/im_chatbot.png';
@@ -89,7 +86,6 @@ class _AssetsImages {
 
 class _AssetsSnackbar {
   _AssetsSnackbar._();
-
 
   final ellipse763PNG = 'assets/snackbar/Ellipse 763.png';
   final unionPNG = 'assets/snackbar/Union.png';

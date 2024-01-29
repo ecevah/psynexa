@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class Constant {
   //[Domain]
-  static const String domain = 'http://192.168.1.7:3001';
+  static const String domain = 'http://20.197.7.85:3001';
 
   //[Colors]
   static const Color purple = Color(0xff6747C7);
